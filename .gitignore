@@ -1,0 +1,8 @@
+.idea
+cache.properties
+*.swp
+.netbeans
+app
+nbproject
+lib/autoload.php
+tests/autoload.php
