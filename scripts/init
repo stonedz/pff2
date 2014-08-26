@@ -165,6 +165,16 @@ else
     echo -e "${GREEN}[OK]"
 fi
 
+#Creating symlinks
+echo -ne "\n${CYAN}Moving css and js files"
+tmp=`pwd`
+cd ../lib/vendor
+cd components/modernizr
+cp modernizr.js ${tmp}/../app/public/js
+cd ../normalize.css
+cp normalize.css ${tmp}/../app/public/css
+echo -e "${GREEN}[OK]"
+cd ${tmp}
 
 
 # Final message

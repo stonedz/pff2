@@ -80,6 +80,13 @@ abstract class AController {
     protected $_afterFilters;
 
     /**
+     * May contain the default layout (used by main_layout module for example)
+     *
+     * @var AView
+     */
+    protected $_layout;
+
+    /**
      * Creates a controller
      *
      * @param string $controllerName The controller's name (used to load correct model)
@@ -96,6 +103,7 @@ abstract class AController {
         $this->_params         = $params;
         $this->_moduleManager  = $this->_app->getModuleManager();
         $this->_helperManager  = $this->_app->getHelperManager();
+        $this->_layout         = null;
 
         if ($this->_config->getConfigData('orm')) {
             $this->initORM();
@@ -310,5 +318,33 @@ abstract class AController {
         foreach($this->_afterFilters[$this->_action] as $method) {
             call_user_func($method);
         }
+    }
+
+    public function getLayout(){
+        if($this->_layout) {
+            return $this->_layout;
+        }
+        else {
+            throw new PffException('No layout has been set');
+        }
+    }
+
+    /**
+     * This method RESET the layout (i.e. the first rendereable View in the rendering queue).
+     * If a Layout has already been set it will
+     *
+     * @param $layout ALayout
+     */
+    public function setLayout($layout){
+        $this->_layout = $layout;
+        if(isset($this->_view[0])) {
+            $this->resetViews();
+        }
+        $this->addView($layout);
+    }
+
+    public function resetViews() {
+        unset($this->_view);
+        $this->_view = array();
     }
 }

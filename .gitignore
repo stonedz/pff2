@@ -2,6 +2,8 @@
 cache.properties
 *.swp
 .netbeans
+*.iml
+lib/components
 app
 nbproject
 lib/autoload.php

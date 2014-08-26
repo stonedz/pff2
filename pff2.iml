@@ -4,6 +4,19 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="PHARS">
+        <CLASSES>
+          <root url="phar://$MODULE_DIR$/scripts/composer.phar" />
+          <root url="phar://$MODULE_DIR$/scripts/behat.phar" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="phar://$MODULE_DIR$/scripts/composer.phar" />
+          <root url="phar://$MODULE_DIR$/scripts/behat.phar" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>
 
