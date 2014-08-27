@@ -76,5 +76,7 @@ $pffConfig['databaseConfigDev'] = array(
  * Modules to be loaded
  */
 $pffConfig['modules'] = array(
-    'logger'
+    'logger',
+    'main_layout'
+
 );

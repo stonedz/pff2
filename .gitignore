@@ -3,6 +3,7 @@ cache.properties
 *.swp
 .netbeans
 *.iml
+.idea
 lib/components
 app
 nbproject
