@@ -34,21 +34,34 @@ done
 
 
 # command line dependecies"
-CMDS="curl"
-
+#CMDS="curl"
+PKGS="php5-curl php-apc"
 #######################################
 # START
 #######################################
 fail=false
 
 # CHECK FOR DEPENDENCIES
-echo -ne "${CYAN}Checking dependencies..."
-for i in $CMDS
+#echo -ne "${CYAN}Checking dependencies..."
+#for i in $CMDS
+#do
+#    # command -v will return >0 when the $i is not found
+#    command -v $i >/dev/null && continue || { echo -e "${RED} $i command not found, please install it!."; exit 1; }
+#done
+#echo -e "${GREEN}[OK]"
+
+# CHECK FOR DEPENDECIES PACKAGES
+echo -ne "${CYAN}Checking required packages..."
+for p in $PKGS
 do
-    # command -v will return >0 when the $i is not found
-    command -v $i >/dev/null && continue || { echo -e "${RED} $i command not found, please install it!."; exit 1; }
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $p |grep "install ok installed")
+if [ "" == "$PKG_OK" ]
+then
+     echo -e "${RED} Package ${p} is required, please install it. Rememeber to restart Apache afterwards!${NC}"
+     exit 1
+fi
 done
-echo -e "${GREEN}[OK]"
+echo -e "${GREEN} [OK]"
 
 # COMPOSER
 if [ -f composer.phar -a "$1" != "-f" ]
