@@ -35,6 +35,8 @@ class LayoutPHP extends \pff\ViewPHP {
      * @param int $index
      */
     public function content($index = 0) {
+        if(isset($this->_contentView[$index])){
         $this->_contentView[$index]->render();
+        }
     }
 }
