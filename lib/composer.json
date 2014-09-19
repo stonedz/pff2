@@ -5,7 +5,7 @@
         "behat/mink": "dev-master",
         "symfony/yaml": "2.5.3",
         "symfony/console": "2.5.3",
-        /*"smarty/smarty": "3.1.19",*/
+        "smarty/smarty": "3.1.19",
         "swiftmailer/swiftmailer": "5.2.1",
         "ezyang/htmlpurifier": "dev-master",
         "mobiledetect/mobiledetectlib": "2.8.3",
