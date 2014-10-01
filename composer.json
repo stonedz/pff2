@@ -8,10 +8,22 @@
         "authors": [
         {
             "name": "Paolo Fagni",
-            "email": "paolo.fagni@gmail.com"
+            "email": "paolo.fagni@gmail.com",
+            "role": "Developer"
         }
     ],
         "require": {
-            "php": ">=5.3.2"
+            "php": ">=5.3.2",
+            "doctrine/orm": "v2.4.4",
+            "doctrine/cache": "v1.3.0",
+            "symfony/yaml": "2.5.3",
+            "symfony/console": "2.5.3",
+            "smarty/smarty": "3.1.19",
+            "swiftmailer/swiftmailer": "5.2.1",
+            "ezyang/htmlpurifier": "dev-master",
+            "mobiledetect/mobiledetectlib": "2.8.3",
+            "components/normalize.css": "2.1.2",
+            "components/modernizr": "2.6.2",
+            "codeception/codeception": "*"
         }
 }
