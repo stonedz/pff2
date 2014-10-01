@@ -4,7 +4,7 @@
         "description": "A simple yet robust PHP MVC framework",
         "keywords": ["framework"],
         "homepage": "https://github.com/stonedz/pff2",
-        "license": "LGPL-3.0+",
+        "license": "MIT",
         "authors": [
         {
             "name": "Paolo Fagni",
@@ -18,12 +18,13 @@
             "doctrine/cache": "v1.3.0",
             "symfony/yaml": "2.5.3",
             "symfony/console": "2.5.3",
-            "smarty/smarty": "3.1.19",
+            "smarty/smarty": "*",
             "swiftmailer/swiftmailer": "5.2.1",
             "ezyang/htmlpurifier": "*",
             "mobiledetect/mobiledetectlib": "2.8.3",
             "components/normalize.css": "2.1.2",
             "components/modernizr": "2.6.2",
             "codeception/codeception": "*"
-        }
+        },
+    "bin": ["scrips/init", "scripts/generateAutoload.sh", "scripts/generateAutoloadApp.sh"]
 }
