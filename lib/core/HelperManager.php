@@ -19,7 +19,7 @@ class HelperManager
      */
     public function load($helperName) {
         $helperFilePathUser = ROOT . DS . 'app' . DS . 'helpers' . DS . $helperName . '.php';
-        $helperFilePathPff  = ROOT . DS . 'lib' . DS . 'helpers' . DS . $helperName . '.php';
+        $helperFilePathPff  = ROOT_LIB . DS . 'lib' . DS . 'helpers' . DS . $helperName . '.php';
 
         $found = false;
 

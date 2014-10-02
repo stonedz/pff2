@@ -1,5 +1,4 @@
 #!/bin/bash
-
 green='\e[0;32m'
 GREEN='\e[1;32m'
 red='\e[0;31m'
@@ -41,15 +40,6 @@ PKGS="php5-curl php-apc"
 #######################################
 fail=false
 
-# CHECK FOR DEPENDENCIES
-#echo -ne "${CYAN}Checking dependencies..."
-#for i in $CMDS
-#do
-#    # command -v will return >0 when the $i is not found
-#    command -v $i >/dev/null && continue || { echo -e "${RED} $i command not found, please install it!."; exit 1; }
-#done
-#echo -e "${GREEN}[OK]"
-
 # CHECK FOR DEPENDECIES PACKAGES
 echo -ne "${CYAN}Checking required packages..."
 for p in $PKGS
@@ -63,106 +53,19 @@ fi
 done
 echo -e "${GREEN} [OK]"
 
-# COMPOSER
-if [ -f composer.phar -a "$1" != "-f" ]
-then
-    echo -e "\n${GREEN}* [OK] ${BLUE}Composer is already installed"
-else
-    echo -ne "\n${CYAN}Installing Composer..."
-    curl -s http://getcomposer.org/installer | php &> /dev/null
-    echo -e "${GREEN}[OK]"
-fi
-
-
-# Clean old htmlpurifier if prensent
-if [ -d ../lib/vendor/htmlpurifier-4.4.0-standalone ]
-then
-    echo -ne "\n${CYAN}Clean old packages..."
-    rm -rf ../lib/vendor/htmlpurifier-4.4.0-standalone
-    echo -e "${GREEN}[OK]"
-fi
-
-# INSTALL COMPOSER PACKAGES
-if [ -f composer.phar ]
-then
-    tmp=`pwd`
-    cd ../lib
-    php ../scripts/composer.phar update
-    cd $tmp
-fi
-
-# INSTALL APP COMPOSER PACKAGES
-if [ -f composer.phar -a -f ../app/composer.json ]
-then
-    tmp=`pwd`
-    cd ../app
-    php ../scripts/composer.phar update
-    cd $tmp
-fi
-
-# BEHAT
-if [ -f behat.phar -a "$1" != "-f" ]
-then
-    echo -e "\n${GREEN}* [OK] ${BLUE}Behat is already installed"
-else
-    echo -ne "\n${CYAN}Installing Behat..."
-    wget -qO - https://github.com/downloads/Behat/Behat/behat.phar > behat.phar
-    echo -e "${GREEN}[OK]"
-fi
-
-# HTMLPURIFIER STANDALONE
-#if [ -f ../lib/vendor/htmlpurifier-4.4.0-standalone//HTMLPurifier.standalone.php -a "$1" != "-f" ]
-#then
-#    echo -e "\n${GREEN}* [OK] ${BLUE}HTMLPurifier is already installed"
-#else
-#    echo -ne "\n${CYAN}Installing Htmlpurifier..."
-#    wget -q http://htmlpurifier.org/releases/htmlpurifier-4.4.0-standalone.tar.gz
-#    if [ -f  htmlpurifier-4.4.0-standalone.tar.gz ]
-#    then
-#        tar -xzvf htmlpurifier-4.4.0-standalone.tar.gz -C ../lib/vendor/ > /dev/null
-#        rm htmlpurifier-4.4.0-standalone.tar.gz
-#        echo -e "${GREEN}[OK]"
-#    else
-#        fail=true
-#        echo -e "${RED}[FAIL]"
-#    fi
-#fi
 
 # GENERATE app FOLDER
 echo -ne "\n${CYAN}Initializing app..."
 tmp=`pwd`
-cd ..
 if [ ! -d "app" ]
 then
-    cp -r lib/app_skeleton app/
-    git init app/ &> /dev/null
+    cp -r vendor/stonedz/pff2/lib/app_skeleton app/
+    git init . &> /dev/null
     echo -e "${GREEN}[OK]"
 else
     echo -e "${GREEN}[OK]${NC} (app/ folder already present)"
 fi
 cd $tmp
-
-#GIT Hooks
-echo -ne "\n${CYAN}Installing git post-merge hook..."
-tmp=`pwd`
-cd ../.git/hooks
-if [ -x post-merge ];
-then
-    echo -e "${red}[WARNING] ${NC}post-merge hook seems to be already installed, please add the following lines to .git/hooks/post-merge if needed:\n
-    cd scripts
-    ./update
-    cd .."
-else
-    touch post-merge
-    echo "#!/bin/bash
-
-cd scripts
-./update
-cd .." > post-merge
-    chmod +x post-merge
-    echo -e "${GREEN}[OK]"
-fi
-cd ${tmp}
 
 #Generate autoload files
 if ! command -v phpab &> /dev/null
@@ -174,21 +77,35 @@ then
     fail=true
 else
     echo -ne "\n${CYAN}Generating autoload.php files..."
-    sh generateAutoload.sh &> /dev/null
+    sh vendor/bin/generateAutoload.sh &> /dev/null
     echo -e "${GREEN}[OK]"
 fi
 
 #Creating symlinks
 echo -ne "\n${CYAN}Moving css and js files"
 tmp=`pwd`
-cd ../lib/vendor
+cd vendor
 cd components/modernizr
-cp modernizr.js ${tmp}/../app/public/js
+cp modernizr.js ${tmp}/app/public/js
 cd ../normalize.css
-cp normalize.css ${tmp}/../app/public/css
+cp normalize.css ${tmp}/app/public/css
 echo -e "${GREEN}[OK]"
 cd ${tmp}
 
+#Creating .htaccess
+echo -ne "\n${CYAN}Generating htaccess file"
+cp vendor/stonedz/pff2/.htaccess .
+echo -e "${GREEN}[OK]"
+
+#Creating cli-config for doctrine
+echo -ne "\n${CYAN}Copying cli-config for doctrine"
+cp vendor/stonedz/pff2/scripts/cli-config.php .
+echo -e "${GREEN}[OK]"
+
+#Copying .gitignore file
+echo -ne "\n${CYAN}Copying cli-config for doctrine"
+cp vendor/stonedz/pff2/lib/site_skeleton/.gitignore .
+echo -e "${GREEN}[OK]"
 
 # Final message
 if [ "$fail" == "false" ]

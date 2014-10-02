@@ -39,7 +39,7 @@ class ExceptionHandler extends \pff\AModule implements \pff\IBeforeSystemHook {
         elseif(file_exists(ROOT . DS . 'app' . DS . 'views' . DS . 'defaultError_View.php')) {
             $viewPath = 'defaultError_View.php';
         }
-        elseif (file_exists(ROOT . DS . 'lib' . DS . 'modules' . DS . 'exception_handler' . DS . 'views' . DS . 'default' . $code . '_View.php')) {
+        elseif (file_exists(ROOT_LIB . DS . 'lib' . DS . 'modules' . DS . 'exception_handler' . DS . 'views' . DS . 'default' . $code . '_View.php')) {
             $viewPath = '..' . DS . '..' . DS . 'lib' . DS . 'modules' . DS . 'exception_handler' . DS . 'views' . DS . 'default' . $code . '_View.php';
         }
         else {

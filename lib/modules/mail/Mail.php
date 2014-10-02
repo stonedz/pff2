@@ -8,7 +8,7 @@ namespace pff\modules;
  * @author marco.sangiorgi<at>neropaco.net
  */
 
-require_once(ROOT . DS . 'lib/vendor/swiftmailer/swiftmailer/lib/swift_init.php');
+require_once(ROOT_LIB . DS . 'lib/vendor/swiftmailer/swiftmailer/lib/swift_init.php');
 
 class Mail extends \pff\AModule
 {

@@ -82,7 +82,7 @@ class ModuleManager {
      */
     public function loadModule($moduleName) {
         $moduleFilePathUser = ROOT . DS . 'app' . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
-        $moduleFilePathPff  = ROOT . DS . 'lib' . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
+        $moduleFilePathPff  = ROOT_LIB . DS . 'lib' . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
 
         if (file_exists($moduleFilePathUser)) {
             $moduleFilePath = $moduleFilePathUser;

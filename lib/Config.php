@@ -30,7 +30,7 @@ class Config {
      * @throws ConfigException
      * @return void
      */
-    public function loadConfig($configFile = 'config.php', $configPath = 'config') {
+    public function loadConfig($configFile = 'config.user.php', $configPath = 'app/config') {
         $completePath = ROOT . DS . $configPath . DS . $configFile;
 
         if (!file_exists($completePath)) {

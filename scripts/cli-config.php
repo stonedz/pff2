@@ -1,11 +1,13 @@
 <?php
 /**
- *
  * @author paolo.fagni<at>gmail.com
  */
-require '../lib/autoload.php';
-require '../app/autoload.php';
-require '../app/config/config.user.php';
+if (php_sapi_name() != "cli") {
+    die();
+}
+require 'vendor/stonedz/pff2/lib/autoload.php';
+require 'app/autoload.php';
+require 'app/config/config.user.php';
 
 // Define application environment
 define('APPLICATION_ENV', "development");
@@ -19,13 +21,13 @@ defined('APPLICATION_ENV')
 $config = new Doctrine\ORM\Configuration();
 
 // Proxies (3)
-$config->setProxyDir('../app/proxies');
+$config->setProxyDir('app/proxies');
 $config->setProxyNamespace('pff\proxies');
 
 $config->setAutoGenerateProxyClasses((APPLICATION_ENV == "development"));
 
 // Driver (4)
-$driverImpl = $config->newDefaultAnnotationDriver(array('../app/models'));
+$driverImpl = $config->newDefaultAnnotationDriver(array('app/models'));
 $config->setMetadataDriverImpl($driverImpl);
 
 // Caching Configuration (5)
@@ -57,3 +59,15 @@ $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
 
 $platform = $em->getConnection()->getDatabasePlatform();
 $platform->registerDoctrineTypeMapping('enum', 'string');
+
+foreach ($GLOBALS as $helperSetCandidate) {
+    if ($helperSetCandidate instanceof \Symfony\Component\Console\Helper\HelperSet) {
+        $helperSet = $helperSetCandidate;
+        break;
+    }
+}
+
+$helperSet = ($helperSet) ?: new \Symfony\Component\Console\Helper\HelperSet();
+
+\Doctrine\ORM\Tools\Console\ConsoleRunner::run($helperSet);
+return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($em);

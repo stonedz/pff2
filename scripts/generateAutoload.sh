@@ -1,6 +1,6 @@
 #!/bin/bash
-
-cd ..
+tmp=`pwd`
+cd vendor/stonedz/pff2
 phpab --exclude 'lib/vendor/ezyang/htmlpurifier/maintenance/*' \
     --exclude 'lib/vendor/doctrine/common/tests*' \
     --exclude 'lib/vendor/doctrine/dbal/tests*' \
@@ -10,8 +10,7 @@ phpab --exclude 'lib/vendor/ezyang/htmlpurifier/maintenance/*' \
     --exclude 'lib/vendor/swiftmailer/swiftmailer/tests*' \
     --exclude '*/tests/*' \
     --output lib/autoload.php lib
-
-phpab --output tests/autoload.php tests
+cd $tmp
 
 phpab --exclude 'app/vendor/doctrine/common/tests*' \
     --exclude 'app/vendor/doctrine/dbal/tests*' \
