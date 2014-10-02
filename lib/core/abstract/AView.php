@@ -142,4 +142,8 @@ abstract class AView implements IRenderable {
     public function getPublicFolder() {
         return $this->_publicFolder;
     }
+
+    public function addContent(\pff\AView $v) {
+        return null;
+    }
 }
