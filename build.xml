@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name=""e default="build">
-    <otarget name="build" depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpdox,phpcpd,phpunit,phpcb"/>
+<project name="pff app" default="build">
+    <target name="build" depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpdox,phpcpd,phpunit,phpcb"/>
 
     <target name="build-parallel" depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
 
