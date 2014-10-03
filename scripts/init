@@ -107,6 +107,18 @@ echo -ne "\n${CYAN}Copying cli-config for doctrine"
 cp vendor/stonedz/pff2/lib/site_skeleton/.gitignore .
 echo -e "${GREEN}[OK]"
 
+#Copying build files
+echo -ne "\n${CYAN}Copying ld related files"
+cp vendor/stonedz/pff2/phpdox.xml.dist .
+cp vendor/stonedz/pff2/build.xml .
+
+if [ ! -d "build" ]
+then
+mkdir build
+fi
+
+echo -e "${GREEN}[OK]"
+
 # Final message
 if [ "$fail" == "false" ]
 then

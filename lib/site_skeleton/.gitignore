@@ -6,3 +6,5 @@ vendor
 .idea
 *.swp
 cache.properties
+
+tests/_output/*
