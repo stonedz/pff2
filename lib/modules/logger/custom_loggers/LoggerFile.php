@@ -52,7 +52,7 @@ class LoggerFile extends \pff\modules\ALogger {
     public function getLogFile() {
 
         if ($this->_fp === null) {
-            $this->LOG_DIR = ROOT . DS . 'tmp' . DS . 'logs';
+            $this->LOG_DIR = ROOT .DS. 'app' . DS .  'logs';
             $filename      = $this->LOG_DIR . DS . date("Y-m-d");
             $this->_fp     = fopen($filename, 'a');
             if ($this->_fp === false) {
