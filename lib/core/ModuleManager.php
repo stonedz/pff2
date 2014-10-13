@@ -83,9 +83,12 @@ class ModuleManager {
     public function loadModule($moduleName) {
         $moduleFilePathUser = ROOT . DS . 'app' . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
         $moduleFilePathPff  = ROOT_LIB . DS . 'lib' . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
+	$moduleComposerPath = ROOT . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
 
         if (file_exists($moduleFilePathUser)) {
             $moduleFilePath = $moduleFilePathUser;
+	} elseif(file_exists($moduleComposerPath)) {
+           $moduleFilePath($moduleComposerPath);
         } elseif (file_exists($moduleFilePathPff)) {
             $moduleFilePath = $moduleFilePathPff;
         } else {
