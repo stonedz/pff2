@@ -83,12 +83,15 @@ class ModuleManager {
     public function loadModule($moduleName) {
         $moduleFilePathUser = ROOT . DS . 'app' . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
         $moduleFilePathPff  = ROOT_LIB . DS . 'lib' . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
-	$moduleComposerPath = ROOT . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
+	    $moduleComposerPath = ROOT . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
+
+        $composerModule = false;
 
         if (file_exists($moduleFilePathUser)) {
             $moduleFilePath = $moduleFilePathUser;
 	} elseif(file_exists($moduleComposerPath)) {
-           $moduleFilePath($moduleComposerPath);
+           $moduleFilePath = $moduleComposerPath;
+            $composerModule = true;
         } elseif (file_exists($moduleFilePathPff)) {
             $moduleFilePath = $moduleFilePathPff;
         } else {
@@ -99,6 +102,9 @@ class ModuleManager {
 
             if (isset($moduleConf['requires_php_extension']) && is_array($moduleConf['requires_php_extension'])) {
                 $this->checkPhpExtensions($moduleConf['requires_php_extension']);
+            }
+            if($composerModule) {
+                require(ROOT . DS . 'modules' . DS . $moduleName . DS. $moduleConf['class'] .'.php');
             }
 
             $tmpModule = new \ReflectionClass('\\pff\\modules\\' . $moduleConf['class']);
