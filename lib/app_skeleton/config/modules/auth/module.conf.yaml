@@ -13,3 +13,9 @@ moduleConf:
 
   # name of the session's var
   sessionVarName: pff_logged
+
+  # Use salt for password? The format to get the hash would be the concatenation hash(password+salt)
+  useSalt: true
+
+  # Method of the class to get the password salt
+  userGetSalt: getPasswordSalt

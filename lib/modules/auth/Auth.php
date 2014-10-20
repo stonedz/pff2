@@ -59,6 +59,21 @@ class Auth extends \pff\AModule implements \pff\IConfigurableModule {
     private $_encryptionStrategy;
 
     /**
+     * If true use password salts
+     *
+     * @var bool
+     */
+    private $_useSalt;
+
+    /**
+     * Method to get the salt
+     *
+     * @var string
+     */
+    private $_methodGetSalt;
+
+
+    /**
      * @param string $confFile Path to configuration file
      */
     public function __construct($confFile = 'auth/module.conf.yaml') {
@@ -71,11 +86,19 @@ class Auth extends \pff\AModule implements \pff\IConfigurableModule {
         $this->_methodGetPassword = $parsedConfig['moduleConf']['userGetPassword'];
         $this->_encryptionMethod  = $parsedConfig['moduleConf']['passwordType'];
         $this->_sessionVarName    = $parsedConfig['moduleConf']['sessionVarName'];
+        $this->_useSalt           = $parsedConfig['moduleConf']['useSalt'];
+        $this->_methodGetSalt     = $parsedConfig['moduleConf']['userGetSalt'];
 
         switch ($this->_encryptionMethod) {
             case 'md5':
             case 'MD5':
                 $this->_encryptionStrategy = new Md5PasswordChecker();
+                break;
+            case 'sha2':
+            case 'SHA2':
+            case 'sha256':
+            case 'SHA256':
+                $this->_encryptionMethod = new Sha256PasswordChecker();
                 break;
             default : // If no encrytion is selected choose md5
                 $this->_encryptionStrategy = new Md5PasswordChecker();
@@ -111,7 +134,7 @@ class Auth extends \pff\AModule implements \pff\IConfigurableModule {
             ->getRepository('pff\models\\' . $this->_modelName)
             ->findOneBy(array($this->_usernameAttribute => $username));
         if ($tmp) {
-            if ($this->_encryptionStrategy->checkPass($password, call_user_func(array($tmp, $this->_methodGetPassword)))) {
+            if ($this->_encryptionStrategy->checkPass($password, call_user_func(array($tmp, $this->_methodGetPassword)), ($this->_useSalt)?(call_user_func($tmp,$this->_methodGetSalt)):'')) {
                 $this->_logUser();
                 return true;
             } else {
