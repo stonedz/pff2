@@ -8,7 +8,7 @@ namespace pff\modules;
  */
 class Md5PasswordChecker extends APasswordChecker {
 
-    public function checkPass($pass, $encryptedPass, $salt) {
+    public function checkPass($pass, $encryptedPass, $salt = '') {
         if (md5($pass.$salt) == $encryptedPass) {
             return true;
         } else {

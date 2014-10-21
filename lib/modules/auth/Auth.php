@@ -98,7 +98,7 @@ class Auth extends \pff\AModule implements \pff\IConfigurableModule {
             case 'SHA2':
             case 'sha256':
             case 'SHA256':
-                $this->_encryptionMethod = new Sha256PasswordChecker();
+                $this->_encryptionStrategy = new Sha256PasswordChecker();
                 break;
             default : // If no encrytion is selected choose md5
                 $this->_encryptionStrategy = new Md5PasswordChecker();
@@ -134,7 +134,7 @@ class Auth extends \pff\AModule implements \pff\IConfigurableModule {
             ->getRepository('pff\models\\' . $this->_modelName)
             ->findOneBy(array($this->_usernameAttribute => $username));
         if ($tmp) {
-            if ($this->_encryptionStrategy->checkPass($password, call_user_func(array($tmp, $this->_methodGetPassword)), ($this->_useSalt)?(call_user_func($tmp,$this->_methodGetSalt)):'')) {
+            if ($this->_encryptionStrategy->checkPass($password, call_user_func(array($tmp, $this->_methodGetPassword)), ($this->_useSalt)?(call_user_func(array($tmp,$this->_methodGetSalt))):'')) {
                 $this->_logUser();
                 return true;
             } else {
