@@ -8,7 +8,7 @@ namespace pff\modules;
  */
 class Sha256PasswordChecker extends APasswordChecker {
 
-    public function checkPass($pass, $encryptedPass, $salti = '') {
+    public function checkPass($pass, $encryptedPass, $salt = '') {
         if (hash('sha256', $pass.$salt) == $encryptedPass) {
             return true;
         } else {
