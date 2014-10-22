@@ -14,8 +14,14 @@ class ViewPHP extends \pff\AView {
      */
     private $_data;
 
-    public function __construct($templateName, \pff\App $app) {
-        $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $templateName;
+    public function __construct($templateName, \pff\App $app)
+    {
+        if (substr($templateName, 0, 1) != '/'){
+            $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $templateName;
+        }
+        else {
+            $templatePath = $templateName;
+        }
         if (!file_exists($templatePath)) {
             throw new \pff\ViewException('Template file ' . $templatePath . ' does not exist');
         }
@@ -27,7 +33,12 @@ class ViewPHP extends \pff\AView {
     }
 
     public function render() {
-        $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $this->_templateFile;
+        if (substr($this->_templateFile, 0, 1) != '/'){
+            $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $this->_templateFile;
+        }
+        else {
+            $templatePath = $this->_templateFile;
+        }
         if (!file_exists($templatePath)) {
             throw new \pff\ViewException('Template file ' . $templatePath . ' does not exist');
         }
@@ -42,12 +53,17 @@ class ViewPHP extends \pff\AView {
         bindtextdomain("messages", ROOT . DS. 'app' . DS . 'locale');
         textdomain("messages");*/
 
-        include (ROOT . DS . 'app' . DS . 'views' . DS . $this->_templateFile);
+        include ($templatePath);
         //ob_end_flush();
     }
 
     public function renderHtml() {
-        $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $this->_templateFile;
+        if (substr($this->_templateFile, 0, 1) != '/'){
+            $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $this->_templateFile;
+        }
+        else {
+            $templatePath = $this->_templateFile;
+        }
         if (!file_exists($templatePath)) {
             throw new \pff\ViewException('Template file ' . $templatePath . ' does not exist');
         }
@@ -55,7 +71,7 @@ class ViewPHP extends \pff\AView {
             extract($this->_data); // Extract set data to scope vars
         }
 
-        include (ROOT . DS . 'app' . DS . 'views' . DS . $this->_templateFile);
+        include ($templatePath);
         $output = ob_get_contents();
         ob_clean();
         return $output;
