@@ -61,7 +61,9 @@ class ExceptionHandler extends \pff\AModule implements \pff\IBeforeSystemHook {
                 }
             }
         }
-        $this->_controller->resetViews();
+        if(isset($this->_controller)) {
+            $this->_controller->resetViews();
+        }
         $view->render();
     }
 }
