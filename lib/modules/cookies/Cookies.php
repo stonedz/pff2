@@ -88,7 +88,7 @@ class Cookies extends \pff\AModule {
      */
     public function deleteCookie($cookieName) {
         if (isset($_COOKIE[$cookieName])) {
-            if (setcookie($cookieName, null, time() - 6000)) {
+            if (setcookie($cookieName, null, time() - 6000, '/')) {
                 return true;
             } else {
                 return false;
