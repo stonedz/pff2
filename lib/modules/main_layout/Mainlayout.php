@@ -16,7 +16,9 @@ class Mainlayout extends \pff\AModule implements \pff\IBeforeHook{
      * @return mixed
      */
     public function doBefore() {
-        $l = \pff\FLayout::create('main_layout.php', $this->_app);
-        $this->_controller->setLayout($l);
+        if(count($this->_controller->getViews()) == 0) {
+            $l = \pff\FLayout::create('main_layout.php', $this->_app);
+            $this->_controller->setLayout($l);
+        }
     }
 }

@@ -46,21 +46,22 @@ class ExceptionHandler extends \pff\AModule implements \pff\IBeforeSystemHook {
             $viewPath = ROOT_LIB . DS . 'lib' . DS . 'modules' . DS . 'exception_handler' . DS . 'views' . DS . 'defaultError_View.php';
         }
         //die($viewPath);
-
         $view = \pff\FView::create($viewPath, $this->getApp());
         $view->set('message', $exception->getMessage());
+        $view->set('code', $exception->getCode());
         $view->set('trace', $exception->getTrace());
 
-        if(is_a($exception, '\pff\PffException')){
+        if(is_a($exception, '\pff\PffException')) {
             /** @var PffException $exception */
             $exceptionParams = $exception->getViewParams();
-            if($exceptionParams !== null && is_array($exceptionParams)) {
+            if ($exceptionParams !== null && is_array($exceptionParams)) {
                 $view->set('exceptionParams', $exceptionParams);
-                foreach($exceptionParams as $k=>$v){
+                foreach ($exceptionParams as $k => $v) {
                     $view->set($k, $v);
                 }
             }
         }
+        $this->_controller->resetViews();
         $view->render();
     }
 }

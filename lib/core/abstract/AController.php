@@ -104,6 +104,7 @@ abstract class AController {
         $this->_moduleManager  = $this->_app->getModuleManager();
         $this->_helperManager  = $this->_app->getHelperManager();
         $this->_layout         = null;
+        $this->_view           = array();
 
         if ($this->_config->getConfigData('orm')) {
             $this->initORM();
@@ -346,5 +347,9 @@ abstract class AController {
     public function resetViews() {
         unset($this->_view);
         $this->_view = array();
+    }
+
+    public function getViews() {
+        return $this->_view;
     }
 }
