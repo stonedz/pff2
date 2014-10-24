@@ -24,7 +24,7 @@
             "components/normalize.css": "2.1.2",
             "components/modernizr": "2.6.2",
             "codeception/codeception": "*",
-            "stonedz/pff2-installers": "v1.0.1-alpha2"
+            "stonedz/pff2-installers": "v1.0.1-alpha3"
         },
     "bin": ["scripts/init", "scripts/generateAutoload.sh", "scripts/generateAutoloadApp.sh"]
 }
