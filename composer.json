@@ -1,6 +1,6 @@
 {
     "name": "stonedz/pff2",
-        "type": "library",
+        "type": "pff2-core",
         "description": "A simple yet robust PHP MVC framework",
         "keywords": ["framework"],
         "homepage": "https://github.com/stonedz/pff2",
