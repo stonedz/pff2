@@ -8,3 +8,4 @@ vendor
 cache.properties
 
 tests/_output/*
+app/tmp/*
