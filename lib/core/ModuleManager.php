@@ -1,6 +1,7 @@
 <?php
 
 namespace pff;
+use Symfony\Component\Yaml\Parser;
 
 /**
  * Manages pff modules
@@ -38,9 +39,9 @@ class ModuleManager {
      */
     private $_app;
 
-    public function __construct(\pff\Config $cfg) {
+    public function __construct(Config $cfg) {
         $this->_config      = $cfg;
-        $this->_yamlParser  = new \Symfony\Component\Yaml\Parser();
+        $this->_yamlParser  = new Parser();
         $this->_hookManager = null;
         //$this->initModules();
     }
@@ -68,7 +69,7 @@ class ModuleManager {
     private function checkPhpExtensions($phpExtensions) {
         foreach ($phpExtensions as $extension) {
             if (!extension_loaded($extension)) {
-                throw new \pff\ModuleException("Module loagin failed! A module needs the following php extension in order to load: " . $extension);
+                throw new ModuleException("Module loagin failed! A module needs the following php extension in order to load: " . $extension);
             }
         }
     }
@@ -83,14 +84,14 @@ class ModuleManager {
     public function loadModule($moduleName) {
         $moduleFilePathUser = ROOT . DS . 'app' . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
         $moduleFilePathPff  = ROOT_LIB . DS . 'lib' . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
-	    $moduleComposerPath = ROOT . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
+        $moduleComposerPath = ROOT . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
 
         $composerModule = false;
 
         if (file_exists($moduleFilePathUser)) {
             $moduleFilePath = $moduleFilePathUser;
-	} elseif(file_exists($moduleComposerPath)) {
-           $moduleFilePath = $moduleComposerPath;
+        } elseif(file_exists($moduleComposerPath)) {
+            $moduleFilePath = $moduleComposerPath;
             $composerModule = true;
         } elseif (file_exists($moduleFilePathPff)) {
             $moduleFilePath = $moduleFilePathPff;
@@ -102,9 +103,6 @@ class ModuleManager {
 
             if (isset($moduleConf['requires_php_extension']) && is_array($moduleConf['requires_php_extension'])) {
                 $this->checkPhpExtensions($moduleConf['requires_php_extension']);
-            }
-            if($composerModule) {
-                require(ROOT . DS . 'modules' . DS . $moduleName . DS. $moduleConf['class'] .'.php');
             }
 
             $tmpModule = new \ReflectionClass('\\pff\\modules\\' . $moduleConf['class']);
@@ -165,7 +163,7 @@ class ModuleManager {
                 return $this->loadModule($moduleName);
             }
             catch (\Exception $e) {
-                throw new \pff\ModuleException("Cannot find requested module: $moduleName");
+                throw new ModuleException("Cannot find requested module: $moduleName");
             }
         }
     }
@@ -201,7 +199,7 @@ class ModuleManager {
     /**
      * Sets the Controller for each module
      */
-    public function setController(\pff\AController $controller) {
+    public function setController(AController $controller) {
         if (count($this->_modules) > 0) {
             foreach ($this->_modules as $module) {
                 $module->setController($controller);
