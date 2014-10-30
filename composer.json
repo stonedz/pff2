@@ -30,7 +30,7 @@
     "autoload": {
         "psr-4": {
             "pff\\": "src",
-            "pff\\modules": [
+            "pff\\modules\\": [
                 "src/modules/session",
                 "src/modules/url",
                 "src/modules/search"
