@@ -1,14 +1,16 @@
 <?php
 
 namespace pff\modules;
-use pff\PffException;
+use pff\Abstact\AModule;
+use pff\Iface\IBeforeSystemHook;
+use pff\Exception\PffException;
 
 /**
  * Manages uncaught exceptions
  *
  * @author paolo.fagni<at>gmail.com
  */
-class ExceptionHandler extends \pff\AModule implements \pff\IBeforeSystemHook {
+class ExceptionHandler extends AModule implements IBeforeSystemHook {
 
     /**
      * Executed before the system startup
@@ -51,7 +53,7 @@ class ExceptionHandler extends \pff\AModule implements \pff\IBeforeSystemHook {
         $view->set('code', $exception->getCode());
         $view->set('trace', $exception->getTrace());
 
-        if(is_a($exception, '\pff\PffException')) {
+        if(is_a($exception, '\pff\Exception\PffException')) {
             /** @var PffException $exception */
             $exceptionParams = $exception->getViewParams();
             if ($exceptionParams !== null && is_array($exceptionParams)) {

@@ -1,13 +1,14 @@
 <?php
 
 namespace pff\modules;
+use pff\Abstact\AModule;
 
 /**
  * User: alessandro
  * Date: 05/10/12
  * Time: 11.39
  */
-class Url extends \pff\AModule {
+class Url extends AModule {
 
     public function clear_string($str, $replace = array(), $delimiter = '-') {
         if (!empty($replace)) {

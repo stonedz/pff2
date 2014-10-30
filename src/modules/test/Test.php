@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\modules;
+use pff\Abstact\AModule;
 
 /**
  * Created by JetBrains PhpStorm.
@@ -9,7 +10,7 @@ namespace pff\modules;
  * Time: 11.39
  * To change this template use File | Settings | File Templates.
  */
-class Test extends \pff\AModule {
+class Test extends AModule {
 
     public function testOne($var) {
         return 'test '.$var;

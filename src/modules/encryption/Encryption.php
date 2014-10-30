@@ -1,13 +1,14 @@
 <?php
 
 namespace pff\modules;
+use pff\Abstact\AModule;
 
 /**
  * Helper module to encrypt/decrypt content
  *
  * @author paolo.fagni<at>gmail.com
  */
-class Encryption extends \pff\AModule {
+class Encryption extends AModule{
 
     const MODE = MCRYPT_MODE_CBC;
 

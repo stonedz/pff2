@@ -1,13 +1,15 @@
 <?php
 
 namespace pff\modules;
+use pff\Abstact\AModule;
+use pff\Iface\IBeforeSystemHook;
 
 /**
  * Module to manage sessions
  *
  * @author paolo.fagni<at>gmail.com
  */
-class Session extends \pff\AModule implements \pff\IBeforeSystemHook {
+class Session extends AModule implements IBeforeSystemHook {
 
 
     /**
@@ -15,9 +17,7 @@ class Session extends \pff\AModule implements \pff\IBeforeSystemHook {
      *
      * @return mixed
      */
-    public function doBeforeSystem()
-    {
+    public function doBeforeSystem() {
         session_start();
-        // TODO: Implement doBeforeSystem() method.
     }
 }

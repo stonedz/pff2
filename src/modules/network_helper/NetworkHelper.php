@@ -1,13 +1,14 @@
 <?php
 
 namespace pff\modules;
+use pff\Abstact\AModule;
 
 /**
  * Module to perform HTTP requests
  *
  * @author paolo.fagni<at>gmail.com
  */
-class NetworkHelper extends \pff\Amodule {
+class NetworkHelper extends AModule {
 
 
     public function __construct() {

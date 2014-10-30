@@ -1,12 +1,15 @@
 <?php
 
 namespace pff\modules;
+use pff\Abstact\AModule;
+use pff\Iface\IAfterViewHook;
+use pff\Iface\IBeforeViewHook;
 
 /**
  *
  * @author paolo.fagni<at>gmail.com
  */
-class TidyCleaner extends \pff\AModule implements \pff\IBeforeViewHook, \pff\IAfterViewHook {
+class TidyCleaner extends AModule implements IBeforeViewHook, IAfterViewHook {
 
     /**
      * Executes actions before the Views are rendered

@@ -1,22 +1,18 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: marco
+ * User: marco.sangiorgi@neropaco.net
  * Date: 07/12/12
  * Time: 16.04
- * To change this template use File | Settings | File Templates.
  */
 namespace pff\modules;
+use pff\Abstact\AModule;
 
 /**
  * Helper module to search into a database
  *
  * @author marco.sangiorgi<at>neropaco.net
  */
-
-
-class Searcher extends \pff\AModule
-{
+class Searcher extends AModule {
 
     private $models_array;
 
@@ -89,7 +85,7 @@ class Searcher extends \pff\AModule
      * return an array of entity matching $what, false otherwise
      */
     private function searchText($what, $modelname, $_em, $excludeArray = array()){
-        $reflector = new \ReflectionClass("\pff\models\\".$modelname);
+        $reflector = new \ReflectionClass("\\pff\\models\\".$modelname);
         $properties = $this->my_class_type($reflector);
         $searchableProperties = array();
         foreach($properties as $key=>$value){
@@ -138,7 +134,7 @@ class Searcher extends \pff\AModule
         }
         $qb = $_em->createQueryBuilder();
         $qb->select('f')
-            ->from("pff\models\\".$modelname, 'f');
+            ->from("pff\\models\\".$modelname, 'f');
         $or = $qb->expr()->orx();
         foreach($searchableProperties as $prop){
             $or->add($qb->expr()->like("f.{$prop}", ":{$key}" ));
@@ -161,7 +157,7 @@ class Searcher extends \pff\AModule
      * return an array of entity matching $what, false otherwise
      */
     private function searchNumberExact($what, $modelname, $_em, $excludeArray = array()){
-        $reflector = new \ReflectionClass("\pff\models\\".$modelname);
+        $reflector = new \ReflectionClass("\\pff\\models\\".$modelname);
         $properties = $this->my_class_type($reflector);
         $searchableProperties = array();
         foreach($properties as $key=>$value){
@@ -174,7 +170,7 @@ class Searcher extends \pff\AModule
         }
         $qb = $_em->createQueryBuilder();
         $qb->select('f')
-            ->from("pff\models\\".$modelname, 'f');
+            ->from("pff\\models\\".$modelname, 'f');
         $or = $qb->expr()->orx();
         foreach($searchableProperties as $prop){
             $or->add($qb->expr()->like("f.{$prop}", ":{$key}" ));
@@ -197,7 +193,7 @@ class Searcher extends \pff\AModule
      * return an array of entity matching $what, false otherwise
      */
     private function searchTextExact($what, $modelname, $_em, $excludeArray = array()){
-        $reflector = new \ReflectionClass("\pff\models\\".$modelname);
+        $reflector = new \ReflectionClass("\\pff\\models\\".$modelname);
         $properties = $this->my_class_type($reflector);
         $searchableProperties = array();
         foreach($properties as $key=>$value){
@@ -210,7 +206,7 @@ class Searcher extends \pff\AModule
         }
         $qb = $_em->createQueryBuilder();
         $qb->select('f')
-            ->from("pff\models\\".$modelname, 'f');
+            ->from("pff\\models\\".$modelname, 'f');
         $or = $qb->expr()->orx();
         foreach($searchableProperties as $prop){
             $or->add($qb->expr()->like("f.{$prop}", ":{$key}" ));
@@ -236,7 +232,7 @@ class Searcher extends \pff\AModule
         if(!is_array($what) && count($what) != 3){
             return false;
         }
-        $reflector = new \ReflectionClass("\pff\models\\".$modelname);
+        $reflector = new \ReflectionClass("\\pff\\models\\".$modelname);
         $properties = $this->my_class_type($reflector);
         $searchableProperties = array();
         foreach($properties as $key=>$value){
@@ -254,7 +250,7 @@ class Searcher extends \pff\AModule
 
         $qb = $_em->createQueryBuilder();
         $qb->select('f')
-            ->from("pff\models\\".$modelname, 'f');
+            ->from("pff\\models\\".$modelname, 'f');
         $or = $qb->expr()->orx();
         foreach($searchableProperties as $prop){
             $or->add($qb->expr()->between("f.{$prop}", ":da", ":a" ));

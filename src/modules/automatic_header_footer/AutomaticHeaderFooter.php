@@ -1,6 +1,11 @@
 <?php
 
 namespace pff\modules;
+use pff\Abstact\AModule;
+use pff\Factory\FView;
+use pff\Iface\IAfterHook;
+use pff\Iface\IBeforeViewHook;
+use pff\Iface\IConfigurableModule;
 
 /**
  * This pff module automatically loads an header or a footer
@@ -8,8 +13,8 @@ namespace pff\modules;
  * @author paolo.fagni<at>gmail.com
  */
 class AutomaticHeaderFooter
-    extends \pff\AModule
-    implements \pff\IBeforeViewHook, \pff\IAfterHook, \pff\IConfigurableModule {
+    extends AModule
+    implements IBeforeViewHook, IAfterHook, IConfigurableModule {
 
     /**
      * @var bool
@@ -84,12 +89,12 @@ class AutomaticHeaderFooter
                 strtolower($this->_controller->getControllerName()) . DS .
                 strtolower($this->_controller->getAction()) . DS . 'footer.php';
             if (file_exists($viewPath)) {
-                $this->_controller->addView(\pff\FView::create(strtolower($this->_controller->getControllerName()) . DS .
+                $this->_controller->addView(FView::create(strtolower($this->_controller->getControllerName()) . DS .
                     strtolower($this->_controller->getAction()) . DS . 'footer.php', $this->getController()->getApp()));
             } elseif ($this->_footerGlobal) {
                 $viewPath = ROOT . DS . 'app' . DS . 'views' . DS . 'footer.php';
                 if (file_exists($viewPath)) {
-                    $this->_controller->addView(\pff\FView::create('footer.php', $this->getController()->getApp()));
+                    $this->_controller->addView(FView::create('footer.php', $this->getController()->getApp()));
                 }
             }
         }

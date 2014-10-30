@@ -1,6 +1,6 @@
 <?php
 
-namespace pff\Abstract;
+namespace pff\Abstact;
 
 /**
  * Every model must implement this abstract class

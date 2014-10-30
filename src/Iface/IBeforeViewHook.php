@@ -1,13 +1,13 @@
 <?php
 
-namespace pff\Interface;
+namespace pff\Iface;
 
 /**
  * Implements a hook before the registered views
  *
  * @author paolo.fagni<at>gmail.com
  */
-interface IBeforeViewHook extends \pff\IHookProvider {
+interface IBeforeViewHook extends IHookProvider {
 
     /**
      * Executes actions before the Views are rendered

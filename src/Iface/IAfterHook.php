@@ -1,13 +1,13 @@
 <?php
 
-namespace pff\Interface;
+namespace pff\Iface;
 
 /**
  * Implements a hook after the controller
  *
  * @author paolo.fagni<at>gmail.com
  */
-interface IAfterHook extends \pff\IHookProvider  {
+interface IAfterHook extends IHookProvider  {
 
     /**
      * Executes actios after the controller has finished its work.

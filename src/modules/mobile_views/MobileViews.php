@@ -2,9 +2,9 @@
 
 namespace pff\modules;
 
-use pff\AModule;
-use pff\IBeforeHook;
-use pff\IConfigurableModule;
+use pff\Abstact\AModule;
+use pff\Iface\IBeforeHook;
+use pff\Iface\IConfigurableModule;
 use Symfony\Component\DependencyInjection\Loader\IniFileLoader;
 
 class MobileViews extends AModule implements IConfigurableModule, IBeforeHook {
@@ -211,5 +211,4 @@ class MobileViews extends AModule implements IConfigurableModule, IBeforeHook {
     public function getMobileViewOnly() {
         return $this->_sessionForceMobile;
     }
-
 }

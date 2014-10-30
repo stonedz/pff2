@@ -1,6 +1,6 @@
 <?php
 
-namespace pff\Abstract;
+namespace pff\Abstact;
 
 /**
  * Every view must implement this abstract class

@@ -1,5 +1,6 @@
 <?php
 namespace pff\modules;
+use pff\Abstact\AModule;
 
 /**
  * Module to perform payment with Paypal express checkout system
@@ -8,7 +9,7 @@ namespace pff\modules;
  * 
  * @author Marco Bernini <marco.bernini@neropaco.net> 
  */
-class Paypal extends \pff\AModule {
+class Paypal extends AModule {
     
     /**
      * This constant value is provided by Paypal to a merchant (seller) account.

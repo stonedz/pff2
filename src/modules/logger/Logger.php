@@ -1,6 +1,8 @@
 <?php
 
 namespace pff\modules;
+use pff\Abstact\AModule;
+use pff\Iface\IConfigurableModule;
 
 
 /**
@@ -11,8 +13,7 @@ namespace pff\modules;
  * @author paolo.fagni<at>gmail.com
  */
 
-class Logger extends \pff\AModule implements \pff\IConfigurableModule
-{
+class Logger extends AModule implements IConfigurableModule {
 
     /**
      * Private Logger instance (Singleton)

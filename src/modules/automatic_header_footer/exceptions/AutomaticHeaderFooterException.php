@@ -1,13 +1,14 @@
 <?php
 
 namespace pff\modules;
+use pff\Exception\PffException;
 
 /**
  * Generic logger exception
  *
  * @author paolo.fagni<at>gmail.com
  */
-class AutomaticHeaderFooterException extends \pff\PffException {
+class AutomaticHeaderFooterException extends PffException {
 
     /**
      * contains the backtrack of all the callers.

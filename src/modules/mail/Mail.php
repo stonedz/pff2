@@ -8,10 +8,11 @@ namespace pff\modules;
  * @author marco.sangiorgi<at>neropaco.net
  */
 
+use pff\Abstact\AModule;
+
 require_once(ROOT_LIB . DS . 'lib/vendor/swiftmailer/swiftmailer/lib/swift_init.php');
 
-class Mail extends \pff\AModule
-{
+class Mail extends AModule {
 
     private $mailer;
 
@@ -19,8 +20,7 @@ class Mail extends \pff\AModule
 
     private $message;
 
-    public function __construct($confFile = 'mail/module.conf.yaml')
-    {
+    public function __construct($confFile = 'mail/module.conf.yaml') {
         $this->loadConfig($this->readConfig($confFile));
 
         $this->mailer = new \Swift_Mailer($this->transport);
@@ -31,8 +31,7 @@ class Mail extends \pff\AModule
      *
      * @param array $parsedConfig
      */
-    private function loadConfig($parsedConfig)
-    {
+    private function loadConfig($parsedConfig) {
         if(isset($parsedConfig['moduleConf']['Type']) && $parsedConfig['moduleConf']['Type'] == "smtp"){
             
             $this->transport = \Swift_SmtpTransport::newInstance();

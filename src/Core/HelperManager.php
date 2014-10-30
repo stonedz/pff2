@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Core;
+use pff\Exception\HelperException;
 
 /**
  * Manages helpers
@@ -15,7 +16,7 @@ class HelperManager
      *
      * @param string $helperName Name of the helper to include
      * @return bool
-     * @throws \pff\HelperException
+     * @throws HelperException
      */
     public function load($helperName) {
         $helperFilePathUser = ROOT . DS . 'app' . DS . 'helpers' . DS . $helperName . '.php';
@@ -33,7 +34,7 @@ class HelperManager
         }
 
         if (!($found)) {
-            throw new \pff\HelperException("Helper not found: " . $helperName);
+            throw new HelperException("Helper not found: " . $helperName);
         }
         else {
             return true;

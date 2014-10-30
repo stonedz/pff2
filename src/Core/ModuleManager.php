@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Core;
+use pff\AModule;
 use Symfony\Component\Yaml\Parser;
 
 /**
@@ -16,7 +17,7 @@ class ModuleManager {
     private $_config;
 
     /**
-     * @var \pff\HookManager
+     * @var HookManager
      */
     private $_hookManager;
 
@@ -28,7 +29,7 @@ class ModuleManager {
     /**
      * Contains loaded modules
      *
-     * @var \pff\AModule[]
+     * @var AModule[]
      */
     private $_modules;
 
@@ -39,7 +40,7 @@ class ModuleManager {
      */
     private $_app;
 
-    public function __construct(Config $cfg) {
+    public function __construct(\pff\Config $cfg) {
         $this->_config      = $cfg;
         $this->_yamlParser  = new Parser();
         $this->_hookManager = null;

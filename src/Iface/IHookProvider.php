@@ -1,6 +1,6 @@
 <?php
 
-namespace pff\Interface;
+namespace pff\Iface;
 
 /**
  *

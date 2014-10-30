@@ -1,12 +1,14 @@
 <?php
 
 namespace pff\modules;
+use pff\Abstact\AModule;
+use pff\Iface\IBeforeSystemHook;
 
 /**
  *
  * @author paolo.fagni<at>gmail.com
  */
-class MultiLanguage extends \pff\AModule implements \pff\IBeforeSystemHook {
+class MultiLanguage extends AModule implements IBeforeSystemHook {
 
     /**
      * Contains the user selected language if specified in URL or the default specified in the configuration

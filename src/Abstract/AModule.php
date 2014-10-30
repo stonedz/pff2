@@ -1,6 +1,6 @@
 <?php
 
-namespace pff\Abstract;
+namespace pff\Abstact;
 
 /**
  * Abstract class for pff modules

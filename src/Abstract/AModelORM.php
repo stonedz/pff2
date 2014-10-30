@@ -1,6 +1,6 @@
 <?php
 
-namespace pff\Abstract;
+namespace pff\Abstact;
 
 /**
  * Model that will use ORM to obtain object persistance

@@ -1,13 +1,13 @@
 <?php
 
-namespace pff\Interface;
+namespace pff\Iface;
 
 /**
  * Before controller hook
  *
  * @author paolo.fagni<at>gmail.com
  */
-interface IBeforeHook extends \pff\IHookProvider {
+interface IBeforeHook extends IHookProvider {
 
     /**
      * Executes actions before the Controller

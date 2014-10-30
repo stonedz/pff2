@@ -1,6 +1,9 @@
 <?php
 
 namespace pff\Core;
+use pff\Exception\HookException;
+use pff\IBeforeHook;
+use pff\IHookProvider;
 
 /**
  * Hook mediator
@@ -57,39 +60,39 @@ class HookManager {
     /**
      * Registers a hook provider
      *
-     * @param \pff\IHookProvider $prov
-     * @throws \pff\HookException
+     * @param IHookProvider $prov
+     * @throws HookException
      */
-    public function registerHook(\pff\IHookProvider $prov) {
+    public function registerHook(IHookProvider $prov) {
         $found = false;
 
-        if(is_a($prov, '\\pff\\IBeforeHook')) {
+        if(is_a($prov, '\\pff\\Interface\\IBeforeHook')) {
             $this->_beforeController[] = $prov;
             $found                     = true;
         }
 
-        if(is_a($prov, '\\pff\\IAfterHook')) {
+        if(is_a($prov, '\\pff\\Interface\\IAfterHook')) {
             $this->_afterController[] = $prov;
             $found                    = true;
         }
 
-        if(is_a($prov, '\\pff\\IBeforeSystemHook')) {
+        if(is_a($prov, '\\pff\\Interface\\IBeforeSystemHook')) {
             $this->_beforeSystem[] = $prov;
             $found                 = true;
         }
 
-        if(is_a($prov, '\\pff\\IBeforeViewHook')) {
+        if(is_a($prov, '\\pff\\Interface\\IBeforeViewHook')) {
             $this->_beforeView[] = $prov;
             $found               = true;
         }
 
-        if(is_a($prov, '\\pff\\IAfterViewHook')) {
+        if(is_a($prov, '\\pff\\Interface\\IAfterViewHook')) {
             $this->_afterView[] = $prov;
             $found              = true;
 
         }
         if(!$found) {
-            throw new \pff\HookException("Cannot add given class as a hook provider: ". get_class($prov));
+            throw new HookException("Cannot add given class as a hook provider: ". get_class($prov));
         }
     }
 
@@ -166,14 +169,14 @@ class HookManager {
     }
 
     /**
-     * @return \pff\IBeforeHook[]
+     * @return IBeforeHook[]
      */
     public function getBeforeController() {
         return $this->_beforeController;
     }
 
     /**
-     * @return \pff\IBeforeSystemHook[]
+     * @return IBeforeSystemHook[]
      */
     public function getBeforeSystem() {
         return $this->_beforeSystem;

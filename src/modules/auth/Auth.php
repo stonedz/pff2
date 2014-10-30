@@ -1,6 +1,9 @@
 <?php
 
 namespace pff\modules;
+
+use pff\Abstact\AModule;
+use pff\Iface\IConfigurableModule;
 use pff\models;
 
 /**
@@ -8,7 +11,7 @@ use pff\models;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class Auth extends \pff\AModule implements \pff\IConfigurableModule {
+class Auth extends AModule implements IConfigurableModule {
 
     /*
      * The model class name

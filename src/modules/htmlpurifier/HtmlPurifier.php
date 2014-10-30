@@ -1,12 +1,13 @@
 <?php
 
 namespace pff\modules;
+use pff\Abstact\AModule;
 
 /**
  *
  * @author paolo.fagni<at>gmail.com
  */
-class HtmlPurifier extends \pff\AModule {
+class HtmlPurifier extends AModule {
 
     public function __construct() {
         if (!defined('HTMLPURIFIER_PREFIX')) {

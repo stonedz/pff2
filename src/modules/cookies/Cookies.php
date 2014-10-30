@@ -1,13 +1,14 @@
 <?php
 
 namespace pff\modules;
+use pff\Abstact\AModule;
 
 /**
  * Helper module to manage cookies
  *
  * @author paolo.fagni<at>gmail.com
  */
-class Cookies extends \pff\AModule {
+class Cookies extends AModule {
 
     /**
      * If true use encryped cookies

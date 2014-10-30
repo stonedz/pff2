@@ -1,13 +1,16 @@
 <?php
 
 namespace pff\modules;
+use pff\Abstact\AModule;
+use pff\Iface\IBeforeSystemHook;
+use pff\Iface\IConfigurableModule;
 
 /**
  * This module loads a specific controller if the user requested controller is not valid
  *
  * @author paolo.fagni<at>gmail.com
  */
-class DefaultController extends \pff\AModule implements \pff\IConfigurableModule, \pff\IBeforeSystemHook{
+class DefaultController extends AModule implements IConfigurableModule, IBeforeSystemHook{
 
     /**
      * @var string

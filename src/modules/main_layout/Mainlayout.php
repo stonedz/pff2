@@ -1,14 +1,16 @@
 <?php
 namespace pff\modules;
+use pff\Abstact\AModule;
+use pff\Factory\FLayout;
+use pff\Iface\IBeforeHook;
+
 /**
- * Created by IntelliJ IDEA.
- * User: stonedz
+ * User: paolo.fagni@gmail.com
  * Date: 8/20/14
  * Time: 3:24 PM
- * To change this template use File | Settings | File Templates.
  */
 
-class Mainlayout extends \pff\AModule implements \pff\IBeforeHook{
+class Mainlayout extends AModule implements IBeforeHook{
 
     /**
      * Executes actions before the Controller
@@ -17,7 +19,7 @@ class Mainlayout extends \pff\AModule implements \pff\IBeforeHook{
      */
     public function doBefore() {
         if(count($this->_controller->getViews()) == 0) {
-            $l = \pff\FLayout::create('main_layout.php', $this->_app);
+            $l = FLayout::create('main_layout.php', $this->_app);
             $this->_controller->setLayout($l);
         }
     }
