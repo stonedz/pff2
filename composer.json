@@ -28,7 +28,7 @@
     },
     "bin": ["scripts/init", "scripts/generateAutoload.sh", "scripts/generateAutoloadApp.sh"],
     "autoload": {
-        "psr-": {
+        "psr-4": {
             "pff\\": "src"
         }
     }
