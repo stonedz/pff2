@@ -1,7 +1,7 @@
 <?php
 
 namespace pff\modules;
-use pff\Abstact\AModule;
+use pff\Abs\AModule;
 use pff\Iface\IConfigurableModule;
 use pff\modules\Abs\ALogger;
 use pff\modules\Exception\LoggerException;

@@ -1,6 +1,6 @@
 <?php
 namespace pff\modules;
-use pff\Abstact\AModule;
+use pff\Abs\AModule;
 use pff\modules\Exception\PaypalException;
 
 /**

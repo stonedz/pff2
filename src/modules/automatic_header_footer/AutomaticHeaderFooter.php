@@ -1,7 +1,7 @@
 <?php
 
 namespace pff\modules;
-use pff\Abstact\AModule;
+use pff\Abs\AModule;
 use pff\Factory\FView;
 use pff\Iface\IAfterHook;
 use pff\Iface\IBeforeViewHook;

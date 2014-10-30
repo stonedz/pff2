@@ -1,7 +1,7 @@
 <?php
 
 namespace pff\Core;
-use pff\Abstact\AModule;
+use pff\Abs\AModule;
 use pff\Exception\ModuleException;
 use Symfony\Component\Yaml\Parser;
 

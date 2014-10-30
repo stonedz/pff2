@@ -1,7 +1,7 @@
 <?php
 
 namespace pff\modules;
-use pff\Abstact\AModule;
+use pff\Abs\AModule;
 
 /**
  * Helper module to manage cookies

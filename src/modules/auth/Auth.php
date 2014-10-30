@@ -2,7 +2,7 @@
 
 namespace pff\modules;
 
-use pff\Abstact\AModule;
+use pff\Abs\AModule;
 use pff\Iface\IConfigurableModule;
 use pff\modules\Abs\APasswordChecker;
 use pff\modules\Utils\Md5PasswordChecker;

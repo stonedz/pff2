@@ -8,7 +8,7 @@ namespace pff\modules;
  * @author marco.sangiorgi<at>neropaco.net
  */
 
-use pff\Abstact\AModule;
+use pff\Abs\AModule;
 
 require_once(ROOT_LIB . DS . 'lib/vendor/swiftmailer/swiftmailer/lib/swift_init.php');
 

@@ -5,7 +5,7 @@
  * Time: 16.04
  */
 namespace pff\modules;
-use pff\Abstact\AModule;
+use pff\Abs\AModule;
 
 /**
  * Helper module to search into a database

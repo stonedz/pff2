@@ -2,7 +2,7 @@
 
 namespace pff\modules;
 
-use pff\Abstact\AModule;
+use pff\Abs\AModule;
 use pff\Iface\IBeforeHook;
 use pff\Iface\IConfigurableModule;
 use Symfony\Component\DependencyInjection\Loader\IniFileLoader;
