@@ -4,7 +4,9 @@ namespace pff\modules;
 
 use pff\Abstact\AModule;
 use pff\Iface\IConfigurableModule;
-use pff\models;
+use pff\modules\Abs\APasswordChecker;
+use pff\modules\Utils\Md5PasswordChecker;
+use pff\modules\Utils\Sha256PasswordChecker;
 
 /**
  * Module to manage user authentification
@@ -57,7 +59,7 @@ class Auth extends AModule implements IConfigurableModule {
     private $_sessionVarName;
 
     /**
-     * @var \pff\modules\APasswordChecker
+     * @var APasswordChecker
      */
     private $_encryptionStrategy;
 

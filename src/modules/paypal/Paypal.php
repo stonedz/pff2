@@ -1,6 +1,7 @@
 <?php
 namespace pff\modules;
 use pff\Abstact\AModule;
+use pff\modules\Exception\PaypalException;
 
 /**
  * Module to perform payment with Paypal express checkout system

@@ -3,6 +3,8 @@
 namespace pff\modules;
 use pff\Abstact\AModule;
 use pff\Iface\IConfigurableModule;
+use pff\modules\Abs\ALogger;
+use pff\modules\Exception\LoggerException;
 
 
 /**
@@ -25,7 +27,7 @@ class Logger extends AModule implements IConfigurableModule {
     /**
      * Array of loggers registered.
      *
-     * @var \pff\modules\ALogger[]
+     * @var ALogger[]
      */
     private $_loggers;
 
@@ -44,7 +46,7 @@ class Logger extends AModule implements IConfigurableModule {
         $conf = $this->readConfig($confFile);
         try {
             foreach ($conf['moduleConf']['activeLoggers'] as $logger) {
-                $tmpClass         = new \ReflectionClass('\\pff\\modules\\' . (string)$logger['class']);
+                $tmpClass         = new \ReflectionClass('\\pff\\modules\\Utils\\' . (string)$logger['class']);
                 $this->_loggers[] = $tmpClass->newInstance();
             }
         } catch (\ReflectionException $e) {
@@ -106,7 +108,7 @@ class Logger extends AModule implements IConfigurableModule {
         foreach ($this->_loggers as $logger) {
             try {
                 $logger->logMessage($message, $level);
-            } catch (\pff\modules\LoggerException $e) {
+            } catch (LoggerException $e) {
                 throw $e;
             }
         }

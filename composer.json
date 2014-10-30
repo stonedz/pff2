@@ -33,7 +33,27 @@
             "pff\\modules\\": [
                 "src/modules/session",
                 "src/modules/url",
-                "src/modules/search"
+                "src/modules/search",
+                "src/modules/auth",
+                "src/modules/automatic_header_footer",
+                "src/modules/config_var",
+                "src/modules/cookies",
+                "src/modules/default_controller",
+                "src/modules/encryption",
+                "src/modules/exception_handler",
+                "src/modules/htmlpurifier",
+                "src/modules/logger",
+                "src/modules/mail",
+                "src/modules/main_layout",
+                "src/modules/mobile_views",
+                "src/modules/multilanguage",
+                "src/modules/network_helper",
+                "src/modules/paypal",
+                "src/modules/search",
+                "src/modules/session",
+                "src/modules/tidy",
+                "src/modules/url"
+
             ]
         }
     }
