@@ -29,7 +29,12 @@
     "bin": ["scripts/init", "scripts/generateAutoload.sh", "scripts/generateAutoloadApp.sh"],
     "autoload": {
         "psr-4": {
-            "pff\\": "src"
+            "pff\\": "src",
+            "pff\\modules": [
+                "src/modules/session",
+                "src/modules/url",
+                "src/modules/search"
+            ]
         }
     }
 }

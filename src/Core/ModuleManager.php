@@ -1,7 +1,8 @@
 <?php
 
 namespace pff\Core;
-use pff\AModule;
+use pff\Abstact\AModule;
+use pff\Exception\ModuleException;
 use Symfony\Component\Yaml\Parser;
 
 /**
@@ -79,7 +80,7 @@ class ModuleManager {
      * Loads a module and its dependencies and then returns the module reference
      *
      * @param string $moduleName
-     * @return bool|\pff\AModule
+     * @return bool|AModule
      * @throws \pff\ModuleException
      */
     public function loadModule($moduleName) {
@@ -107,7 +108,7 @@ class ModuleManager {
             }
 
             $tmpModule = new \ReflectionClass('\\pff\\modules\\' . $moduleConf['class']);
-            if ($tmpModule->isSubclassOf('\\pff\\AModule')) {
+            if ($tmpModule->isSubclassOf('\\pff\\Abstract\\AModule')) {
                 $moduleName = strtolower($moduleConf['name']);
 
                 if (isset($this->_modules[$moduleName])) { //Module has already been loaded
@@ -139,11 +140,11 @@ class ModuleManager {
                 throw new \pff\ModuleException("Invalid module: " . $moduleConf['name']);
             }
         } catch (\Symfony\Component\Yaml\Exception\ParseException $e) {
-            throw new \pff\ModuleException("Unable to parse module configuration
+            throw new ModuleException("Unable to parse module configuration
                                                 file for $moduleName: " . $e->getMessage());
         }
         catch (\ReflectionException $e) {
-            throw new \pff\ModuleException("Unable to create module instance: " . $e->getMessage());
+            throw new ModuleException("Unable to create module instance: " . $e->getMessage());
         }
 
     }
@@ -153,7 +154,7 @@ class ModuleManager {
      *
      * @param string $moduleName
      * @throws ModuleException
-     * @return \pff\AModule The requested module
+     * @return AModule The requested module
      */
     public function getModule($moduleName) {
         $moduleName = strtolower($moduleName);
