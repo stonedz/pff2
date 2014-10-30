@@ -1,0 +1,11 @@
+composer.lock
+*.iml
+composer.phar
+components
+vendor
+.idea
+*.swp
+cache.properties
+
+tests/_output/*
+app/tmp/*
