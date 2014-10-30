@@ -17,5 +17,5 @@ define('EXT_ROOT', $ext_root);
 
 (isset($_GET['url'])) ? $url = $_GET['url'] : $url='' ;
 
-require_once(ROOT_LIB . DS . 'lib' . DS . 'bootstrap.php');
+require_once(ROOT_LIB  . DS . 'bootstrap.php');
 

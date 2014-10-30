@@ -1,3 +1,0 @@
-  "beberlei/DoctrineExtensions": "dev-master",
-  "dompdf/dompdf": "dev-master",
-  "hybridauth/hybridauth": "dev-master"

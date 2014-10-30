@@ -1,4 +1,0 @@
-name: MainLayout
-version: "0.1"
-desc: Enables main layout automatic loading
-class: Mainlayout

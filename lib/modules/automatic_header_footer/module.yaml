@@ -1,4 +1,0 @@
-name: AutomaticHeaderFooter
-version: "0.1"
-desc: Automagically load header and footer based on Controller/action name
-class: AutomaticHeaderFooter

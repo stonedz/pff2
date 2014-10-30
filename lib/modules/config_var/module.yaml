@@ -1,5 +1,0 @@
-name: ConfigVars
-version: "0.1"
-desc: Gestione delle variabili dal database
-class: ConfigVars
-

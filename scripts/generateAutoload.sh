@@ -9,7 +9,7 @@ phpab --exclude 'lib/vendor/ezyang/htmlpurifier/maintenance/*' \
     --exclude 'lib/vendor/swiftmailer/swiftmailer/test-suite*' \
     --exclude 'lib/vendor/swiftmailer/swiftmailer/tests*' \
     --exclude '*/tests/*' \
-    --output lib/autoload.php lib
+    --output src/autoload.php src 
 cd $tmp
 
 phpab --exclude 'app/vendor/doctrine/common/tests*' \
