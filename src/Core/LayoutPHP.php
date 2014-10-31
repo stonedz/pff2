@@ -14,7 +14,7 @@ use pff\Abs\AView;
 class LayoutPHP extends ViewPHP {
 
     /**
-     * @var \pff\AView[]
+     * @var AView[]
      */
     private $_contentView;
 

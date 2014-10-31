@@ -67,12 +67,12 @@ class AutomaticHeaderFooter
                 strtolower($this->_controller->getControllerName()) . DS .
                 strtolower($this->_controller->getAction()) . DS . 'header.php';
             if (file_exists($viewPath)) {
-                $this->_controller->addViewPre(\pff\FView::create(strtolower($this->_controller->getControllerName()) . DS .
+                $this->_controller->addViewPre(FView::create(strtolower($this->_controller->getControllerName()) . DS .
                     strtolower($this->_controller->getAction()) . DS . 'header.php', $this->getController()->getApp()));
             } elseif ($this->_headerGlobal) {
                 $viewPath = ROOT . DS . 'app' . DS . 'views' . DS . 'header.php';
                 if (file_exists($viewPath)) {
-                    $this->_controller->addViewPre(\pff\FView::create('header.php', $this->getController()->getApp()));
+                    $this->_controller->addViewPre(FView::create('header.php', $this->getController()->getApp()));
                 }
             }
         }

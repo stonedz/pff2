@@ -2,6 +2,7 @@
 
 namespace pff\modules;
 use pff\Abs\AModule;
+use pff\Factory\FView;
 use pff\Iface\IBeforeSystemHook;
 use pff\Exception\PffException;
 
@@ -47,8 +48,7 @@ class ExceptionHandler extends AModule implements IBeforeSystemHook {
         else {
             $viewPath = ROOT_LIB . DS . 'src' . DS . 'modules' . DS . 'exception_handler' . DS . 'views' . DS . 'defaultError_View.php';
         }
-        //die($viewPath);
-        $view = \pff\FView::create($viewPath, $this->getApp());
+        $view = FView::create($viewPath, $this->getApp());
         $view->set('message', $exception->getMessage());
         $view->set('code', $exception->getCode());
         $view->set('trace', $exception->getTrace());

@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Core;
+use pff\Abs\AView;
 
 /**
  * Layout system with Smarty templates
@@ -19,16 +20,16 @@ class LayoutSmarty extends \pff\ViewSmarty {
     }
 
     /**
-     * @var \pff\AView[]
+     * @var AView[]
      */
     private $_contentView;
 
     /**
      * Adds an Aview to the layout queue
      *
-     * @param \pff\AView $view
+     * @param AView $view
      */
-    public function addContent(\pff\AView $view) {
+    public function addContent(AView $view) {
         $this->_contentView[] = $view;
     }
 
