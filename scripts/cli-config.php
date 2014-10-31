@@ -3,10 +3,9 @@
  * @author paolo.fagni<at>gmail.com
  */
 if (php_sapi_name() != "cli") {
-    die();
+    throw new \Exception('can\'t do that');
 }
-require 'vendor/stonedz/pff2/lib/autoload.php';
-require 'app/autoload.php';
+require 'vendor/autoload.php'
 require 'app/config/config.user.php';
 
 // Define application environment
