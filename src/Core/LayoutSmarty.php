@@ -11,7 +11,7 @@ use pff\Abs\AView;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class LayoutSmarty extends \pff\ViewSmarty {
+class LayoutSmarty extends ViewSmarty {
 
     public function __construct($tempalteName, \pff\App $app) {
         parent::__construct($tempalteName, $app);
