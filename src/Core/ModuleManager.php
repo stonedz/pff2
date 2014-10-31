@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Core;
+use pff\Abs\AController;
 use pff\Abs\AModule;
 use pff\Exception\ModuleException;
 use Symfony\Component\Yaml\Parser;
@@ -45,7 +46,6 @@ class ModuleManager {
         $this->_config      = $cfg;
         $this->_yamlParser  = new Parser();
         $this->_hookManager = null;
-        //$this->initModules();
     }
 
     /**
@@ -81,7 +81,7 @@ class ModuleManager {
      *
      * @param string $moduleName
      * @return bool|AModule
-     * @throws \pff\ModuleException
+     * @throws ModuleException
      */
     public function loadModule($moduleName) {
         $moduleFilePathUser = ROOT . DS . 'app' . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
@@ -108,7 +108,7 @@ class ModuleManager {
             }
 
             $tmpModule = new \ReflectionClass('\\pff\\modules\\' . $moduleConf['class']);
-            if ($tmpModule->isSubclassOf('\\pff\\Abstract\\AModule')) {
+            if ($tmpModule->isSubclassOf('\\pff\\Abs\\AModule')) {
                 $moduleName = strtolower($moduleConf['name']);
 
                 if (isset($this->_modules[$moduleName])) { //Module has already been loaded
@@ -123,7 +123,7 @@ class ModuleManager {
                 $this->_modules[$moduleName]->setConfig($this->_config);
                 $this->_modules[$moduleName]->setApp($this->_app);
 
-                if ($tmpModule->isSubclassOf('\pff\IHookProvider') && $this->_hookManager !== null) {
+                if ($tmpModule->isSubclassOf('\pff\Iface\IHookProvider') && $this->_hookManager !== null) {
                     $this->_hookManager->registerHook($this->_modules[$moduleName]);
                 }
 

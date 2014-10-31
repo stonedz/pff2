@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Abs;
+use pff\Iface\IRenderable;
 
 /**
  * Every view must implement this abstract class
@@ -143,7 +144,11 @@ abstract class AView implements IRenderable {
         return $this->_publicFolder;
     }
 
-    public function addContent(\pff\AView $v) {
+    public function addContent(AView $v) {
+        return null;
+    }
+
+    public function content($index = 0) {
         return null;
     }
 }

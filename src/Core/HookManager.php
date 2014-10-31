@@ -2,8 +2,12 @@
 
 namespace pff\Core;
 use pff\Exception\HookException;
-use pff\IBeforeHook;
-use pff\IHookProvider;
+use pff\Iface\IAfterHook;
+use pff\Iface\IAfterViewHook;
+use pff\Iface\IBeforeHook;
+use pff\Iface\IBeforeSystemHook;
+use pff\Iface\IBeforeViewHook;
+use pff\Iface\IHookProvider;
 
 /**
  * Hook mediator
@@ -15,28 +19,28 @@ class HookManager {
     /**
      * Array of hooks to be executed before system startup
      *
-     * @var \pff\IBeforeSystemHook[]
+     * @var IBeforeSystemHook[]
      */
     private $_beforeSystem;
 
     /**
      * Array of hooks to be executed before the controller
      *
-     * @var \pff\IBeforeHook[]
+     * @var IBeforeHook[]
      */
     private $_beforeController;
 
     /**
      * Array of hooks to be executed after the controller
      *
-     * @var \pff\IAfterHook[]
+     * @var IAfterHook[]
      */
     private $_afterController;
 
     /**
      * Array of hooks to be executed before the Views are rendered
      *
-     * @var \pff\IBeforeViewHook[]
+     * @var IBeforeViewHook[]
      */
     private $_beforeView;
 
@@ -44,7 +48,7 @@ class HookManager {
     /**
      * Array of hooks to be executed after the Views are rendered
      *
-     * @var \pff\IAfterViewHook[]
+     * @var IAfterViewHook[]
      */
     private $_afterView;
 
@@ -66,27 +70,27 @@ class HookManager {
     public function registerHook(IHookProvider $prov) {
         $found = false;
 
-        if(is_a($prov, '\\pff\\Interface\\IBeforeHook')) {
+        if(is_a($prov, '\\pff\\Iface\\IBeforeHook')) {
             $this->_beforeController[] = $prov;
             $found                     = true;
         }
 
-        if(is_a($prov, '\\pff\\Interface\\IAfterHook')) {
+        if(is_a($prov, '\\pff\\Iface\\IAfterHook')) {
             $this->_afterController[] = $prov;
             $found                    = true;
         }
 
-        if(is_a($prov, '\\pff\\Interface\\IBeforeSystemHook')) {
+        if(is_a($prov, '\\pff\\Iface\\IBeforeSystemHook')) {
             $this->_beforeSystem[] = $prov;
             $found                 = true;
         }
 
-        if(is_a($prov, '\\pff\\Interface\\IBeforeViewHook')) {
+        if(is_a($prov, '\\pff\\Iface\\IBeforeViewHook')) {
             $this->_beforeView[] = $prov;
             $found               = true;
         }
 
-        if(is_a($prov, '\\pff\\Interface\\IAfterViewHook')) {
+        if(is_a($prov, '\\pff\\Iface\\IAfterViewHook')) {
             $this->_afterView[] = $prov;
             $found              = true;
 

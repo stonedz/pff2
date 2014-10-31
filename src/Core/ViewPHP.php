@@ -1,13 +1,15 @@
 <?php
 
 namespace pff\Core;
+use pff\Abs\AView;
+use pff\Exception\ViewException;
 
 /**
  * View that uses plain php files as template.
  *
  * @author paolo.fagni<at>gmail.com
  */
-class ViewPHP extends \pff\AView {
+class ViewPHP extends AView {
 
     /**
      * @var array Contains the data to be used in the template file
@@ -23,7 +25,7 @@ class ViewPHP extends \pff\AView {
             $templatePath = $templateName;
         }
         if (!file_exists($templatePath)) {
-            throw new \pff\ViewException('Template file ' . $templatePath . ' does not exist');
+            throw new ViewException('Template file ' . $templatePath . ' does not exist');
         }
         parent::__construct($templateName, $app);
     }
@@ -40,7 +42,7 @@ class ViewPHP extends \pff\AView {
             $templatePath = $this->_templateFile;
         }
         if (!file_exists($templatePath)) {
-            throw new \pff\ViewException('Template file ' . $templatePath . ' does not exist');
+            throw new ViewException('Template file ' . $templatePath . ' does not exist');
         }
         if (is_array($this->_data)) {
             extract($this->_data); // Extract set data to scope vars
@@ -65,7 +67,7 @@ class ViewPHP extends \pff\AView {
             $templatePath = $this->_templateFile;
         }
         if (!file_exists($templatePath)) {
-            throw new \pff\ViewException('Template file ' . $templatePath . ' does not exist');
+            throw new ViewException('Template file ' . $templatePath . ' does not exist');
         }
         if (is_array($this->_data)) {
             extract($this->_data); // Extract set data to scope vars

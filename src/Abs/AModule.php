@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Abs;
+use pff\Exception\ModuleException;
 
 /**
  * Abstract class for pff modules
@@ -40,7 +41,7 @@ abstract class AModule {
     /**
      * Contains modules required by this module
      *
-     * @var \pff\AModule[]
+     * @var AModule[]
      */
     private $_requiredModules;
 
@@ -50,7 +51,7 @@ abstract class AModule {
     private $_config;
 
     /**
-     * @var \pff\AController
+     * @var AController
      */
     protected $_controller;
 
@@ -108,7 +109,7 @@ abstract class AModule {
      *
      * @param \pff\AModule $module
      */
-    public function registerRequiredModule(\pff\AModule $module) {
+    public function registerRequiredModule(AModule $module) {
         $this->_requiredModules[strtolower($module->getModuleName())] = $module;
     }
 
@@ -116,7 +117,7 @@ abstract class AModule {
      * Gets a module
      *
      * @param string $moduleName
-     * @return \pff\AModule|null
+     * @return AModule|null
      */
     public function getRequiredModules($moduleName) {
         $moduleName = strtolower($moduleName);
@@ -188,8 +189,7 @@ abstract class AModule {
      * Reads the configuration file ad returns a configuration array
      *
      * @param string $configFile The module filename
-     * @throws \pff\ModuleException
-     * @throws \pff\ModuleException
+     * @throws ModuleException
      * @return array
      */
     public function readConfig($configFile) {
@@ -210,7 +210,7 @@ abstract class AModule {
         try {
             $conf = $yamlParser->parse(file_get_contents($confPath));
         } catch (\Symfony\Component\Yaml\Exception\ParseException $e) {
-            throw new \pff\ModuleException("Unable to parse module configuration
+            throw new ModuleException("Unable to parse module configuration
                                             file for AutomaticHeaderFooter module: " . $e->getMessage());
         }
         return $conf;

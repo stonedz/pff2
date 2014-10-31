@@ -1,6 +1,9 @@
 <?php
 
 namespace pff\Factory;
+use pff\Abs\AView;
+use pff\Core\ViewPHP;
+use pff\Core\ViewSmarty;
 
 /**
  * Views Factory
@@ -16,7 +19,7 @@ class FView {
      * @param string $templateName The name of the template
      * @param App $app
      * @param string $templateType Te type of the template
-     * @return \pff\AView
+     * @return AView
      */
     static public function create($templateName, \pff\App $app, $templateType = null) {
         $standardTemplate = $templateName;
@@ -46,16 +49,16 @@ class FView {
         switch ($templateType) {
             case 'php':
                 $templateName = self::checkMobile($templateName, $mm, 'php');
-                return new \pff\ViewPHP($templateName, $app);
+                return new ViewPHP($templateName, $app);
                 break;
             case 'tpl':
             case 'smarty':
                 $templateName = self::checkMobile($templateName, $mm, 'smarty');
-                return new \pff\ViewSmarty($templateName, $app);
+                return new ViewSmarty($templateName, $app);
                 break;
             default:
                 $templateName = self::checkMobile($templateName, $mm, 'php');
-                return new \pff\ViewPHP($templateName, $app);
+                return new ViewPHP($templateName, $app);
                 break;
 
         }

@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityManager;
 use pff\App;
 use pff\Core\HelperManager;
 use pff\Core\ModuleManager;
+use pff\Exception\PffException;
 
 /**
  * Every controller must implement this abstract class
@@ -172,9 +173,9 @@ abstract class AController {
     /**
      * Adds a view
      *
-     * @param \pff\AView $view
+     * @param AView $view
      */
-    public function addView(\pff\AView $view) {
+    public function addView(AView $view) {
         $this->_view[] = $view;
     }
 
@@ -183,7 +184,7 @@ abstract class AController {
      *
      * @param AView $view
      */
-    public function addViewPre(\pff\AView $view) {
+    public function addViewPre(AView $view) {
         array_unshift($this->_view, $view);
     }
 
@@ -322,6 +323,10 @@ abstract class AController {
         }
     }
 
+    /**
+     * @return AView
+     * @throws PffException
+     */
     public function getLayout(){
         if($this->_layout) {
             return $this->_layout;
@@ -335,7 +340,7 @@ abstract class AController {
      * This method RESET the layout (i.e. the first rendereable View in the rendering queue).
      * If a Layout has already been set it will
      *
-     * @param $layout ALayout
+     * @param $layout AView
      */
     public function setLayout($layout){
         $this->_layout = $layout;

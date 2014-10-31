@@ -1,13 +1,14 @@
 <?php
 
 namespace pff\Core;
+use pff\Abs\AView;
 
 /**
  * Smarty view adapter
  *
  * @author paolo.fagni<at>gmail.com
  */
-class ViewSmarty extends \pff\AView {
+class ViewSmarty extends AView {
 
     /**
      * @var \Smarty

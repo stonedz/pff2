@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Core;
+use pff\Abs\AView;
 
 /**
  * Layout system with PHP templates
@@ -10,7 +11,7 @@ namespace pff\Core;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class LayoutPHP extends \pff\ViewPHP {
+class LayoutPHP extends ViewPHP {
 
     /**
      * @var \pff\AView[]
@@ -20,9 +21,9 @@ class LayoutPHP extends \pff\ViewPHP {
     /**
      * Adds an Aview to the layout queue
      *
-     * @param \pff\AView $view
+     * @param AView $view
      */
-    public function addContent(\pff\AView $view) {
+    public function addContent(AView $view) {
         $this->_contentView[] = $view;
     }
 

@@ -1,6 +1,9 @@
 <?php
 
 namespace pff\Factory;
+use pff\Abs\AView;
+use pff\Core\LayoutPHP;
+use pff\Core\LayoutSmarty;
 
 /**
  * Layouts factory
@@ -16,11 +19,10 @@ class FLayout {
      * @param string $templateName The name of the template
      * @param App $app
      * @param string $templateType Te type of the template
-     * @return \pff\ALayout
+     * @return AView
      */
     static public function create($templateName, \pff\App $app, $templateType = null) {
         $standardTemplate = $templateName;
-
 
         if ($templateType === null) {
             $tmp          = explode('.', $templateName);
@@ -30,14 +32,6 @@ class FLayout {
         }
 
         return self::loadTemplate($templateName, $app, $templateType);
-
-
-//        try {
-//            return self::loadTemplate($templateName, $app, $templateType);
-//        }
-//        catch(\Exception $e) {
-//            return self::loadTemplate($standardTemplate, $app, $templateType);
-//        }
     }
 
     static private function loadTemplate($templateName, \pff\App $app, $templateType) {
@@ -46,16 +40,16 @@ class FLayout {
         switch ($templateType) {
             case 'php':
                 $templateName = self::checkMobile($templateName, $mm, 'php');
-                return new \pff\LayoutPHP($templateName, $app);
+                return new LayoutPHP($templateName, $app);
                 break;
             case 'tpl':
             case 'smarty':
                 $templateName = self::checkMobile($templateName, $mm, 'smarty');
-                return new \pff\LayoutSmarty($templateName, $app);
+                return new LayoutSmarty($templateName, $app);
                 break;
             default:
                 $templateName = self::checkMobile($templateName, $mm, 'php');
-                return new \pff\LayoutPHP($templateName, $app);
+                return new LayoutPHP($templateName, $app);
                 break;
 
         }
