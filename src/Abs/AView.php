@@ -69,7 +69,7 @@ abstract class AView implements IRenderable {
      * @TODO Error check
      */
     public function renderAction($controller, $action = 'index', $params = array()) {
-        $controllerClass = ucfirst($controller) . '_Controller';
+        $controllerClass = '\\pff\\controllers\\'.ucfirst($controller) . '_Controller';
         $tmpController   = new $controllerClass($controller, $this->_app, $action, $params);
         $tmpController->$action();
     }

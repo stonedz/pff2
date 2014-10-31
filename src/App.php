@@ -250,7 +250,7 @@ class App {
         } elseif (file_exists(ROOT . DS . 'app' . DS . 'controllers' . DS . ucfirst($tmpController) . '_Controller.php')) {
             $action = isset($urlArray[0]) ? array_shift($urlArray) : 'index';
             include (ROOT . DS . 'app' . DS . 'controllers' . DS . ucfirst($tmpController) . '_Controller.php');
-            $controllerClassName = ucfirst($tmpController) . '_Controller';
+            $controllerClassName = '\\pff\\controllers\\'.ucfirst($tmpController) . '_Controller';
             $controller          = new $controllerClassName($tmpController, $this, $action, array_merge($urlArray,$myGet));
         } else {
             throw new RoutingException('Cannot find a valid controller.', 404);
