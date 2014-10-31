@@ -50,7 +50,7 @@ class Logger extends AModule implements IConfigurableModule {
                 $this->_loggers[] = $tmpClass->newInstance();
             }
         } catch (\ReflectionException $e) {
-            throw new \pff\modules\LoggerException('Logger creation failed: ' . $e->getMessage());
+            throw new LoggerException('Logger creation failed: ' . $e->getMessage());
         }
 
     }

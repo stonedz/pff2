@@ -3,6 +3,7 @@
 namespace pff\modules\Utils;
 use pff\modules\Abs\ALogger;
 use pff\modules\Exception\LoggerException;
+use pff\modules\Exception\LoggerFileException;
 
 /**
  * Implementa log su file
@@ -28,7 +29,7 @@ class LoggerFile extends ALogger {
 
     /**
      * @param bool $debugActive True to activate debugmode
-     * @throws \pff\modules\LoggerException
+     * @throws LoggerException
      */
     public function __construct($debugActive = false) {
         parent::__construct($debugActive);
@@ -48,7 +49,7 @@ class LoggerFile extends ALogger {
     /**
      * Opens log file only if it's not already open
      *
-     * @throws \pff\modules\LoggerException
+     * @throws LoggerException
      * @return null|resource
      */
     public function getLogFile() {
@@ -73,7 +74,7 @@ class LoggerFile extends ALogger {
      * @param string $message Message to log
      * @param int $level Log level
      * @return bool
-     * @throws \pff\modules\LoggerFileException
+     * @throws LoggerFileException
      */
     public function logMessage($message, $level = 0) {
         $this->getLogFile();
