@@ -245,11 +245,10 @@ class App {
             $this->_hookManager->runAfter(); // Runs after controller hooks
         } elseif ($this->applyRouting($tmpController, $action, $urlArray)) {
             ($action === null) ? $action = 'index' : $action;
-            include(ROOT . DS . 'app' . DS . 'controllers' . DS . $tmpController . '.php');
+            $tmpController = '\\pff\\controllers\\'.$tmpController;
             $controller = new $tmpController($tmpController, $this, $action, array_merge($urlArray,$myGet));
         } elseif (file_exists(ROOT . DS . 'app' . DS . 'controllers' . DS . ucfirst($tmpController) . '_Controller.php')) {
             $action = isset($urlArray[0]) ? array_shift($urlArray) : 'index';
-            include (ROOT . DS . 'app' . DS . 'controllers' . DS . ucfirst($tmpController) . '_Controller.php');
             $controllerClassName = '\\pff\\controllers\\'.ucfirst($tmpController) . '_Controller';
             $controller          = new $controllerClassName($tmpController, $this, $action, array_merge($urlArray,$myGet));
         } else {
