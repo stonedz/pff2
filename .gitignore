@@ -7,5 +7,5 @@ cache.properties
 lib/components
 app
 nbproject
-lib/autoload.php
 tests/autoload.php
+autoload.php
