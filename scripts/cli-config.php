@@ -5,7 +5,7 @@
 if (php_sapi_name() != "cli") {
     throw new \Exception('can\'t do that');
 }
-require 'vendor/autoload.php'
+require 'vendor/autoload.php';
 require 'app/config/config.user.php';
 
 // Define application environment
