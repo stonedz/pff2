@@ -140,10 +140,10 @@ class App {
      *
      * @param string $request
      * @param string $destinationPage
-     * @throws \pff\RoutingException
+     * @throws \pff\Exception\RoutingException
      */
     public function addStaticRoute($request, $destinationPage) {
-        if (file_exists(ROOT . DS . 'app' . DS . 'pages' . DS . $destinationPage)) {
+        if (file_exists(PAGES. DS . $destinationPage)) {
             $this->_staticRoutes[$request] = $destinationPage;
         } else {
             throw new RoutingException('Non existant static route specified: ' . $destinationPage);
@@ -159,7 +159,7 @@ class App {
      */
     public function addRoute($request, $destinationController) {
         $explodedDestination = explode('/', $destinationController);
-        if (file_exists(ROOT . DS . 'app' . DS . 'controllers' . DS . ucfirst($explodedDestination[0]) . '_Controller.php')) {
+        if (file_exists(CONTROLLERS . DS . ucfirst($explodedDestination[0]) . '_Controller.php')) {
             $this->_routes[$request] = $destinationController;
         } else {
             throw new RoutingException('Non existant MVC route specified: ' . $destinationController);

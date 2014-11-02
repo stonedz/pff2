@@ -17,9 +17,9 @@ class AppTest extends PHPUnit_Framework_TestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $conf          = new \pff\Config();
-        $moduleManager = $this->getMock('\\pff\\ModuleManager', array(), array($conf));
-        $hookManager   = $this->getMock('\\pff\\HookManager', array(), array($conf));
+        $conf          = new \pff\Config('config.user.php', 'tests/assets');
+        $moduleManager = $this->getMock('\\pff\\Core\\ModuleManager', array(), array($conf));
+        $hookManager   = $this->getMock('\\pff\\Core\\HookManager', array(), array($conf));
         $this->object  = new \pff\App('one/two/three', $conf, $moduleManager, $hookManager);
     }
 
@@ -80,11 +80,11 @@ class AppTest extends PHPUnit_Framework_TestCase {
      * Fails the addition to a static route that points to a non existant file
      *
      * @covers \pff\App
-     * @covers \pff\RoutingException
+     * @covers \pff\Exception\RoutingException
      * @return void
      */
     public function testSetRoutesFails() {
-        $this->setExpectedException('\\pff\\RoutingException');
+        $this->setExpectedException('\\pff\\Exception\\RoutingException');
         $this->object->addRoute('test', 'testNOTController');
     }
 
@@ -119,7 +119,7 @@ class AppTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testSetStaticRoutesFails() {
-        $this->setExpectedException('\\pff\\RoutingException');
+        $this->setExpectedException('\\pff\\Exception\\RoutingException');
         $this->object->addStaticRoute('test', 'testNOTPage.php');
     }
 
@@ -134,7 +134,7 @@ class AppTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testRunFailsWithInvalidController() {
-        $this->setExpectedException('\\pff\\RoutingException');
+        $this->setExpectedException('\\pff\\Exception\\RoutingException');
         $this->object->run();
     }
 

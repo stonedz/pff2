@@ -16,7 +16,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $this->object = new \pff\Config();
+        $this->object = new \pff\Config('config.user.php', 'tests/assets');
     }
 
     /**
@@ -33,7 +33,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testGetConfigFailsWithInvalid() {
-        $this->setExpectedException('\\pff\\ConfigException');
+        $this->setExpectedException('\\pff\\Exception\\ConfigException');
         $this->object->getConfigData('NoIDoNotExistxxxxx');
     }
 
@@ -47,7 +47,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testSetAConfigurationFailsWithoutAString() {
-        $this->setExpectedException('\\pff\\ConfigException');
+        $this->setExpectedException('\\pff\\Exception\\ConfigException');
         $this->object->setConfig(array(), 12);
     }
 
@@ -57,7 +57,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testLoadConfigFailsWithInexistantFile() {
-        $this->setExpectedException('\\pff\\ConfigException');
+        $this->setExpectedException('\\pff\\Exception\\ConfigException');
         $this->object->loadConfig('nonono', 'config');
     }
 }

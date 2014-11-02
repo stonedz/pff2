@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <phpunit bootstrap="tests/bootstrap.php"
          backupGlobals="false"
          backupStaticAttributes="false"
@@ -7,9 +6,9 @@
          verbose="true"
          timeoutForSmallTests="5">
   <testsuites>
-    <testsuite name="pff">
+    <testsuite name="pff2">
       <directory suffix="Test.php">tests</directory>
-      <exclude>lib/vendor</exclude>
+      <exclude>vendor</exclude>
       <!--<directory suffix="Test.php">tests/system</directory>-->
     </testsuite>
   </testsuites>
@@ -20,14 +19,14 @@
          lowUpperBound="35" highLowerBound="70"/>
     <log type="coverage-clover" target="tmp/build/logs/clover.xml"/>
     <log type="junit" target="tmp/build/logs/junit.xml" logIncompleteSkipped="false"/>
+    <log type="tap" target="tmp/build/logs/report.tap"/>
   </logging>
 
   <filter>
     <whitelist addUncoveredFilesFromWhitelist="false">
-      <directory suffix=".php">lib</directory>
+      <directory suffix=".php">src</directory>
       <exclude>
-        <file>lib/autoload.php</file>
-        <directory>lib/vendor</directory>
+        <directory>vendor</directory>
       </exclude>
     </whitelist>
   </filter>

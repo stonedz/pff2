@@ -76,7 +76,7 @@ class MultiLanguage extends AModule implements IBeforeSystemHook {
     public function doBeforeSystem() {
         $url = $this->_app->getUrl();
         $url = $this->processUrl($url);
-        if (is_null($this->_selectedLanguage)) { // No language code has been foud in URL request
+        if (is_null($this->_selectedLanguage)) { // No language code has been found in URL request
             $this->chooseLanguage();
         }
         $this->_app->setUrl($url);

@@ -158,14 +158,14 @@ abstract class AModule {
     }
 
     /**
-     * @param \pff\AController $controller
+     * @param AController $controller
      */
     public function setController($controller) {
         $this->_controller = $controller;
     }
 
     /**
-     * @return \pff\AController
+     * @return AController
      */
     public function getController() {
         return $this->_controller;
@@ -204,7 +204,7 @@ abstract class AModule {
         } elseif (file_exists($libConfPath)) {
             $confPath = $libConfPath;
         } else {
-            throw new \pff\ModuleException ("Module configuration file not found!");
+            throw new ModuleException ("Module configuration file not found!");
         }
 
         try {

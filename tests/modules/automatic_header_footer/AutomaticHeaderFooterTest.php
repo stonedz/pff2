@@ -33,7 +33,7 @@ class AutomaticHeaderFooterTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testReadConfigFailsWithInvalidFile() {
-        $this->setExpectedException('\\pff\\ModuleException');
+        $this->setExpectedException('\\pff\\Exception\\ModuleException');
         $this->object->readConfig('automatic_header_footer/i_do_not_exist_and_never_will.conf.jdjd');
     }
 

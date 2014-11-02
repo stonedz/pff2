@@ -98,7 +98,7 @@ class ModuleManager {
         } elseif (file_exists($moduleFilePathPff)) {
             $moduleFilePath = $moduleFilePathPff;
         } else {
-            throw new \pff\ModuleException("Specified module \"" . $moduleName . "\" does not exist");
+            throw new \pff\Exception\ModuleException("Specified module \"" . $moduleName . "\" does not exist");
         }
         try {
             $moduleConf = $this->_yamlParser->parse(file_get_contents($moduleFilePath));

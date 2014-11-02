@@ -30,12 +30,12 @@ class LoggerTest extends PHPUnit_Framework_TestCase {
     public function testInitialState() {
         $tmpLoggerArray = $this->object->getLoggers();
         $this->assertInternalType('array', $tmpLoggerArray);
-        $this->assertInstanceOf('\\pff\\modules\\ALogger', $tmpLoggerArray[0]);
+        $this->assertInstanceOf('\\pff\\modules\\Abs\\ALogger', $tmpLoggerArray[0]);
 
     }
 
     public function testX() {
-        $this->setExpectedException('\\pff\\ModuleException');
+        $this->setExpectedException('\\pff\\Exception\\ModuleException');
         $this->object->reset();
         $this->object = \pff\modules\Logger::getInstance('nonononon.yaml');
     }

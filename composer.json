@@ -23,10 +23,13 @@
         "mobiledetect/mobiledetectlib": "2.8.3",
         "components/normalize.css": "2.1.2",
         "components/modernizr": "2.6.2",
-        "codeception/codeception": "*",
         "stonedz/pff2-installers": "*"
     },
-    "bin": ["scripts/init", "scripts/generateAutoload.sh", "scripts/generateAutoloadApp.sh"],
+    "require-dev": {
+        "mikey179/vfsStream": "1.*",
+        "codeception/codeception": "*"
+    },
+    "bin": ["scripts/init"],
     "autoload": {
         "psr-4": {
             "pff\\": "src",

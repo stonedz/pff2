@@ -18,9 +18,9 @@ class Config {
      */
     private $_config;
 
-    public function __construct() {
+    public function __construct($configFile = 'config.user.php', $configPath = 'app/config') {
         $this->_config = array();
-        $this->loadConfig(); // Load main config file
+        $this->loadConfig($configFile,$configPath); // Load main config file
     }
 
     /**
@@ -90,7 +90,7 @@ class Config {
         if (is_string($data)) {
             $this->_config[$data] = $value;
         } else {
-            throw new ConfigException("Error while setting a config value: " . $data);
+            throw new ConfigException("Error while setting a config value");
         }
     }
 }

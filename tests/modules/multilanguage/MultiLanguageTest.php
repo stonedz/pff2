@@ -20,18 +20,18 @@ class MultiLanguageTest extends PHPUnit_Framework_TestCase
         $this->object = new \pff\modules\MultiLanguage();
     }
 
-//    public function testProcessUrlWithLanguage() {
-//        $tmpUrl = $this->object->processUrl('it/controller/action/param1');
-//        $this->assertEquals('controller/action/param1', $tmpUrl);
-//        $this->assertEquals('it', $this->object->getSelectedLanguage());
-//    }
+    public function testProcessUrlWithLanguage() {
+        $tmpUrl = $this->object->processUrl('it/controller/action/param1');
+        $this->assertEquals('controller/action/param1', $tmpUrl);
+        $this->assertEquals('it', $this->object->getSelectedLanguage());
+    }
 
-    public function testProcessUrlWithNoLanguage()
+    /*public function testProcessUrlWithNoLanguage()
     {
         $tmpUrl = $this->object->processUrl('controller/action/param1');
         $this->assertEquals('controller/action/param1', $tmpUrl);
         $this->assertNull($this->object->getSelectedLanguage());
-    }
+    }*/
 
 //    public function testDefaultLanguage() {
 //       $this->object->chooseLanguage();

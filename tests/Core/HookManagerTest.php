@@ -6,7 +6,7 @@
 class HookManagerTest extends PHPUnit_Framework_TestCase {
 
     /**
-     * @var \pff\HookManager
+     * @var \pff\Core\HookManager
      */
     protected $object;
 
@@ -16,8 +16,8 @@ class HookManagerTest extends PHPUnit_Framework_TestCase {
      *
      */
     protected function setUp() {
-        $conf         = new \pff\Config();
-        $this->object = new \pff\HookManager($conf);
+        $conf         = new \pff\Config('config.user.php', 'tests/assets');
+        $this->object = new \pff\Core\HookManager($conf);
     }
 
     /**
@@ -35,7 +35,7 @@ class HookManagerTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testRegisterABeforeProvider() {
-        $stub = $this->getMock('\\pff\\IBeforeHook');
+        $stub = $this->getMock('\\pff\\Iface\\IBeforeHook');
         $stub->expects($this->any())
              ->method('doBefore')
              ->will($this->returnValue('done'));
@@ -50,7 +50,7 @@ class HookManagerTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testRegisterAnAfterProvider() {
-        $stub = $this->getMock('\\pff\\IAfterHook');
+        $stub = $this->getMock('\\pff\\Iface\\IAfterHook');
         $stub->expects($this->any())
             ->method('doAfter')
             ->will($this->returnValue('done'));
@@ -63,7 +63,7 @@ class HookManagerTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testRegisterABeforeSystemProvider() {
-        $stub = $this->getMock('\\pff\\IBeforeSystemHook');
+        $stub = $this->getMock('\\pff\\Iface\\IBeforeSystemHook');
         $stub->expects($this->any())
             ->method('doBeforeSystem')
             ->will($this->returnValue('done'));
@@ -76,8 +76,8 @@ class HookManagerTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testFailsToRegisterAnEmptyProvider() {
-        $this->setExpectedException('\\pff\\HookException');
-        $stub = $this->getMock('\\pff\\IHookProvider');
+        $this->setExpectedException('\\pff\\Exception\\HookException');
+        $stub = $this->getMock('\\pff\\Iface\\IHookProvider');
         $this->object->registerHook($stub);
     }
 
