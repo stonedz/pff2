@@ -11,6 +11,7 @@ matrix:
     - php: hhvm
 
 before_script:
+ - curl http://cs.sensiolabs.org/get/php-cs-fixer.phar -o php-cs-fixer.phar
  - curl -s http://getcomposer.org/installer | php
  - php composer.phar install --dev --no-interaction --prefer-source
 
