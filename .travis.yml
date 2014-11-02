@@ -12,12 +12,16 @@ matrix:
 
 before_script:
  - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ~/xdebug.ini
+ - composer require satooshi/php-coveralls:dev-master --no-update --dev
  - curl http://cs.sensiolabs.org/get/php-cs-fixer.phar -o php-cs-fixer.phar
  - curl -s http://getcomposer.org/installer | php
  - php composer.phar install --dev --no-interaction --prefer-source
 
 script:
   - phpunit --configuration phpunit.xml.dist --coverage-text
+
+after_script:
+  - php vendor/bin/coveralls
 
 notifications:
   slack: neropaco:jxHRwHv4jRizu1VLwmIjGLoK
