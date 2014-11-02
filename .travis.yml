@@ -11,7 +11,6 @@ matrix:
     - php: hhvm
 
 before_script:
- - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ~/xdebug.ini
  - composer require satooshi/php-coveralls:dev-master --no-update --dev
  - curl http://cs.sensiolabs.org/get/php-cs-fixer.phar -o php-cs-fixer.phar
  - curl -s http://getcomposer.org/installer | php
