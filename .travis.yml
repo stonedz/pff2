@@ -18,3 +18,6 @@ before_script:
 
 script:
   - phpunit --configuration phpunit.xml.dist --coverage-text
+
+notifications:
+  slack: neropaco:jxHRwHv4jRizu1VLwmIjGLoK
