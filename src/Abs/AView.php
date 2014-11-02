@@ -64,9 +64,6 @@ abstract class AView implements IRenderable {
      * @param $controller
      * @param string $action
      * @param array $params
-     *
-     * @TODO tidy module is called once for every renderAction + one for the controller owning THIS view!
-     * @TODO Error check
      */
     public function renderAction($controller, $action = 'index', $params = array()) {
         $controllerClass = '\\pff\\controllers\\'.ucfirst($controller) . '_Controller';

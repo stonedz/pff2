@@ -2,6 +2,7 @@
 
 namespace pff\Factory;
 use pff\Abs\AView;
+use pff\App;
 use pff\Core\ViewPHP;
 use pff\Core\ViewSmarty;
 
@@ -21,7 +22,7 @@ class FView {
      * @param string $templateType Te type of the template
      * @return AView
      */
-    static public function create($templateName, \pff\App $app, $templateType = null) {
+    static public function create($templateName, App $app, $templateType = null) {
         $standardTemplate = $templateName;
 
 
@@ -43,7 +44,7 @@ class FView {
 //        }
     }
 
-    static private function loadTemplate($templateName, \pff\App $app, $templateType) {
+    static private function loadTemplate($templateName, App $app, $templateType) {
         $mm = $app->getModuleManager();
 
         switch ($templateType) {

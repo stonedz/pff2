@@ -122,8 +122,6 @@ class MultiLanguage extends AModule implements IBeforeSystemHook {
 
     /**
      * Chooses a default language. First check for cookies, then user configuration, then module configuration
-     *
-     * @TODO refactor this...
      */
     public function chooseLanguage() {
         if ($this->_saveOnCookies &&

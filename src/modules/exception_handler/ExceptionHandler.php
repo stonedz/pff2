@@ -24,7 +24,6 @@ class ExceptionHandler extends AModule implements IBeforeSystemHook {
 
     /**
      * @param \Exception $exception
-     * @todo refactor
      */
     public function manageExceptions(\Exception $exception) {
         $code = (int)$exception->getCode();
