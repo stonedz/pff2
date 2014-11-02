@@ -3,7 +3,7 @@
  * ModuleManager test suite
  *
  * @author paolo.fagni<at>gmail.com
- * @covers \pff\ModuleManager
+ * @covers \pff\Core\ModuleManager
  */
 class ModuleManagerTest extends PHPUnit_Framework_TestCase {
 
@@ -35,7 +35,7 @@ class ModuleManagerTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers \pff\ModuleManager::loadModule
+     * @covers \pff\Core\ModuleManager::loadModule
      */
     public function testLoadModuleFailsWithNonexistentModule() {
         $this->setExpectedException('\\pff\\Exception\\ModuleException');

@@ -2,7 +2,7 @@
 <phpunit bootstrap="tests/bootstrap.php"
          backupGlobals="false"
          backupStaticAttributes="false"
-         strict="true"
+         strict="false"
          verbose="true"
          timeoutForSmallTests="5">
   <testsuites>
