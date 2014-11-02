@@ -324,42 +324,42 @@ class App {
     }
 
     /**
-     * @param \pff\HookManager $hookManager
+     * @param HookManager $hookManager
      */
     public function setHookManager($hookManager) {
         $this->_hookManager = $hookManager;
     }
 
     /**
-     * @return \pff\HookManager
+     * @return HookManager
      */
     public function getHookManager() {
         return $this->_hookManager;
     }
 
     /**
-     * @param \pff\ModuleManager $moduleManager
+     * @param ModuleManager $moduleManager
      */
     public function setModuleManager($moduleManager) {
         $this->_moduleManager = $moduleManager;
     }
 
     /**
-     * @return \pff\ModuleManager
+     * @return ModuleManager
      */
     public function getModuleManager() {
         return $this->_moduleManager;
     }
 
     /**
-     * @param \pff\HelperManager $helperManager
+     * @param HelperManager $helperManager
      */
     public function setHelperManager($helperManager) {
         $this->_helperManager = $helperManager;
     }
 
     /**
-     * @return \pff\HelperManager
+     * @return HelperManager
      */
     public function getHelperManager() {
         return $this->_helperManager;

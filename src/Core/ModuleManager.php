@@ -137,7 +137,7 @@ class ModuleManager {
                 return $this->_modules[$moduleName];
 
             } else {
-                throw new \pff\ModuleException("Invalid module: " . $moduleConf['name']);
+                throw new ModuleException("Invalid module: " . $moduleConf['name']);
             }
         } catch (\Symfony\Component\Yaml\Exception\ParseException $e) {
             throw new ModuleException("Unable to parse module configuration
