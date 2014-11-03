@@ -5,7 +5,6 @@ namespace pff\modules;
 use pff\Abs\AModule;
 use pff\Iface\IBeforeHook;
 use pff\Iface\IConfigurableModule;
-use Symfony\Component\DependencyInjection\Loader\IniFileLoader;
 
 class MobileViews extends AModule implements IConfigurableModule, IBeforeHook {
 

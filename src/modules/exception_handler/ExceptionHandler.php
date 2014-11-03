@@ -2,9 +2,9 @@
 
 namespace pff\modules;
 use pff\Abs\AModule;
+use pff\Exception\PffException;
 use pff\Factory\FView;
 use pff\Iface\IBeforeSystemHook;
-use pff\Exception\PffException;
 
 /**
  * Manages uncaught exceptions
