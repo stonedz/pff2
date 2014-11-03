@@ -2,8 +2,11 @@
 
 namespace pff\Factory;
 use pff\Abs\AView;
+use pff\App;
 use pff\Core\LayoutPHP;
 use pff\Core\LayoutSmarty;
+use pff\Core\ModuleManager;
+use pff\Exception\ModuleException;
 
 /**
  * Layouts factory
@@ -21,7 +24,7 @@ class FLayout {
      * @param string $templateType Te type of the template
      * @return AView
      */
-    static public function create($templateName, \pff\App $app, $templateType = null) {
+    static public function create($templateName, App $app, $templateType = null) {
         $standardTemplate = $templateName;
 
         if ($templateType === null) {
@@ -57,10 +60,12 @@ class FLayout {
 
     /**
      * @param $templateName
-     * @param $mm
+     * @param ModuleManager $mm
+     * @param $type
+     * @throws ModuleException
      * @return array
      */
-    private static function checkMobile($templateName, $mm, $type) {
+    private static function checkMobile($templateName, ModuleManager $mm, $type) {
         if ($mm->isLoaded('mobile_views')) {
 
             /** @var \pff\modules\MobileViews $mobileViews */

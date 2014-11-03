@@ -3,6 +3,7 @@
 namespace pff\Factory;
 use pff\Abs\AView;
 use pff\App;
+use pff\Core\ModuleManager;
 use pff\Core\ViewPHP;
 use pff\Core\ViewSmarty;
 
@@ -67,10 +68,10 @@ class FView {
 
     /**
      * @param $templateName
-     * @param $mm
+     * @param ModuleManager $mm
      * @return array
      */
-    private static function checkMobile($templateName, $mm, $type) {
+    private static function checkMobile($templateName, ModuleManager $mm, $type) {
         if ($mm->isLoaded('mobile_views')) {
 
             /** @var \pff\modules\MobileViews $mobileViews */
