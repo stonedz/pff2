@@ -25,8 +25,6 @@ class FLayout {
      * @return AView
      */
     static public function create($templateName, App $app, $templateType = null) {
-        $standardTemplate = $templateName;
-
         if ($templateType === null) {
             $tmp          = explode('.', $templateName);
             $templateType = $tmp[count($tmp) - 1];

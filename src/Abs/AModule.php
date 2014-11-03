@@ -107,7 +107,7 @@ abstract class AModule {
     /**
      * Injects a required module reference to the module
      *
-     * @param \pff\AModule $module
+     * @param AModule $module
      */
     public function registerRequiredModule(AModule $module) {
         $this->_requiredModules[strtolower($module->getModuleName())] = $module;
