@@ -18,14 +18,7 @@
  */
 
 require_once '../lib/autoload.php';
-//require_once '../lib/vendor/doctrine-common/lib/Doctrine/Common/ClassLoader.php';
 
-/*$classLoader = new \Doctrine\Common\ClassLoader('Doctrine');
-$classLoader->register();
-
-$classLoader = new \Doctrine\Common\ClassLoader('Symfony', 'Doctrine');
-$classLoader->register();
-  */
 $configFile = getcwd() . DIRECTORY_SEPARATOR . 'cli-config.php';
 
 $helperSet = null;

@@ -11,11 +11,6 @@ require 'app/config/config.user.php';
 // Define application environment
 define('APPLICATION_ENV', "development");
 
-/*
-defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
-*/
-
 // configuration (2)
 $config = new Doctrine\ORM\Configuration();
 

@@ -222,12 +222,7 @@ class App {
         if ($lastElement == '') {
             array_pop($urlArray);
         }
-        //If not empty let's see if it's a list of GET parameters
-        //elseif('?' == substr($lastElement,0,1)){
-        //   echo substr($lastElement,1);
-        //}
         reset($urlArray);
-
 
         // If present take the first element as the controller
         $tmpController = isset($urlArray[0]) ? array_shift($urlArray) : 'index';

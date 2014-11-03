@@ -26,7 +26,6 @@ class HtmlPurifier extends AModule {
         $purifierConfig = \HTMLPurifier_Config::createDefault();
         $purifierConfig->set('Core.Encoding', 'UTF-8');
         $purifierConfig->set('Attr.EnableID', true);
-        //$config->set('Attr.IDPrefix', 'user_');
         $purifierConfig->set('HTML.TidyLevel', 'medium');
         $purifier = new \HTMLPurifier($purifierConfig);
         $output   = $purifier->purify($output);

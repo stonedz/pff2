@@ -81,7 +81,6 @@ class Mail extends AModule {
         if(null !== $addressReply){
             $this->message->setReplyTo($addressReply);
         }
-        //$this->message->attach($attachment);
         return $this->mailer->send($this->message);
     }
 }

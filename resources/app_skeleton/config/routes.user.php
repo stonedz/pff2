@@ -6,8 +6,7 @@
  * $app->addStaticroute: adds a route to a "static page"
  *
  * @author paolo.fagni<at>gmail.com
+ *
+ * @example $app->addRoute('admin', 'test/anaction');
+ * @example $app->addStaticroute('tests','testPage.php');
  */
-
-//$app->addRoute('admin', 'test/anaction');
-//$app->addStaticroute('tests','testPage.php');
-

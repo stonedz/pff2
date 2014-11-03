@@ -143,11 +143,9 @@ class Auth extends AModule implements IConfigurableModule {
                 $this->_logUser();
                 return true;
             } else {
-                //throw new \pff\modules\AuthException(_('Wrong password'));
                 return false;
             }
         } else {
-            //throw new \pff\modules\AuthException(_('User '.$username.' not found!'));
             return false;
         }
     }

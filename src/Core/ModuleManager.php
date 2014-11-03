@@ -113,7 +113,6 @@ class ModuleManager {
 
                 if (isset($this->_modules[$moduleName])) { //Module has already been loaded
                     return $this->_modules[$moduleName];
-                    //return true;
                 }
 
                 $this->_modules[$moduleName] = $tmpModule->newInstance();
@@ -174,6 +173,7 @@ class ModuleManager {
      * Checks if a module is currently loaded
      *
      * @param string $moduleName
+     * @return bool
      */
     public function isLoaded($moduleName) {
         if(isset($this->_modules[$moduleName])){

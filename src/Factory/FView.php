@@ -35,14 +35,6 @@ class FView {
         }
 
         return self::loadTemplate($templateName, $app, $templateType);
-
-
-//        try {
-//            return self::loadTemplate($templateName, $app, $templateType);
-//        }
-//        catch(\Exception $e) {
-//            return self::loadTemplate($standardTemplate, $app, $templateType);
-//        }
     }
 
     static private function loadTemplate($templateName, App $app, $templateType) {

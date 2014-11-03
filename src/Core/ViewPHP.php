@@ -47,16 +47,7 @@ class ViewPHP extends AView {
         if (is_array($this->_data)) {
             extract($this->_data); // Extract set data to scope vars
         }
-
-        //ob_start(array($this,'preView'));
-        /*$locale = "it_IT.utf8";
-        putenv("LC_ALL=$locale");
-        setlocale(LC_ALL, $locale);
-        bindtextdomain("messages", ROOT . DS. 'app' . DS . 'locale');
-        textdomain("messages");*/
-
         include ($templatePath);
-        //ob_end_flush();
     }
 
     public function renderHtml() {
