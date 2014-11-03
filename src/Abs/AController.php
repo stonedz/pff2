@@ -1,8 +1,9 @@
 <?php
 
 namespace pff\Abs;
-use Assetic\Cache\ArrayCache;
+
 use Doctrine\Common\Cache\ApcCache;
+use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use pff\App;
