@@ -78,7 +78,7 @@ class Mail extends AModule {
         $this->message->setBody($body);
         $this->message->setCharset("UTF-8");
         $this->message->setContentType("text/html");
-        if($addressReply != null){
+        if(null !== $addressReply){
             $this->message->setReplyTo($addressReply);
         }
         //$this->message->attach($attachment);

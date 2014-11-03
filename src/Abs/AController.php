@@ -1,11 +1,15 @@
 <?php
 
 namespace pff\Abs;
+use Assetic\Cache\ArrayCache;
+use Doctrine\Common\Cache\ApcCache;
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use pff\App;
 use pff\Core\HelperManager;
 use pff\Core\ModuleManager;
 use pff\Exception\PffException;
+use pff\Exception\ViewException;
 
 /**
  * Every controller must implement this abstract class
@@ -129,13 +133,13 @@ abstract class AController {
      */
     private function initORM() {
 
-        if ($this->_config->getConfigData('development_environment') == true) {
-            $cache = new \Doctrine\Common\Cache\ArrayCache;
+        if (true === $this->_config->getConfigData('development_environment')) {
+            $cache = new ArrayCache();
         } else {
-            $cache = new \Doctrine\Common\Cache\ApcCache(array('prefix'=>$this->_app->getConfig()->getConfigData('app_name')));
+            $cache = new ApcCache(array('prefix'=>$this->_app->getConfig()->getConfigData('app_name')));
         }
 
-        $config = new \Doctrine\ORM\Configuration();
+        $config = new Configuration();
         $config->setMetadataCacheImpl($cache);
         $driverImpl = $config->newDefaultAnnotationDriver(ROOT . DS . 'app' . DS . 'models');
         $config->setMetadataDriverImpl($driverImpl);
@@ -143,7 +147,7 @@ abstract class AController {
         $config->setProxyDir(ROOT . DS . 'app' . DS . 'proxies');
         $config->setProxyNamespace('pff\proxies');
 
-        if ($this->_config->getConfigData('development_environment') == true) {
+        if (true === $this->_config->getConfigData('development_environment')) {
             $config->setAutoGenerateProxyClasses(true);
             $connectionOptions = $this->_config->getConfigData('databaseConfigDev');
         } else {
@@ -193,7 +197,7 @@ abstract class AController {
      *
      * The view's render method is called for each view registered.
      *
-     * @throws \pff\ViewException
+     * @throws ViewException
      */
     public function __destruct() {
 
@@ -209,7 +213,7 @@ abstract class AController {
                 $this->_view->render();
                 $this->_app->getHookManager()->runAfterView();
             } else {
-                throw new \pff\ViewException("The specified View is not valid.");
+                throw new ViewException("The specified View is not valid.");
             }
         }
     }
@@ -273,7 +277,7 @@ abstract class AController {
             return $this->_params[$index];
         }
         else{
-             throw new \pff\PffException($errorMessage, $errorCode);
+             throw new PffException($errorMessage, $errorCode);
         }
     }
 

@@ -48,7 +48,7 @@ class Encryption extends AModule{
      * @return string
      */
     public function encrypt($plaintext, $key = null) {
-        if($key != null) {
+        if(null !== $key) {
             $this->_key = md5($key);
         }
 
@@ -68,7 +68,7 @@ class Encryption extends AModule{
      * @return string
      */
     public function decrypt($crypttext, $key = null) {
-        if($key != null) {
+        if(null !== $key) {
             $this->_key = md5($key);
         }
 

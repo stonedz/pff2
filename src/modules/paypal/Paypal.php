@@ -174,19 +174,19 @@ class Paypal extends AModule {
                             &L_PAYMENTREQUEST_0_ITEMCATEGORY0=Digital&PAYMENTREQUEST_0_CURRENCYCODE=EUR";
                         break;
                     case "GetExpressCheckoutDetails":
-                        if($session == null){ return false; }
+                        if(null === $session){ return false; }
                         $str = "USER=".urlencode($this->getAPI_USERNAME())."&PWD=".urlencode($this->getAPI_PASSWORD()).
                             "&SIGNATURE=".urlencode($this->getAPI_SIGNATURE())."&METHOD=".urlencode($method).
                             "&VERSION=".urlencode($this->getVersion())."&TOKEN=".urlencode($session['TOKEN']);
                         break;
                     case "CreateRecurringPaymentsProfile":
-                        if($session == null){ return false; }
+                        if(null === $session){ return false; }
                         $str = "USER=".urlencode($this->getAPI_USERNAME())."&PWD=".urlencode($this->getAPI_PASSWORD()).
                             "&SIGNATURE=".urlencode($this->getAPI_SIGNATURE())."&METHOD=".urlencode($method).
                             "&VERSION=".urlencode($this->getVersion())."&TOKEN=".urlencode($session['TOKEN']);
                         break;
                     case "DoExpressCheckoutPayment":
-                        if($session == null){ return false; }
+                        if(null === $session){ return false; }
                         $str = "USER=".urlencode($this->getAPI_USERNAME())."&PWD=".urlencode($this->getAPI_PASSWORD()).
                             "&SIGNATURE=".urlencode($this->getAPI_SIGNATURE())."&METHOD=".urlencode($method).
                             "&VERSION=".urlencode($this->getVersion())."&TOKEN=".urlencode($session['TOKEN']).

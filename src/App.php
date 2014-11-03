@@ -82,7 +82,7 @@ class App {
      * Sets error reporting
      */
     public function setErrorReporting() {
-        if ($this->_config->getConfigData('development_environment') == true) {
+        if (true ===  $this->_config->getConfigData('development_environment')) {
             error_reporting(E_ALL);
             ini_set('display_errors', 'On');
         } else {
@@ -280,7 +280,7 @@ class App {
      * @return string
      */
     public function getExternalPath() {
-        if ($this->_config->getConfigData('development_environment') == true) {
+        if (true === $this->_config->getConfigData('development_environment')) {
             $extPath = EXT_ROOT . $this->_config->getConfigData('base_path_dev');
         } else {
             $extPath = EXT_ROOT . $this->_config->getConfigData('base_path');

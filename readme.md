@@ -5,3 +5,13 @@
 [![License](https://poser.pugx.org/stonedz/pff2/license.svg)](https://packagist.org/packages/stonedz/pff2)
 
 Documentation is a WIP
+
+## Composer Installation
+
+```json
+{
+  "require": {
+    "stonedz/pff2": "~2.0"
+  }
+}
+```

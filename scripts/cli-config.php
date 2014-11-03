@@ -42,7 +42,7 @@ if (APPLICATION_ENV == "development") {
 $config->setMetadataCacheImpl($cache);
 $config->setQueryCacheImpl($cache);
 
-if ($pffConfig['development_environment'] == true) {
+if (true === $pffConfig['development_environment']) {
     $connectionOptions = $pffConfig['databaseConfigDev'];
 } else {
     $connectionOptions = $pffConfig['databaseConfig'];
