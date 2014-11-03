@@ -2,6 +2,7 @@
 
 namespace pff\Core;
 use pff\Abs\AView;
+use pff\App;
 use pff\Exception\ViewException;
 
 /**
@@ -16,7 +17,7 @@ class ViewPHP extends AView {
      */
     private $_data;
 
-    public function __construct($templateName, \pff\App $app)
+    public function __construct($templateName, App $app)
     {
         if (substr($templateName, 0, 1) != '/'){
             $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $templateName;
@@ -35,12 +36,7 @@ class ViewPHP extends AView {
     }
 
     public function render() {
-        if (substr($this->_templateFile, 0, 1) != '/'){
-            $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $this->_templateFile;
-        }
-        else {
-            $templatePath = $this->_templateFile;
-        }
+        $templatePath = $this->getTemplatePath();
         if (!file_exists($templatePath)) {
             throw new ViewException('Template file ' . $templatePath . ' does not exist');
         }
@@ -51,12 +47,7 @@ class ViewPHP extends AView {
     }
 
     public function renderHtml() {
-        if (substr($this->_templateFile, 0, 1) != '/'){
-            $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $this->_templateFile;
-        }
-        else {
-            $templatePath = $this->_templateFile;
-        }
+        $templatePath = $this->getTemplatePath();
         if (!file_exists($templatePath)) {
             throw new ViewException('Template file ' . $templatePath . ' does not exist');
         }
@@ -87,5 +78,18 @@ class ViewPHP extends AView {
         $output   = $purifier->purify($output);
 
         return $output;
+    }
+
+    /**
+     * @return string
+     */
+    private function getTemplatePath() {
+        if (substr($this->_templateFile, 0, 1) != '/') {
+            $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $this->_templateFile;
+            return $templatePath;
+        } else {
+            $templatePath = $this->_templateFile;
+            return $templatePath;
+        }
     }
 }
