@@ -24,7 +24,7 @@
         "components/normalize.css": "2.1.2",
         "components/modernizr": "2.6.2",
         "stonedz/pff2-installers": "*",
-        "doctrine/mongodb-odm": "1.0.*@dev"
+        "doctrine/mongodb-odm": "1.0.0-BETA11"
     },
     "require-dev": {
         "mikey179/vfsStream": "1.*",
