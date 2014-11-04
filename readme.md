@@ -6,6 +6,7 @@
 [![Latest Stable Version](https://poser.pugx.org/stonedz/pff2/v/stable.svg)](https://packagist.org/packages/stonedz/pff2)
 [![License](https://poser.pugx.org/stonedz/pff2/license.svg)](https://packagist.org/packages/stonedz/pff2)
 [![Code Climate](https://codeclimate.com/github/stonedz/pff2/badges/gpa.svg)](https://codeclimate.com/github/stonedz/pff2)
+[![Dependency Status](https://www.versioneye.com/user/projects/545897eab0448a91020000bd/badge.svg?style=flat)](https://www.versioneye.com/user/projects/545897eab0448a91020000bd)
 
 Documentation is a WIP
 
