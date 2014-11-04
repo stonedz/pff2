@@ -118,6 +118,9 @@ abstract class AController {
         if ($this->_config->getConfigData('orm')) {
             $this->initORM();
         }
+        else {
+            $this->_em = null;
+        }
 
         $this->initController();
     }
