@@ -11,6 +11,7 @@ use pff\Core\HelperManager;
 use pff\Core\ModuleManager;
 use pff\Exception\PffException;
 use pff\Exception\ViewException;
+use pff\Traits\ControllerTrait;
 
 /**
  * Every controller must implement this abstract class
@@ -18,6 +19,7 @@ use pff\Exception\ViewException;
  * @author paolo.fagni<at>gmail.com
  */
 abstract class AController {
+    use ControllerTrait;
 
     /**
      * @var string
@@ -218,14 +220,6 @@ abstract class AController {
             }
         }
     }
-
-    /**
-     * All controllers should at least implement an index
-     *
-     * @abstract
-     * @return mixed
-     */
-    abstract public function index();
 
     /**
      * @return string

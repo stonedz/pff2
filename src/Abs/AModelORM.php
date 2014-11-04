@@ -7,5 +7,5 @@ namespace pff\Abs;
  *
  * @author paolo.fagni<at>gmail.com
  */
-abstract class AModelORM extends \pff\AModel {
+abstract class AModelORM extends AModel {
 }
