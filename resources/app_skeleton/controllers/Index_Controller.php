@@ -4,7 +4,7 @@ namespace pff\controllers;
 use pff\Abs\AController;
 
 /**
- * @author paolo.fagni<at>gmail.com
+ * Index controller
  */
 class Index_Controller extends AController {
 
