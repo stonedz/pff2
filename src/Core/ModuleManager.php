@@ -122,10 +122,6 @@ class ModuleManager {
                 $this->_modules[$moduleName]->setConfig($this->_config);
                 $this->_modules[$moduleName]->setApp($this->_app);
 
-                if ($tmpModule->isSubclassOf('\pff\Iface\IHookProvider') && $this->_hookManager !== null) {
-                    $this->_hookManager->registerHook($this->_modules[$moduleName]);
-                }
-
                 if (isset ($moduleConf['requires']) && is_array($moduleConf['requires'])) {
                     $this->_modules[$moduleName]->setModuleRequirements($moduleConf['requires']);
                     foreach ($moduleConf['requires'] as $requiredModuleName) {
@@ -133,6 +129,11 @@ class ModuleManager {
                         $this->_modules[$moduleName]->registerRequiredModule($this->_modules[$requiredModuleName]);
                     }
                 }
+
+                if ($tmpModule->isSubclassOf('\pff\Iface\IHookProvider') && $this->_hookManager !== null) {
+                    $this->_hookManager->registerHook($this->_modules[$moduleName]);
+                }
+
                 return $this->_modules[$moduleName];
 
             } else {
