@@ -195,10 +195,13 @@ abstract class AModule {
     public function readConfig($configFile) {
         $yamlParser   = new \Symfony\Component\Yaml\Parser();
         $userConfPath = ROOT . DS . 'app' . DS . 'config' . DS . 'modules' . DS . $configFile;
+        $userCustomPath = ROOT. DS . 'app'. DS.'modules'.DS.$configFile;
         $composerConfPath = ROOT . DS . 'modules' . DS . $configFile;
         $libConfPath  = ROOT_LIB . DS . 'src' . DS . 'modules' . DS . $configFile;
         if (file_exists($userConfPath)) {
             $confPath = $userConfPath;
+        } elseif (file_exists($userCustomPath)) {
+            $confPath = $userCustomPath;
         } elseif (file_exists($composerConfPath)) {
             $confPath = $composerConfPath;
         } elseif (file_exists($libConfPath)) {
