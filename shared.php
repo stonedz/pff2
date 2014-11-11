@@ -7,15 +7,33 @@
  * @author paolo.fagni<at>gmail.com
  */
 
-// Create a new app with the current request
-$cfg         = new \pff\Config();
-$hm          = new \pff\Core\HookManager($cfg);
-$mm          = new \pff\Core\ModuleManager($cfg);
-$helpManager = new \pff\Core\HelperManager();
+\pff\Core\ServiceContainer::initPimple();
+\pff\Core\ServiceContainer::set()['config'] = function ($c) {
+    return new \pff\Config();
+};
+\pff\Core\ServiceContainer::set()['hookmanager'] = function ($c) {
+    return new \pff\Core\HookManager();
+};
+\pff\Core\ServiceContainer::set()['modulemanager'] = function ($c) {
+    return new \pff\Core\ModuleManager();
+};
+\pff\Core\ServiceContainer::set()['helpermanager'] = function ($c) {
+    return new \pff\Core\HelperManager();
+};
+\pff\Core\ServiceContainer::set()['app'] = function ($c) {
+    return new \pff\App();
+};
+\pff\Core\ServiceContainer::set()['yamlparser'] = function ($c) {
+    return new \Symfony\Component\Yaml\Parser();
+};
 
-$app = new \pff\App($url, $cfg, $mm, $hm);
-$app->setHelperManager($helpManager);
+
+
+$app = \pff\Core\ServiceContainer::get('app');
+$app->setUrl($url);
 $app->setErrorReporting();
 $app->removeMagicQuotes();
 $app->unregisterGlobals();
+
+\pff\Core\ServiceContainer::get('modulemanager')->initModules();
 // @codeCoverageIgnoreStop

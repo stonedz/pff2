@@ -15,7 +15,7 @@ class ViewSmarty extends AView {
      */
     protected $_smarty;
 
-    public function __construct($templateName, \pff\App $app) {
+    public function __construct($templateName) {
         $this->_smarty               = new \Smarty(); // The smarty instance should be accessible before
         $smartyDir                   = ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS;
         $this->_smarty->template_dir = $smartyDir. 'templates' . DS;
@@ -26,7 +26,7 @@ class ViewSmarty extends AView {
         if (!file_exists($templatePath)) {
             throw new \pff\ViewException('Template file ' . $templatePath . ' does not exist');
         }
-        parent::__construct($templateName, $app);
+        parent::__construct($templateName);
         $this->_smarty->registerPlugin('function', 'renderAction', array($this, 'smarty_plugin_renderAction'));
     }
 

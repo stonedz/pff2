@@ -17,7 +17,7 @@ class ViewPHP extends AView {
      */
     private $_data;
 
-    public function __construct($templateName, App $app)
+    public function __construct($templateName)
     {
         if (substr($templateName, 0, 1) != '/'){
             $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $templateName;
@@ -28,7 +28,7 @@ class ViewPHP extends AView {
         if (!file_exists($templatePath)) {
             throw new ViewException('Template file ' . $templatePath . ' does not exist');
         }
-        parent::__construct($templateName, $app);
+        parent::__construct($templateName);
     }
 
     public function set($name, $value) {

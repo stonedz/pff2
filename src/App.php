@@ -4,7 +4,9 @@ namespace pff;
 use pff\Core\HelperManager;
 use pff\Core\HookManager;
 use pff\Core\ModuleManager;
+use pff\Core\ServiceContainer;
 use pff\Exception\RoutingException;
+use \Symfony\Component\Debug\ErrorHandler;
 
 /**
  * Main app
@@ -58,29 +60,16 @@ class App {
     private $_action;
 
     /**
-     * @param string $url The request URL
-     * @param Config $config
-     * @param ModuleManager $moduleManager
-     * @param HookManager $hookManager
+     * @internal param string $url The request URL
+     * @internal param Config $config
+     * @internal param ModuleManager $moduleManager
+     * @internal param HookManager $hookManager
      */
-    public function __construct($url,
-                                Config $config,
-                                ModuleManager $moduleManager,
-                                HookManager $hookManager) {
-        $this->setUrl($url);
-
-        $this->_config        = $config;
-        $this->_hookManager   = $hookManager;
-        $this->_moduleManager = $moduleManager;
-        $this->_moduleManager->setApp($this);
-
-        /*
-         * ModuleManager needs a HooklManager instance to initialize modules
-         * which provide hooks
-         */
-        $this->_moduleManager->setHookManager($this->_hookManager);
-        $this->_moduleManager->initModules(); //Loads modules specified in the configuration
-
+    public function __construct() {
+        $this->_config        = ServiceContainer::get('config');
+        $this->_hookManager   = ServiceContainer::get('hookmanager');
+        $this->_moduleManager = ServiceContainer::get('modulemanager');
+        $this->_helperManager = ServiceContainer::get('helpermanager');
     }
 
     /**
@@ -90,6 +79,8 @@ class App {
         if (true ===  $this->_config->getConfigData('development_environment')) {
             error_reporting(E_ALL);
             ini_set('display_errors', 'On');
+
+            ErrorHandler::register();
         } else {
             error_reporting(E_ALL);
             ini_set('display_errors', 'Off');
@@ -169,7 +160,6 @@ class App {
         } else {
             throw new RoutingException('Non existant MVC route specified: ' . $destinationController);
         }
-
     }
 
     /**
@@ -272,7 +262,6 @@ class App {
                 throw new RoutingException('Not a valid action: ' . $action, 404);
             }
         }
-
     }
 
     /**
@@ -379,6 +368,4 @@ class App {
     public function setAction($action) {
         $this->_action = $action;
     }
-
-
 }

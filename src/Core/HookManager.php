@@ -57,8 +57,8 @@ class HookManager {
      */
     private $_config;
 
-    public function __construct(\pff\Config $cfg) {
-        $this->_config = $cfg;
+    public function __construct() {
+        $this->_config = ServiceContainer::get('config');
     }
 
     /**

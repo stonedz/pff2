@@ -14,13 +14,14 @@ use pff\Exception\PffException;
 use pff\Exception\ViewException;
 use pff\Iface\IOutputs;
 use pff\Traits\ControllerTrait;
+use pff\Iface\IController;
 
 /**
  * Every controller must implement this abstract class
  *
  * @author paolo.fagni<at>gmail.com
  */
-abstract class AController {
+abstract class AController implements IController{
     use ControllerTrait;
 
     /**

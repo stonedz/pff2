@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Abs;
+use pff\Core\ServiceContainer;
 use pff\Iface\IRenderable;
 
 /**
@@ -40,8 +41,8 @@ abstract class AView implements IRenderable {
      */
     protected $_jsFolder;
 
-    public function __construct($templateName, \pff\App $app) {
-        $this->_app          = $app;
+    public function __construct($templateName) {
+        $this->_app          = ServiceContainer::get('app');
         $this->_templateFile = $templateName;
         $this->_publicFolder = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS;
         $this->_cssFolder    = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS . 'css' . DS;

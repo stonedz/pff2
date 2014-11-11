@@ -22,7 +22,7 @@ class ModuleManager {
     /**
      * @var HookManager
      */
-    private $_hookManager;
+    private static $_hookManager;
 
     /**
      * @var \Symfony\Component\Yaml\Parser
@@ -34,7 +34,7 @@ class ModuleManager {
      *
      * @var AModule[]
      */
-    private $_modules;
+    static private $_modules;
 
     /**
      * Reference to main app
@@ -43,10 +43,10 @@ class ModuleManager {
      */
     private $_app;
 
-    public function __construct(\pff\Config $cfg) {
-        $this->_config      = $cfg;
+    public function __construct() {
+        $this->_config      = ServiceContainer::get('config');
         $this->_yamlParser  = new Parser();
-        $this->_hookManager = null;
+        $this->_hookManager = ServiceContainer::get('hookmanager');
     }
 
     /**
@@ -54,11 +54,12 @@ class ModuleManager {
      *
      * @return void
      */
-    public function initModules() {
-        $moduleList = $this->_config->getConfigData('modules');
+    public static function initModules() {
+        $cfg = ServiceContainer::get('config');
+        $moduleList = $cfg->getConfigData('modules');
         if (count($moduleList) > 0) {
-            foreach ($this->_config->getConfigData('modules') as $moduleName) {
-                $this->loadModule($moduleName);
+            foreach ($moduleList as $moduleName) {
+                self::loadModule($moduleName);
             }
         }
     }
@@ -66,13 +67,13 @@ class ModuleManager {
     /**
      * Checks for php extensions for pff modules
      *
-     * @var $phpExtensions array An array of php extesions names
-     * @throws \pff\ModuleException
+     * @var $phpExtensions array An array of php extensions names
+     * @throws ModuleException
      */
-    private function checkPhpExtensions($phpExtensions) {
+    private static function checkPhpExtensions($phpExtensions) {
         foreach ($phpExtensions as $extension) {
             if (!extension_loaded($extension)) {
-                throw new ModuleException("Module loagin failed! A module needs the following php extension in order to load: " . $extension);
+                throw new ModuleException("Module loading failed! A module needs the following php extension in order to load: " . $extension);
             }
         }
     }
@@ -84,43 +85,43 @@ class ModuleManager {
      * @return bool|AModule
      * @throws ModuleException
      */
-    public function loadModule($moduleName) {
-        $moduleConf = $this->getModuleConf($moduleName);
+    public static function loadModule($moduleName) {
+        $moduleConf = self::getModuleConf($moduleName);
 
         try {
 
             if (isset($moduleConf['requires_php_extension']) && is_array($moduleConf['requires_php_extension'])) {
-                $this->checkPhpExtensions($moduleConf['requires_php_extension']);
+                self::checkPhpExtensions($moduleConf['requires_php_extension']);
             }
 
             $tmpModule = new \ReflectionClass('\\pff\\modules\\' . $moduleConf['class']);
             if ($tmpModule->isSubclassOf('\\pff\\Abs\\AModule')) {
                 $moduleName = strtolower($moduleConf['name']);
 
-                if (isset($this->_modules[$moduleName])) { //Module has already been loaded
-                    return $this->_modules[$moduleName];
+                if (isset(self::$_modules[$moduleName])) { //Module has already been loaded
+                    return self::$_modules[$moduleName];
                 }
 
-                $this->_modules[$moduleName] = $tmpModule->newInstance();
-                $this->_modules[$moduleName]->setModuleName($moduleConf['name']);
-                $this->_modules[$moduleName]->setModuleVersion($moduleConf['version']);
-                $this->_modules[$moduleName]->setModuleDescription($moduleConf['desc']);
-                $this->_modules[$moduleName]->setConfig($this->_config);
-                $this->_modules[$moduleName]->setApp($this->_app);
+                self::$_modules[$moduleName] = $tmpModule->newInstance();
+                self::$_modules[$moduleName]->setModuleName($moduleConf['name']);
+                self::$_modules[$moduleName]->setModuleVersion($moduleConf['version']);
+                self::$_modules[$moduleName]->setModuleDescription($moduleConf['desc']);
+                self::$_modules[$moduleName]->setConfig(ServiceContainer::get('config'));
+                self::$_modules[$moduleName]->setApp(ServiceContainer::get('app'));
 
                 if (isset ($moduleConf['requires']) && is_array($moduleConf['requires'])) {
-                    $this->_modules[$moduleName]->setModuleRequirements($moduleConf['requires']);
+                    self::$_modules[$moduleName]->setModuleRequirements($moduleConf['requires']);
                     foreach ($moduleConf['requires'] as $requiredModuleName) {
-                        $this->loadModule($requiredModuleName);
-                        $this->_modules[$moduleName]->registerRequiredModule($this->_modules[$requiredModuleName]);
+                        self::loadModule($requiredModuleName);
+                        self::$_modules[$moduleName]->registerRequiredModule(self::$_modules[$requiredModuleName]);
                     }
                 }
 
-                if ($tmpModule->isSubclassOf('\pff\Iface\IHookProvider') && $this->_hookManager !== null) {
-                    $this->_hookManager->registerHook($this->_modules[$moduleName]);
+                if ($tmpModule->isSubclassOf('\pff\Iface\IHookProvider')) {
+                    ServiceContainer::get('hookmanager')->registerHook(self::$_modules[$moduleName]);
                 }
 
-                return $this->_modules[$moduleName];
+                return self::$_modules[$moduleName];
 
             } else {
                 throw new ModuleException("Invalid module: " . $moduleConf['name']);
@@ -141,8 +142,8 @@ class ModuleManager {
      */
     public function getModule($moduleName) {
         $moduleName = strtolower($moduleName);
-        if (isset($this->_modules[$moduleName])) {
-            return $this->_modules[$moduleName];
+        if (isset(self::$_modules[$moduleName])) {
+            return self::$_modules[$moduleName];
         } else {
             try {
                 return $this->loadModule($moduleName);
@@ -160,7 +161,7 @@ class ModuleManager {
      * @return bool
      */
     public function isLoaded($moduleName) {
-        if(isset($this->_modules[$moduleName])){
+        if(isset(self::$_modules[$moduleName])){
             return true;
         }
         else {
@@ -186,8 +187,8 @@ class ModuleManager {
      * Sets the Controller for each module
      */
     public function setController(AController $controller) {
-        if (count($this->_modules) > 0) {
-            foreach ($this->_modules as $module) {
+        if (count(self::$_modules) > 0) {
+            foreach (self::$_modules as $module) {
                 $module->setController($controller);
             }
         }
@@ -213,8 +214,8 @@ class ModuleManager {
      * @throws ModuleException
      * @throws \pff\Exception\ConfigException
      */
-    private function getModuleConf($moduleName) {
-        $key = $this->_config->getConfigData('app_name') . '-config-' . md5($moduleName);
+    private static function getModuleConf($moduleName) {
+        $key = ServiceContainer::get('config')->getConfigData('app_name') . '-config-' . md5($moduleName);
         if (extension_loaded('apc') && apc_exists($key)) {
             $moduleConf = apc_fetch($key);
             return $moduleConf;
@@ -234,7 +235,7 @@ class ModuleManager {
             }
 
             try {
-                $moduleConf = $this->_yamlParser->parse(file_get_contents($moduleFilePath));
+                $moduleConf = ServiceContainer::get('yamlparser')->parse(file_get_contents($moduleFilePath));
             } catch (ParseException $e) {
                 throw new ModuleException("Unable to parse module configuration
                                                 file for $moduleName: " . $e->getMessage());

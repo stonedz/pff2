@@ -4,6 +4,7 @@ namespace pff\Factory;
 use pff\Abs\AView;
 use pff\App;
 use pff\Core\ModuleManager;
+use pff\Core\ServiceContainer;
 use pff\Core\ViewPHP;
 use pff\Core\ViewSmarty;
 
@@ -23,7 +24,7 @@ class FView {
      * @param string $templateType Te type of the template
      * @return AView
      */
-    static public function create($templateName, App $app, $templateType = null) {
+    static public function create($templateName, App $app = null, $templateType = null) {
         $standardTemplate = $templateName;
 
 
@@ -34,25 +35,24 @@ class FView {
             $templateType = strtolower($templateType);
         }
 
-        return self::loadTemplate($templateName, $app, $templateType);
+        return self::loadTemplate($templateName, $templateType);
     }
 
-    static private function loadTemplate($templateName, App $app, $templateType) {
-        $mm = $app->getModuleManager();
+    static private function loadTemplate($templateName, $templateType) {
 
         switch ($templateType) {
             case 'php':
-                $templateName = self::checkMobile($templateName, $mm, 'php');
-                return new ViewPHP($templateName, $app);
+                $templateName = self::checkMobile($templateName, 'php');
+                return new ViewPHP($templateName);
                 break;
             case 'tpl':
             case 'smarty':
-                $templateName = self::checkMobile($templateName, $mm, 'smarty');
-                return new ViewSmarty($templateName, $app);
+                $templateName = self::checkMobile($templateName, 'smarty');
+                return new ViewSmarty($templateName);
                 break;
             default:
-                $templateName = self::checkMobile($templateName, $mm, 'php');
-                return new ViewPHP($templateName, $app);
+                $templateName = self::checkMobile($templateName, 'php');
+                return new ViewPHP($templateName);
                 break;
 
         }
@@ -60,10 +60,13 @@ class FView {
 
     /**
      * @param $templateName
-     * @param ModuleManager $mm
+     * @param $type
+     * @throws \pff\Exception\ModuleException
+     * @internal param ModuleManager $mm
      * @return array
      */
-    private static function checkMobile($templateName, ModuleManager $mm, $type) {
+    private static function checkMobile($templateName, $type) {
+        $mm = ServiceContainer::get('modulemanager');
         if ($mm->isLoaded('mobile_views')) {
 
             /** @var \pff\modules\MobileViews $mobileViews */

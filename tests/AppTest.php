@@ -20,7 +20,10 @@ class AppTest extends PHPUnit_Framework_TestCase {
         $conf          = new \pff\Config('config.user.php', 'tests/assets');
         $moduleManager = $this->getMock('\\pff\\Core\\ModuleManager', array(), array($conf));
         $hookManager   = $this->getMock('\\pff\\Core\\HookManager', array(), array($conf));
-        $this->object  = new \pff\App('one/two/three', $conf, $moduleManager, $hookManager);
+        $this->object  = new \pff\App();
+        $this->object->setUrl('one/two/three');
+        $this->object->setHookManager($hookManager);
+        $this->object->setModuleManager($moduleManager);
     }
 
     /**
@@ -36,21 +39,6 @@ class AppTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('one/two/three', $this->object->getUrl());
     }
 
-    public function testSetErrorReportingProd() {
-        $this->object->getConfig()->setConfig('development_environment', false);
-        $this->object->setErrorReporting();
-        $this->assertEquals('Off', ini_get('display_errors'));
-    }
-
-    /**
-     * @covers \pff\App::setErrorReporting
-     * @return void
-     */
-    public function testSetErrorReportingDev() {
-        $this->object->getConfig()->setConfig('development_environment', true);
-        $this->object->setErrorReporting();
-        $this->assertEquals('On', ini_get('display_errors'));
-    }
 
     /**
      * Tests the setting of a user defined route.

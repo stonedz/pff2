@@ -4,8 +4,10 @@ cache.properties
 .netbeans
 *.iml
 .idea
-lib/components
 app
-nbproject
 tests/autoload.php
 autoload.php
+vendor/
+composer.lock
+composer.phar
+components

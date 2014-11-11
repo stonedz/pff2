@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+/**
+ * User: paolo.fagni@gmail.com
+ * Date: 11/11/14
+ * Time: 11.45
+ */
+include 'vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+$application = new Application('pff cli interface');
+$application->add(new \pff\Commands\GeneratePhpStormMeta());
+$application->run();
