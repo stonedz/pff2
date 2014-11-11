@@ -53,6 +53,11 @@ class App {
     private $_helperManager;
 
     /**
+     * @var string
+     */
+    private $_action;
+
+    /**
      * @param string $url The request URL
      * @param Config $config
      * @param ModuleManager $moduleManager
@@ -251,13 +256,14 @@ class App {
         }
 
         if (isset($controller)) {
+            $this->_action = $action;
             $this->_moduleManager->setController($controller); // We have a controller, let the modules know about it
             ob_start();
             $this->_hookManager->runBefore(); // Runs before controller hooks
-            if ((int)method_exists($controller, $action)) {
+            if ((int)method_exists($controller, $this->_action)) {
                 call_user_func_array(array($controller, "beforeAction"), $urlArray);
                 call_user_func(array($controller, "beforeFilter"));
-                call_user_func_array(array($controller, $action), $urlArray);
+                call_user_func_array(array($controller, $this->_action), $urlArray);
                 call_user_func(array($controller, "afterFilter"));
                 call_user_func_array(array($controller, "afterAction"), $urlArray);
                 $this->_hookManager->runAfter(); // Runs after controller hooks
@@ -359,4 +365,20 @@ class App {
     public function getHelperManager() {
         return $this->_helperManager;
     }
+
+    /**
+     * @return string
+     */
+    public function getAction() {
+        return $this->_action;
+    }
+
+    /**
+     * @param string $action
+     */
+    public function setAction($action) {
+        $this->_action = $action;
+    }
+
+
 }

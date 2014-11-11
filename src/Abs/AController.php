@@ -9,8 +9,10 @@ use Doctrine\ORM\EntityManager;
 use pff\App;
 use pff\Core\HelperManager;
 use pff\Core\ModuleManager;
+use pff\Core\Outputs\HTMLOut;
 use pff\Exception\PffException;
 use pff\Exception\ViewException;
+use pff\Iface\IOutputs;
 use pff\Traits\ControllerTrait;
 
 /**
@@ -96,6 +98,12 @@ abstract class AController {
     protected $_layout;
 
     /**
+     * @var IOutputs
+     */
+    protected $_output;
+
+
+    /**
      * Creates a controller
      *
      * @param string $controllerName The controller's name (used to load correct model)
@@ -121,6 +129,9 @@ abstract class AController {
         else {
             $this->_em = null;
         }
+
+        // Set default output to HTML
+        $this->_output = new HTMLOut();
 
         $this->initController();
     }
@@ -206,6 +217,7 @@ abstract class AController {
      * @throws ViewException
      */
     public function __destruct() {
+        $this->_output->outputHeader();
 
         if (isset($this->_view)) {
             if (is_array($this->_view)) {
@@ -359,5 +371,18 @@ abstract class AController {
 
     public function getViews() {
         return $this->_view;
+    }
+    /**
+     * @return mixed
+     */
+    public function getOutput() {
+        return $this->_output;
+    }
+
+    /**
+     * @param mixed $output
+     */
+    public function setOutput($output) {
+        $this->_output = $output;
     }
 }

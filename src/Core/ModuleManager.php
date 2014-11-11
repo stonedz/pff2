@@ -4,6 +4,7 @@ namespace pff\Core;
 use pff\Abs\AController;
 use pff\Abs\AModule;
 use pff\Exception\ModuleException;
+use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser;
 
 /**
@@ -84,24 +85,9 @@ class ModuleManager {
      * @throws ModuleException
      */
     public function loadModule($moduleName) {
-        $moduleFilePathUser = ROOT . DS . 'app' . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
-        $moduleFilePathPff  = ROOT_LIB . DS . 'src' . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
-        $moduleComposerPath = ROOT . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
+        $moduleConf = $this->getModuleConf($moduleName);
 
-        $composerModule = false;
-
-        if (file_exists($moduleFilePathUser)) {
-            $moduleFilePath = $moduleFilePathUser;
-        } elseif(file_exists($moduleComposerPath)) {
-            $moduleFilePath = $moduleComposerPath;
-            $composerModule = true;
-        } elseif (file_exists($moduleFilePathPff)) {
-            $moduleFilePath = $moduleFilePathPff;
-        } else {
-            throw new \pff\Exception\ModuleException("Specified module \"" . $moduleName . "\" does not exist");
-        }
         try {
-            $moduleConf = $this->_yamlParser->parse(file_get_contents($moduleFilePath));
 
             if (isset($moduleConf['requires_php_extension']) && is_array($moduleConf['requires_php_extension'])) {
                 $this->checkPhpExtensions($moduleConf['requires_php_extension']);
@@ -139,9 +125,6 @@ class ModuleManager {
             } else {
                 throw new ModuleException("Invalid module: " . $moduleConf['name']);
             }
-        } catch (\Symfony\Component\Yaml\Exception\ParseException $e) {
-            throw new ModuleException("Unable to parse module configuration
-                                                file for $moduleName: " . $e->getMessage());
         }
         catch (\ReflectionException $e) {
             throw new ModuleException("Unable to create module instance: " . $e->getMessage());
@@ -150,7 +133,7 @@ class ModuleManager {
     }
 
     /**
-     * Get the istance of desired module
+     * Get the instance of desired module
      *
      * @param string $moduleName
      * @throws ModuleException
@@ -186,14 +169,14 @@ class ModuleManager {
     }
 
     /**
-     * @param \pff\HookManager $hookManager
+     * @param HookManager $hookManager
      */
     public function setHookManager($hookManager) {
         $this->_hookManager = $hookManager;
     }
 
     /**
-     * @return \pff\HookManager
+     * @return HookManager
      */
     public function getHookManager() {
         return $this->_hookManager;
@@ -222,5 +205,46 @@ class ModuleManager {
      */
     public function getApp() {
         return $this->_app;
+    }
+
+    /**
+     * @param $moduleName
+     * @return mixed
+     * @throws ModuleException
+     * @throws \pff\Exception\ConfigException
+     */
+    private function getModuleConf($moduleName) {
+        $key = $this->_config->getConfigData('app_name') . '-config-' . md5($moduleName);
+        if (extension_loaded('apc') && apc_exists($key)) {
+            $moduleConf = apc_fetch($key);
+            return $moduleConf;
+        } else {
+            $moduleFilePathUser = ROOT . DS . 'app' . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
+            $moduleFilePathPff = ROOT_LIB . DS . 'src' . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
+            $moduleComposerPath = ROOT . DS . 'modules' . DS . $moduleName . DS . 'module.yaml';
+
+            if (file_exists($moduleFilePathUser)) {
+                $moduleFilePath = $moduleFilePathUser;
+            } elseif (file_exists($moduleComposerPath)) {
+                $moduleFilePath = $moduleComposerPath;
+            } elseif (file_exists($moduleFilePathPff)) {
+                $moduleFilePath = $moduleFilePathPff;
+            } else {
+                throw new ModuleException("Specified module \"" . $moduleName . "\" does not exist");
+            }
+
+            try {
+                $moduleConf = $this->_yamlParser->parse(file_get_contents($moduleFilePath));
+            } catch (ParseException $e) {
+                throw new ModuleException("Unable to parse module configuration
+                                                file for $moduleName: " . $e->getMessage());
+            }
+
+            if (extension_loaded('apc') && !apc_exists($key)) {
+                apc_store($key, $moduleConf);
+            }
+
+            return $moduleConf;
+        }
     }
 }
