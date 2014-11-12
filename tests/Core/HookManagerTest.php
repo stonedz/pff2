@@ -40,13 +40,13 @@ class HookManagerTest extends PHPUnit_Framework_TestCase {
              ->method('doBefore')
              ->will($this->returnValue('done'));
 
-        $this->object->registerHook($stub);
+        $this->object->registerHook($stub, 'name');
 
         $listOfHooks = $this->object->getBeforeController();
         $this->assertNotEmpty($listOfHooks);
         $this->assertEmpty($this->object->getAfterController());
         $this->assertEmpty($this->object->getBeforeSystem());
-        $this->assertEquals('done', $listOfHooks[0]->doBefore());
+        $this->assertEquals('done', $listOfHooks['name']->doBefore());
     }
 
     public function testRegisterAnAfterProvider() {
@@ -55,11 +55,11 @@ class HookManagerTest extends PHPUnit_Framework_TestCase {
             ->method('doAfter')
             ->will($this->returnValue('done'));
 
-        $this->object->registerHook($stub);
+        $this->object->registerHook($stub, 'name');
 
         $listOfHooks = $this->object->getAfterController();
         $this->assertNotEmpty($listOfHooks);
-        $this->assertEquals('done', $listOfHooks[0]->doAfter());
+        $this->assertEquals('done', $listOfHooks['name']->doAfter());
     }
 
     public function testRegisterABeforeSystemProvider() {
@@ -68,17 +68,17 @@ class HookManagerTest extends PHPUnit_Framework_TestCase {
             ->method('doBeforeSystem')
             ->will($this->returnValue('done'));
 
-        $this->object->registerHook($stub);
+        $this->object->registerHook($stub, 'name');
 
         $listOfHooks = $this->object->getBeforeSystem();
         $this->assertNotEmpty($listOfHooks);
-        $this->assertEquals('done', $listOfHooks[0]->doBeforeSystem());
+        $this->assertEquals('done', $listOfHooks['name']->doBeforeSystem());
     }
 
     public function testFailsToRegisterAnEmptyProvider() {
         $this->setExpectedException('\\pff\\Exception\\HookException');
         $stub = $this->getMock('\\pff\\Iface\\IHookProvider');
-        $this->object->registerHook($stub);
+        $this->object->registerHook($stub, 'name');
     }
 
 }
