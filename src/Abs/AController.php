@@ -10,6 +10,7 @@ use pff\App;
 use pff\Core\HelperManager;
 use pff\Core\ModuleManager;
 use pff\Core\Outputs\HTMLOut;
+use pff\Core\ServiceContainer;
 use pff\Exception\PffException;
 use pff\Exception\ViewException;
 use pff\Iface\IOutputs;
@@ -176,6 +177,7 @@ abstract class AController implements IController{
 
         $this->_em = EntityManager::create($connectionOptions, $config);
 
+        ServiceContainer::set()['dm'] = $this->_em;
         $platform = $this->_em->getConnection()->getDatabasePlatform();
         $platform->registerDoctrineTypeMapping('enum', 'string');
     }

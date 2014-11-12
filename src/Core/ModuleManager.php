@@ -108,6 +108,7 @@ class ModuleManager {
                 self::$_modules[$moduleName]->setModuleDescription($moduleConf['desc']);
                 self::$_modules[$moduleName]->setConfig(ServiceContainer::get('config'));
                 self::$_modules[$moduleName]->setApp(ServiceContainer::get('app'));
+                (isset($moduleConf['runBefore']))? $moduleLoadBefore = $moduleConf['runBefore']: $moduleLoadBefore = null ;
 
                 if (isset ($moduleConf['requires']) && is_array($moduleConf['requires'])) {
                     self::$_modules[$moduleName]->setModuleRequirements($moduleConf['requires']);
@@ -118,7 +119,7 @@ class ModuleManager {
                 }
 
                 if ($tmpModule->isSubclassOf('\pff\Iface\IHookProvider')) {
-                    ServiceContainer::get('hookmanager')->registerHook(self::$_modules[$moduleName]);
+                    ServiceContainer::get('hookmanager')->registerHook(self::$_modules[$moduleName], $moduleName, $moduleLoadBefore);
                 }
 
                 return self::$_modules[$moduleName];

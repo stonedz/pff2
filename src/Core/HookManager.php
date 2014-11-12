@@ -64,39 +64,61 @@ class HookManager {
     /**
      * Registers a hook provider
      *
-     * @param IHookProvider $prov
+     * @param IHookProvider $prov Hook provider (module)
+     * @param string $moduleName Name of the module
+     * @param string|null $loadBefore Hook must be run before specified module name
      * @throws HookException
      */
-    public function registerHook(IHookProvider $prov) {
+    public function registerHook(IHookProvider $prov, $moduleName, $loadBefore = null) {
         $found = false;
 
         if(is_a($prov, '\\pff\\Iface\\IBeforeHook')) {
-            $this->_beforeController[] = $prov;
-            $found                     = true;
+            $found = $this->addHook($this->_beforeController, $prov, $moduleName, $loadBefore);
         }
 
         if(is_a($prov, '\\pff\\Iface\\IAfterHook')) {
-            $this->_afterController[] = $prov;
-            $found                    = true;
+            $found = $this->addHook($this->_afterController, $prov, $moduleName, $loadBefore);
         }
 
         if(is_a($prov, '\\pff\\Iface\\IBeforeSystemHook')) {
-            $this->_beforeSystem[] = $prov;
-            $found                 = true;
+            $found = $this->addHook($this->_beforeSystem, $prov, $moduleName, $loadBefore);
         }
 
         if(is_a($prov, '\\pff\\Iface\\IBeforeViewHook')) {
-            $this->_beforeView[] = $prov;
-            $found               = true;
+            $found = $this->addHook($this->_beforeView, $prov, $moduleName, $loadBefore);
         }
 
         if(is_a($prov, '\\pff\\Iface\\IAfterViewHook')) {
-            $this->_afterView[] = $prov;
-            $found              = true;
-
+            $found = $this->addHook($this->_afterView, $prov, $moduleName, $loadBefore);
         }
+
         if(!$found) {
             throw new HookException("Cannot add given class as a hook provider: ". get_class($prov));
+        }
+    }
+
+    /**
+     * @param array $repository
+     * @param IHookProvider $module
+     * @param string $moduleName
+     * @param string|null $runBeforeModule
+     * @return bool
+     */
+    private function addHook(&$repository, $module, $moduleName, $runBeforeModule) {
+        if($runBeforeModule === null  || !array_key_exists($runBeforeModule, $repository)) {
+            $repository[$moduleName] = $module;
+            return true;
+        }
+        else {
+            $new = array();
+            foreach($repository as $k => $v) {
+                if($k === $runBeforeModule) {
+                    $new[$moduleName] = $module;
+                }
+                $new[$k] = $v;
+            }
+            $repository = $new;
+            return true;
         }
     }
 
