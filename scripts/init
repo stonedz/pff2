@@ -103,8 +103,9 @@ cp vendor/stonedz/pff2/scripts/cli-config.php .
 echo -e "${GREEN}[OK]"
 
 #Copying .gitignore file
-echo -ne "\n${CYAN}Copying cli-config for doctrine"
+echo -ne "\n${CYAN}Copying site skel"
 cp vendor/stonedz/pff2/resources/site_skeleton/.gitignore .
+cp vendor/stonedz/pff2/resources/site_skeleton/index.php .
 echo -e "${GREEN}[OK]"
 
 #Copying build files
