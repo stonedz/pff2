@@ -93,9 +93,9 @@ echo -e "${GREEN}[OK]"
 cd ${tmp}
 
 #Creating .htaccess
-echo -ne "\n${CYAN}Generating htaccess file"
-cp vendor/stonedz/pff2/.htaccess .
-echo -e "${GREEN}[OK]"
+#echo -ne "\n${CYAN}Generating htaccess file"
+#cp vendor/stonedz/pff2/.htaccess .
+#echo -e "${GREEN}[OK]"
 
 #Creating cli-config for doctrine
 echo -ne "\n${CYAN}Copying cli-config for doctrine"
