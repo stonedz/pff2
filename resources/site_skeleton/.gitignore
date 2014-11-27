@@ -6,6 +6,6 @@ vendor
 .idea
 *.swp
 cache.properties
-
+index.php
 tests/_output/*
 app/tmp/*

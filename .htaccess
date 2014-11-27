@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine on
-    RewriteRule    ^$    vendor/stonedz/pff2/public/    [L]
+    RewriteRule    ^$    index.php    [L]
     RewriteCond %{REQUEST_URI} !app/public/([^/]+)
-    RewriteRule    (.*) vendor/stonedz/pff2/public/$1    [L]
+    RewriteRule    (.*) index.php?url=$1    [QSQ, PT,L]
  </IfModule>
