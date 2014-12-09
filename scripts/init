@@ -94,7 +94,7 @@ cd ${tmp}
 
 #Creating .htaccess
 #echo -ne "\n${CYAN}Generating htaccess file"
-#cp vendor/stonedz/pff2/.htaccess .
+cp vendor/stonedz/pff2/public/.htaccess .
 #echo -e "${GREEN}[OK]"
 
 #Creating cli-config for doctrine
