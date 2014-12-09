@@ -22,7 +22,7 @@ class ModuleManager {
     /**
      * @var HookManager
      */
-    private static $_hookManager;
+    private $_hookManager;
 
     /**
      * @var \Symfony\Component\Yaml\Parser
