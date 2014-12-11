@@ -1,6 +1,10 @@
 <IfModule mod_rewrite.c>
-    RewriteEngine on
-    RewriteRule    ^$    index.php    [L]
-    RewriteCond %{REQUEST_URI} !app/public/([^/]+)
-    RewriteRule    (.*) index.php?url=$1    [QSQ, PT,L]
- </IfModule>
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,PT,L]
+
+</IfModule>
+                     ~
