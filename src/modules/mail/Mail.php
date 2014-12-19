@@ -10,7 +10,7 @@ namespace pff\modules;
 
 use pff\Abs\AModule;
 
-require_once(ROOT_LIB . DS . 'lib/vendor/swiftmailer/swiftmailer/lib/swift_init.php');
+require_once(ROOT . DS . 'vendor/swiftmailer/swiftmailer/lib/swift_init.php');
 
 class Mail extends AModule {
 
