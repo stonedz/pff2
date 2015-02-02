@@ -127,7 +127,7 @@ class GenerateFigFiles extends Command{
     protected function execute(InputInterface $input, OutputInterface $output) {
         $questionHelper = $this->getHelper('question');
 
-        if(!$this->command_exist('docker') && !$this->command_exist('docker.io')) {
+        if(!CommandUtils::checkCommand('docker') && !CommandUtils::checkCommand('docker.io')) {
             $output->writeln('<error>Docker does not seem to be installed, please install it!</error>');
             $question = new ConfirmationQuestion('<question>Continue anyway?</question> ', 'n');
 
@@ -242,10 +242,10 @@ db:
     }
 
     protected function create_db_volume_data(InputInterface $input, OutputInterface $output, $container_name, QuestionHelper $question_helper) {
-        if($this->command_exist('docker')) {
+        if(CommandUtils::checkCommand('docker')) {
             $command = 'docker';
         }
-        elseif($this->command_exist('docker.io')){
+        elseif(CommandUtils::checkCommand('docker.io')){
             $command = 'docker.io';
         }
         else {
@@ -269,16 +269,5 @@ db:
             $output->writeln('<error>'.$comman_create.'</error>');
         }
 
-    }
-
-    /**
-     * Checks if a command exists on a *NIX machine
-     *
-     * @param string $cmd
-     * @return bool
-     */
-    protected function command_exist($cmd) {
-        $returnVal = shell_exec("which $cmd");
-        return (empty($returnVal) ? false : true);
     }
 }

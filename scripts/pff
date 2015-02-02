@@ -12,4 +12,6 @@ use Symfony\Component\Console\Application;
 $application = new Application('pff cli interface');
 $application->add(new \pff\Commands\GeneratePhpStormMeta());
 $application->add(new \pff\Commands\GenerateFigFiles());
+$application->add(new \pff\Commands\BackupDatabase());
+$application->add(new \pff\Commands\UpdateDatabase());
 $application->run();
