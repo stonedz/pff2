@@ -155,7 +155,8 @@ abstract class AController implements IController{
         if (true === $this->_config->getConfigData('development_environment')) {
             $cache = new ArrayCache();
         } else {
-            $cache = new ApcCache(array('prefix'=>$this->_app->getConfig()->getConfigData('app_name')));
+            $cache = new ApcCache();
+            $cache->setNamespace($this->_app->getConfig()->getConfigData('app_name'));
         }
 
         $config = new Configuration();
