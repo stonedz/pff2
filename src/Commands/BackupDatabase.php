@@ -45,12 +45,24 @@ class BackupDatabase extends Command {
             $dbHost = $pffConfig['databaseConfigDev']['host'];
             $dbName = $pffConfig['databaseConfigDev']['dbname'];
             $dbPass = $pffConfig['databaseConfigDev']['password'];
+            if(isset($pffConfig['databaseConfigDev']['port'])) {
+                $dbPort = $pffConfig['databaseConfigDev']['port'];
+            }
+            else {
+                $dbPort = 3306;
+            }
         }
         else {
             $dbUser = $pffConfig['databaseConfig']['user'];
             $dbHost = $pffConfig['databaseConfig']['host'];
             $dbName = $pffConfig['databaseConfig']['dbname'];
             $dbPass = $pffConfig['databaseConfig']['password'];
+            if(isset($pffConfig['databaseConfig']['port'])) {
+                $dbPort = $pffConfig['databaseConfig']['port'];
+            }
+            else {
+                $dbPort = 3306;
+            }
         }
 
         $backup_name = $dbName.'-BKP-'.date("dmY-Hi").'.sql';
@@ -78,7 +90,7 @@ class BackupDatabase extends Command {
             $backup_dir .= '/';
         }
 
-        $command = "mysqldump -u$dbUser -p$dbPass -h$dbHost $dbName > $backup_dir$backup_name";
+        $command = "mysqldump -u$dbUser -p$dbPass -h$dbHost -P$dbPort $dbName > $backup_dir$backup_name";
 
         $output->write('Generating db backup for $dbName...');
         exec($command, $res, $ret);
