@@ -225,7 +225,7 @@ abstract class AController implements IController{
 
         if (isset($this->_view)) {
             if (is_array($this->_view)) {
-                $this->_app->getHookManager()->runBeforeView();
+                $this->_app->getHookManager()->runBeforeView(array('controller' => $this));
                 foreach ($this->_view as $view) {
                     $view->render();
                 }

@@ -16,7 +16,7 @@ class TidyCleaner extends AModule implements IBeforeViewHook, IAfterViewHook {
      *
      * @return mixed
      */
-    public function doBeforeView() {
+    public function doBeforeView($context = null) {
         ob_start(array($this,'preView'));
     }
 

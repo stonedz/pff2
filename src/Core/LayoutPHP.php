@@ -40,4 +40,8 @@ class LayoutPHP extends ViewPHP {
         $this->_contentView[$index]->render();
         }
     }
+
+    public function getContentViews() {
+        return $this->_contentView;
+    }
 }

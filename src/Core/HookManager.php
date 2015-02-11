@@ -166,10 +166,10 @@ class HookManager {
      *
      * @return void
      */
-    public function runBeforeView() {
+    public function runBeforeView($context = null) {
         if($this->_beforeView !== null) {
             foreach($this->_beforeView as $hookProvider) {
-                $hookProvider->doBeforeView();
+                $hookProvider->doBeforeView($context);
             }
         }
     }

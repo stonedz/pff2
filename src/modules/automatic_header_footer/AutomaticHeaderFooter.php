@@ -61,7 +61,7 @@ class AutomaticHeaderFooter
      *
      * @return mixed
      */
-    public function doBeforeView() {
+    public function doBeforeView($context = null) {
         if ($this->_headerController) {
             $viewPath = ROOT . DS . 'app' . DS . 'views' . DS .
                 strtolower($this->_controller->getControllerName()) . DS .

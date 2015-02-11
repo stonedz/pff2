@@ -15,5 +15,5 @@ interface IBeforeViewHook extends IHookProvider {
      * @abstract
      * @return mixed
      */
-    public function doBeforeView();
+    public function doBeforeView($context = null);
 }

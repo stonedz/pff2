@@ -51,6 +51,10 @@ abstract class AView implements IRenderable {
         $this->_filesFolder  = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS . 'files' . DS;
         $this->_vendorFolder = $this->_app->getExternalPath() . 'app' . DS . 'vendor' . DS;
 
+        $this->updatePaths();
+    }
+
+    public function updatePaths() {
         $this->set('pff_path_public', $this->_publicFolder);
         $this->set('pff_path_css', $this->_cssFolder);
         $this->set('pff_path_img', $this->_imgFolder);
@@ -58,7 +62,6 @@ abstract class AView implements IRenderable {
         $this->set('pff_path_files', $this->_filesFolder);
         $this->set('pff_path_vendor', $this->_vendorFolder);
         $this->set('pff_root_ext', $this->_app->getExternalPath());
-
     }
 
     /**
@@ -140,6 +143,14 @@ abstract class AView implements IRenderable {
      */
     public function getPublicFolder() {
         return $this->_publicFolder;
+    }
+
+    public function getFilesFolder() {
+        return $this->_filesFolder;
+    }
+
+    public function setFilesFolder($filesFolder) {
+        $this->_filesFolder = $filesFolder;
     }
 
     public function addContent(AView $v) {
