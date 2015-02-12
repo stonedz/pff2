@@ -9,3 +9,4 @@ cache.properties
 tests/_output/*
 app/tmp/*
 modules/*
+backups/
