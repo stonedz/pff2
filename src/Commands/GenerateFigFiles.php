@@ -16,8 +16,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Yaml\Dumper;
+use Guzzle\Stream\Stream;
 
-class GenerateFigFiles extends Command{
+class GenerateFigFiles extends Command {
 
     /**
      * Name of the fig file used for dev
@@ -136,12 +137,17 @@ class GenerateFigFiles extends Command{
             }
         }
 
+        CommandUtils::checkDeployement();
+
         $web_port        = $input->getOption('web-port-dev');
         $db_port         = $input->getOption('db-port-dev');
         $db_host         = $input->getOption('db-host-dev');
         $phpmyadmin_port = $input->getOption('phpmyadmin-port-dev');
 
+        $this->askForFile('dev-php.ini', $input, $output, $questionHelper);
+
         if(!file_exists($this->fig_dev)) {
+
             $output->write('Checking for nginx error log in app/logs/docker-logs/ ...');
             if(!file_exists('app/logs/docker-logs')) {
                 mkdir('app/logs/docker-logs', 0777, true);
@@ -150,7 +156,6 @@ class GenerateFigFiles extends Command{
                 touch('app/logs/docker-logs/nginx-error.log');
             }
             $output->writeln('<info>DONE</info>');
-
 
             $output->write('Generating fig.yml for developement...');
             $toBeWritten =
@@ -162,7 +167,7 @@ class GenerateFigFiles extends Command{
     - db:".$db_host."
   volumes:
     - .:/srv/http
-    - ./deployement/php/php.ini:/etc/php5/fpm/php.ini
+    - ./deployement/php/dev-php.ini:/etc/php5/fpm/php.ini
     - ./app/logs/docker-logs/nginx-error.log:/var/log/nginx/error.log
 
 db:
@@ -191,6 +196,8 @@ phpmyadmin:
             return;
         }
 
+        $this->askForFile('prod-php.ini', $input, $output, $questionHelper);
+
         if(!file_exists($this->fig_prod)) {
             $output->write('Generating fig_prod.yml for production...');
 
@@ -207,7 +214,7 @@ phpmyadmin:
     - db:".$db_host."
   volumes:
     - .:/srv/http
-    - ./deployement/php/php.ini:/etc/php5/fpm/php.ini
+    - ./deployement/php/prod-php.ini:/etc/php5/fpm/php.ini
   ports:
     - \"$web_port:80\"
   environment:
@@ -269,5 +276,35 @@ db:
             $output->writeln('<error>'.$comman_create.'</error>');
         }
 
+    }
+
+    protected function getPHPIniFiles($fileName) {
+        $original = 'https://github.com/stonedz/dev-config/raw/master/'.$fileName;
+        $dest = 'deployement/php/'.$fileName;
+        copy($original, $dest);
+        chmod($dest, 775);
+    }
+
+    /**
+     * @param string $fileName
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @param $questionHelper
+     * @return bool
+     */
+    protected function askForFile($fileName , InputInterface $input, OutputInterface $output, $questionHelper)
+    {
+        $output->write('Checking for '.$fileName.'...');
+        if (!file_exists('deployement/php/'.$fileName)) {
+            $this->getPHPIniFiles($fileName);
+        } else {
+            $question = new ConfirmationQuestion('<question>'.$fileName.' file already present, overwrite?</question>', 'n');
+            if ($questionHelper->ask($input, $output, $question)) {
+                $this->getPHPIniFiles($fileName);
+            }
+        }
+        $output->writeln('<info>DONE</info>');
+
+        return true;
     }
 }
