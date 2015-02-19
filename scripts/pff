@@ -9,6 +9,31 @@ include 'vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
 
+function loadModuleCommands(Application $application) {
+    $moduleDirs = array('app/modules/','modules/');
+
+    foreach($moduleDirs as $moduleDirApp) {
+        $modulesApp = array_diff(scandir($moduleDirApp), array('..','.','.gitignore'));
+        foreach($modulesApp as $module) {
+            if (file_exists($moduleDirApp.$module.'/commands')) {
+                $commands = array_diff(scandir($moduleDirApp.$module.'/commands'), array('..','.','.gitignore'));
+                foreach($commands as $command) {
+                    $command_name = '\\pff\\Commands\\'.substr($command, 0, -4);
+                    $application->add(new $command_name);
+                }
+            }
+        }
+    }
+}
+
+function loadCommands(Application $application) {
+    $pffCommands = array_diff(scandir('vendor/stonedz/pff2/src/Commands'), array('..','.','.gitignore','CommandUtils.php'));
+    foreach($pffCommands as $command) {
+        $command_name = '\\pff\\Commands\\'.substr($command, 0, -4);
+        $application->add(new $command_name);
+    }
+}
+
 $application = new Application('pff cli interface');
 $application->add(new \pff\Commands\GeneratePhpStormMeta());
 $application->add(new \pff\Commands\GenerateFigFiles());
@@ -18,4 +43,10 @@ $application->add(new \pff\Commands\OptimizeProduction());
 $application->add(new \pff\Commands\ComposerInstall());
 $application->add(new \pff\Commands\ComposerUpdate());
 $application->add(new \pff\Commands\ComposerDumpAutoload());
+$application->add(new \pff\Commands\DeployCreate());
+$application->add(new \pff\Commands\DeployPush());
+//loadCommands($application);
+
+loadModuleCommands($application);
+
 $application->run();
