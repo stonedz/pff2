@@ -1,4 +1,4 @@
-**Pff is a MVC PHP framework**
+**Pff2 MVC PHP framework**
 ==============================
 
 [![Build Status](https://travis-ci.org/stonedz/pff2.svg?branch=master)](https://travis-ci.org/stonedz/pff2)
@@ -12,10 +12,36 @@ Documentation is a WIP
 
 ## Composer Installation
 
+To setup a new project:
+
+   - Create e new directory
+   - Install composer in the directory (or do a global composer install). See [here for the instructions](https://getcomposer.org/doc/00-intro.md).
+ - Create a composer.json file with the following content:
+
 ```json
 {
-  "require": {
-    "stonedz/pff2": "~2.0"
-  }
+    "name": "company/project-name",
+    "description": "",
+    "minimum-stability": "beta",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "",
+            "email": ""
+        }
+    ],
+    "require": {
+        "stonedz/pff2": "~2"
+    },
+    "autoload": {
+        "psr-4": {
+            "pff\\models\\": "app/models",
+            "pff\\controllers\\": "app/controllers",
+            "pff\\services\\": "app/services"
+        }
+    }
 }
+
 ```
+
+ - Finally run <code>php composer.phar install</code>
