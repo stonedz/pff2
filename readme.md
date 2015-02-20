@@ -8,8 +8,6 @@
 [![Code Climate](https://codeclimate.com/github/stonedz/pff2/badges/gpa.svg)](https://codeclimate.com/github/stonedz/pff2)
 [![Dependency Status](https://www.versioneye.com/user/projects/545897eab0448a91020000bd/badge.svg?style=flat)](https://www.versioneye.com/user/projects/545897eab0448a91020000bd)
 
-Documentation is a WIP
-
 ## Composer Installation
 
 To setup a new project:
@@ -45,3 +43,5 @@ To setup a new project:
 ```
 
  - Finally run <code>php composer.phar install</code>
+
+**Please see the [Wiki](https://github.com/stonedz/pff2/wiki) for more informations.**
