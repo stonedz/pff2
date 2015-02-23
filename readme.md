@@ -14,7 +14,7 @@ To setup a new project:
 
    - Create e new directory
    - Install composer in the directory (or do a global composer install). See [here for the instructions](https://getcomposer.org/doc/00-intro.md).
- - Create a composer.json file with the following content:
+    - Create a composer.json file with the following content:
 
 ```json
 {
@@ -42,6 +42,7 @@ To setup a new project:
 
 ```
 
- - Finally run <code>php composer.phar install</code>
+ - Run <code>php composer.phar install</code>
+ - Run <code>vendor/bin/init</code> (and follow on screen instructions)
 
 **Please see the [Wiki](https://github.com/stonedz/pff2/wiki) for more informations.**
