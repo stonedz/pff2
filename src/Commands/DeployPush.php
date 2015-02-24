@@ -23,7 +23,7 @@ class DeployPush extends Command {
 
     protected function configure() {
         $this
-            ->setName('deployement:publish')
+            ->setName('deploy:publish')
             ->setDescription('Publishes the site using the specified deployement configuration')
             ->addArgument(
                 'profile-name',
@@ -43,7 +43,7 @@ class DeployPush extends Command {
         $questionHelper = $this->getHelper('question');
 
         $profile_name = $input->getArgument('profile-name');
-        if(!$profile_name || !file_exists('deployement_publish_'.$profile_name.'.yml')) {
+        if(!$profile_name || !file_exists('deployement/publish_'.$profile_name.'.yml')) {
             $output->writeln('<question>Specified profile does not exist or no profile specified</question>');
 
             $table = new Table($output);
@@ -100,10 +100,10 @@ class DeployPush extends Command {
             return 1;
         }
         if($profile_config['use_pem']) {
-            $command = 'rsync -rlDvze "ssh -i '.$profile_config['pem_path'].'" ';
+            $command = 'rsync -rltDvze "ssh -i '.$profile_config['pem_path'].'" ';
         }
         else {
-            $command = 'rsync -rlDvz ';
+            $command = 'rsync -rltDvz ';
         }
 
         foreach($profile_config['exclude'] as $exclude) {
