@@ -126,20 +126,22 @@ class DeployPush extends Command {
             'chmod -R 770 '.$profile_config['remote_dir'].'app/tmp'
         );
 
-        $permissions_commands = array();
+        $permissions_commands = 'ssh '
+            .($profile_config['use_pem']?'-i '.$profile_config['pem_path']:'')
+            .' '
+            .$profile_config['username']
+            .'@'
+            .$profile_config['host']
+            .' '
+            .($profile_config['use_sudo']?'sudo':'')
+            .' \'';
         foreach($chmod as $c) {
-            $permissions_commands[] = 'ssh '
-                .($profile_config['use_pem']?'-i '.$profile_config['pem_path']:'')
-                .' '
-                .$profile_config['username']
-                .'@'
-                .$profile_config['host']
-                .' '
-                .($profile_config['use_sudo']?'sudo':'')
-                .' '
-                .$c;
+                $permissions_commands .= $c. ' && ';
         }
+        $permissions_commands = substr($permissions_commands, 0, -3);
+        $permissions_commands .= '\'';
 
+        // PUBLISH
         $dump_commands = $input->getOption('dump-commands');
         if($dump_commands) {
             $output->writeln($command);
@@ -147,19 +149,41 @@ class DeployPush extends Command {
         else {
             $output->writeln('Publishing with rsync, please wait (it may take a while)...');
             passthru($command);
-            $output->writeln('<info>DONE</info>');
+            $output->writeln('<info>PUBLISH DONE</info>');
         }
 
-        $output->writeln('Setting permissions...');
-        foreach($permissions_commands as $command) {
+        // OPTIMIZE
+        $run_optimize = $profile_config['always_run_optimize'];
+        if($run_optimize) {
+            $output->writeln('Run optimizations...');
+            $command = 'ssh '
+                .($profile_config['use_pem']?'-i '.$profile_config['pem_path']:'')
+                .' '
+                .$profile_config['username']
+                .'@'
+                .$profile_config['host']
+                .' '
+                .'\'cd '.$profile_config['remote_dir'].' && vendor/bin/pff deploy:optimize\'';
+
             if($dump_commands) {
                 $output->writeln($command);
             }
             else {
                 passthru($command);
             }
+            $output->writeln('<info>OPTIMIZE DONE</info>');
         }
-        $output->writeln('<info>DONE</info>');
+
+        // PERMISSIONS
+        $output->writeln('Setting permissions...');
+        if($dump_commands) {
+            $output->writeln($permissions_commands);
+        }
+        else {
+            passthru($permissions_commands);
+        }
+        $output->writeln('<info>PERMISSIONS DONE</info>');
+
     }
 
     protected function getDeployementProfiles() {
