@@ -159,6 +159,7 @@ class DeployPush extends Command {
                 passthru($command);
             }
         }
+        $output->writeln('<info>DONE</info>');
     }
 
     protected function getDeployementProfiles() {

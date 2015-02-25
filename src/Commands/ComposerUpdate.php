@@ -25,7 +25,7 @@ class ComposerUpdate extends Command {
     protected function execute(InputInterface $input, OutputInterface $output) {
 
         $command   = $this->getApplication()->find('composer:install');
-        $arguments = array('command' => 'composer:install', '-c' => true);
+        $arguments = array('command' => 'composer:install');
         $inputa    = new ArrayInput($arguments);
         $ret       = $command->run($inputa, $output);
 
@@ -59,3 +59,4 @@ class ComposerUpdate extends Command {
     }
 
 }
+
