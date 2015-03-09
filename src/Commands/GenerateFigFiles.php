@@ -197,6 +197,7 @@ phpmyadmin:
         }
 
         $this->askForFile('prod-php.ini', $input, $output, $questionHelper);
+        $this->askForFileNginx('nginx.conf', $input, $output, $questionHelper);
 
         if(!file_exists($this->fig_prod)) {
             $output->write('Generating fig_prod.yml for production...');
@@ -215,6 +216,7 @@ phpmyadmin:
   volumes:
     - .:/srv/http
     - ./deployement/php/prod-php.ini:/etc/php5/fpm/php.ini
+    - ./deployement/nginx/nginx.conf:/etc/nginx/nginx.conf
   ports:
     - \"$web_port:80\"
   environment:
@@ -307,4 +309,35 @@ db:
 
         return true;
     }
+
+    protected function getNginxFiles($fileName) {
+        $original = 'https://raw.githubusercontent.com/neropaco/docker-lamp/master/'.$fileName;
+        $dest = 'deployement/nginx/'.$fileName;
+        copy($original, $dest);
+        chmod($dest, 775);
+    }
+    /**
+     * @param string $fileName
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @param $questionHelper
+     * @return bool
+     */
+    protected function askForFileNginx($fileName , InputInterface $input, OutputInterface $output, $questionHelper)
+    {
+        $output->write('Checking for '.$fileName.'...');
+        if (!file_exists('deployement/nginx/'.$fileName)) {
+            $this->getNginxFiles($fileName);
+        } else {
+            $question = new ConfirmationQuestion('<question>'.$fileName.' file already present, overwrite?</question>', 'n');
+            if ($questionHelper->ask($input, $output, $question)) {
+                $this->getNginxFiles($fileName);
+            }
+        }
+        $output->writeln('<info>DONE</info>');
+
+        return true;
+    }
+
+
 }
