@@ -145,6 +145,7 @@ class GenerateFigFiles extends Command {
         $phpmyadmin_port = $input->getOption('phpmyadmin-port-dev');
 
         $this->askForFile('dev-php.ini', $input, $output, $questionHelper);
+        $this->askForFileNginx('dev-nginx.conf', $input, $output, $questionHelper);
 
         if(!file_exists($this->fig_dev)) {
 
@@ -168,6 +169,7 @@ class GenerateFigFiles extends Command {
   volumes:
     - .:/srv/http
     - ./deployement/php/dev-php.ini:/etc/php5/fpm/php.ini
+    - ./deployement/nginx/dev-nginx.conf:/etc/nginx/nginx.conf
     - ./app/logs/docker-logs/nginx-error.log:/var/log/nginx/error.log
 
 db:
@@ -197,7 +199,7 @@ phpmyadmin:
         }
 
         $this->askForFile('prod-php.ini', $input, $output, $questionHelper);
-        $this->askForFileNginx('nginx.conf', $input, $output, $questionHelper);
+        $this->askForFileNginx('prod-nginx.conf', $input, $output, $questionHelper);
 
         if(!file_exists($this->fig_prod)) {
             $output->write('Generating fig_prod.yml for production...');
@@ -216,7 +218,7 @@ phpmyadmin:
   volumes:
     - .:/srv/http
     - ./deployement/php/prod-php.ini:/etc/php5/fpm/php.ini
-    - ./deployement/nginx/nginx.conf:/etc/nginx/nginx.conf
+    - ./deployement/nginx/prod-nginx.conf:/etc/nginx/nginx.conf
   ports:
     - \"$web_port:80\"
   environment:
@@ -311,7 +313,7 @@ db:
     }
 
     protected function getNginxFiles($fileName) {
-        $original = 'https://raw.githubusercontent.com/neropaco/docker-lamp/master/'.$fileName;
+        $original = 'https://github.com/stonedz/dev-config/raw/master/'.$fileName;
         $dest = 'deployement/nginx/'.$fileName;
         copy($original, $dest);
         chmod($dest, 775);
