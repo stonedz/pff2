@@ -64,8 +64,8 @@ class BackupDatabase extends Command {
                 $dbPort = 3306;
             }
         }
-
-        $backup_name = $dbName.'-BKP-'.date("dmY-Hi").'.sql';
+        $backup_prefix = $dbName.'-BKP-';
+        $backup_name = $backup_prefix.date("dmY-Hi").'.sql';
 
         $backup_dir = $input->getOption('backup-dir');
         $output->writeln('Checking for backup dir...');
@@ -104,5 +104,20 @@ class BackupDatabase extends Command {
                 $output->writeln($line);
             }
         }
+
+        $this->cleanOldBkp($input, $output, $backup_dir, $backup_prefix);
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @param string $backup_dir Backup directory
+     * @param string $backup_prefix Prefix used to name backups files.
+     */
+    private function cleanOldBkp(InputInterface $input, OutputInterface $output, $backup_dir, $backup_prefix) {
+        $output->write('Cleaning old backups...');
+        $command = "find ".$backup_dir." -mtime +15 -name '".$backup_prefix."*' -exec rm {} \\;";
+        exec($command);
+        $output->writeln('<info>DONE</info>');
     }
 }
