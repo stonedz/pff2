@@ -38,6 +38,6 @@ class UpdateDatabase extends Command {
         }
 
         exec('vendor/bin/doctrine orm:schema-tool:update --force',$res);
-        foreach ($res as $r) echo $r."\n";
+        foreach ($res as $r) echo $r,"\n";
     }
 }
