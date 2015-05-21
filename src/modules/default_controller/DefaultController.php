@@ -42,6 +42,9 @@ class DefaultController extends AModule implements IConfigurableModule, IBeforeS
         if (file_exists(ROOT . DS . 'app' . DS . 'controllers' . DS . ucfirst($tmpUrl[0]) . '_Controller.php')) {
             return;
         }
+        elseif (file_exists(ROOT.DS.'app'.DS.'pages'.DS.$tmpUrl[0]) && $tmpUrl[0] != '') {
+            return;
+        }
         $this->_app->setUrl($this->_defaultController.'/'.implode('/',$tmpUrl));
     }
 }
