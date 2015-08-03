@@ -73,6 +73,7 @@ abstract class AView implements IRenderable {
         $controllerClass = '\\pff\\controllers\\'.ucfirst($controller) . '_Controller';
         $tmpController   = new $controllerClass($controller, $this->_app, $action, $params);
         $tmpController->$action();
+        $tmpController->setIsRenderAction(true);
     }
 
     /**
