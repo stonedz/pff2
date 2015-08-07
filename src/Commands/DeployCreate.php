@@ -97,6 +97,7 @@ class DeployCreate extends Command {
             'app/views/smarty/compiled_templates/*',
             'app/proxies/*',
             'app/public/admin/include/dbcommon.php',
+            'app/public/admin/connections/ConnectionManager.php',
             '*.pem'
         );
         $excludes = array_merge($custom_excludes, $standard_excludes);
