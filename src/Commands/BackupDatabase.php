@@ -27,7 +27,14 @@ class BackupDatabase extends Command {
                 InputOption::VALUE_REQUIRED,
                 'Backup directory',
                 'backups/sql'
-            );
+              )
+              ->addOption(
+                'port',
+                'p',
+                InputOption::VALUE_REQUIRED,
+                'Mysql db port',
+                '0'
+              );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -39,13 +46,18 @@ class BackupDatabase extends Command {
         }
 
         require('app/config/config.user.php');
+        $mysql_port = $input->getOption('port');
+
         $dev = $pffConfig['development_environment'];
         if($dev) {
             $dbUser = $pffConfig['databaseConfigDev']['user'];
             $dbHost = $pffConfig['databaseConfigDev']['host'];
             $dbName = $pffConfig['databaseConfigDev']['dbname'];
             $dbPass = $pffConfig['databaseConfigDev']['password'];
-            if(isset($pffConfig['databaseConfigDev']['port'])) {
+            if($mysql_port !== 0) {
+                $dbPort = $mysql_port;
+            }
+            elseif(isset($pffConfig['databaseConfigDev']['port'])) {
                 $dbPort = $pffConfig['databaseConfigDev']['port'];
             }
             else {
@@ -57,7 +69,10 @@ class BackupDatabase extends Command {
             $dbHost = $pffConfig['databaseConfig']['host'];
             $dbName = $pffConfig['databaseConfig']['dbname'];
             $dbPass = $pffConfig['databaseConfig']['password'];
-            if(isset($pffConfig['databaseConfig']['port'])) {
+            if($mysql_port !== 0) {
+                $dbPort = $mysql_port;
+            }
+            elseif(isset($pffConfig['databaseConfig']['port'])) {
                 $dbPort = $pffConfig['databaseConfig']['port'];
             }
             else {
