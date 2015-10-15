@@ -23,15 +23,22 @@ class UpdateDatabase extends Command {
             ->addOption(
                 'no-backup',
                 null,
-                InputOption::VALUE_NONE
+                InputOption::VALUE_NONE)
+            ->addOption(
+                'port',
+                'p',
+                InputOption::VALUE_REQUIRED,
+                'Mysql db port (used for db backup)',
+                '0'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         if(!$input->getOption('no-backup')) {
+            $mysql_port = $input->getOption('port');
 
             $command   = $this->getApplication()->find('db:backupDb');
-            $arguments = array('command' => 'db:backupDb');
+            $arguments = array('command' => 'db:backupDb', '--port' => $mysql_port);
             $inputa    = new ArrayInput($arguments);
             $ret       = $command->run($inputa, $output);
 
