@@ -165,4 +165,12 @@ class Auth extends AModule implements IConfigurableModule {
     private function _logUser() {
         $_SESSION[$this->_sessionVarName] = 1;
     }
+
+    public function getModelName() {
+        return $this->_modelName;
+    }
+
+    public function setModelName($modelName) {
+        $this->_modelName = $modelName;
+    }
 }
