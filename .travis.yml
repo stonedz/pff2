@@ -24,3 +24,6 @@ after_script:
 
 notifications:
   slack: neropaco:jxHRwHv4jRizu1VLwmIjGLoK
+addons:
+  code_climate:
+    repo_token: 9287f641e948f0acb905b8160bce67d3c10c30342d706f2704eb328f08114aa2
