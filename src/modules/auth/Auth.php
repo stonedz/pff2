@@ -173,4 +173,18 @@ class Auth extends AModule implements IConfigurableModule {
     public function setModelName($modelName) {
         $this->_modelName = $modelName;
     }
+
+    /**
+     * @return string
+     */
+    public function getUsernameAttribute() {
+      return $this->_usernameAttribute;
+    }
+
+    /**
+     * @param string $usernameAttribute
+     */
+    public function setUsernameAttribute($usernameAttribute) {
+      $this->_usernameAttribute = $usernameAttribute;
+    }
 }
