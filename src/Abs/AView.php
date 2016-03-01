@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Abs;
+use pff\Core\ModuleManager;
 use pff\Core\ServiceContainer;
 use pff\Iface\IRenderable;
 
@@ -59,7 +60,13 @@ abstract class AView implements IRenderable {
         $this->set('pff_path_css', $this->_cssFolder);
         $this->set('pff_path_img', $this->_imgFolder);
         $this->set('pff_path_js', $this->_jsFolder);
-        $this->set('pff_path_files', $this->_filesFolder);
+        if(ModuleManager::isLoaded('pff2-s3')) {
+            $s3 = ModuleManager::loadModule('pff2-s3');
+            $this->set('pff_path_files', $s3->getCloudfrontUrl()?:$this->_filesFolder);
+        }
+        else {
+            $this->set('pff_path_files', $this->_filesFolder);
+        }
         $this->set('pff_path_vendor', $this->_vendorFolder);
         $this->set('pff_root_ext', $this->_app->getExternalPath());
     }

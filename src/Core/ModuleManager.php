@@ -161,7 +161,7 @@ class ModuleManager {
      * @param string $moduleName
      * @return bool
      */
-    public function isLoaded($moduleName) {
+    public static function isLoaded($moduleName) {
         if(isset(self::$_modules[$moduleName])){
             return true;
         }

@@ -225,38 +225,40 @@ abstract class AController implements IController{
      * @throws ViewException
      */
     public function __destruct() {
-      $this->_output->outputHeader();
+        $this->_output->outputHeader();
 
-      if(!$this->_isRenderAction){
-        if (isset($this->_view)) {
-          if (is_array($this->_view)) {
-            $this->_app->getHookManager()->runBeforeView(array('controller' => $this));
-            foreach ($this->_view as $view) {
-              $view->render();
+        if(!$this->_isRenderAction){
+            if (isset($this->_view)) {
+                if (is_array($this->_view)) {
+                    $this->_app->getHookManager()->runBeforeView(array('controller' => $this));
+                    foreach ($this->_view as $view) {
+                        $view->render();
+                    }
+                    $this->_app->getHookManager()->runAfterView();
+                } elseif (is_a($this->_view, '\\pff\\AView')) {
+                    $this->_app->getHookManager()->runBeforeView(array('controller' => $this));
+                    $this->_view->render();
+                    $this->_app->getHookManager()->runAfterView();
+                } else {
+                    throw new ViewException("The specified View is not valid.");
+                }
             }
-            $this->_app->getHookManager()->runAfterView();
-          } elseif (is_a($this->_view, '\\pff\\AView')) {
-            $this->_app->getHookManager()->runBeforeView();
-            $this->_view->render();
-            $this->_app->getHookManager()->runAfterView();
-          } else {
-            throw new ViewException("The specified View is not valid.");
-          }
-        }
-      }else{
-        if (isset($this->_view)) {
-          if (is_array($this->_view)) {
-            foreach ($this->_view as $view) {
-              $view->render();
+        }else{
+            if (isset($this->_view)) {
+                if (is_array($this->_view)) {
+                    foreach ($this->_view as $view) {
+                        $this->_app->getHookManager()->runBeforeView(array('controller' => $this));
+                        $view->render();
+                    }
+                } elseif (is_a($this->_view, '\\pff\\AView')) {
+                    $this->_app->getHookManager()->runBeforeView(array('controller' => $this));
+                    $this->_view->render();
+                } else {
+                    throw new ViewException("The specified View is not valid.");
+                }
             }
-          } elseif (is_a($this->_view, '\\pff\\AView')) {
-            $this->_view->render();
-          } else {
-            throw new ViewException("The specified View is not valid.");
-          }
-        }
 
-      }
+        }
     }
 
     /**
@@ -310,7 +312,7 @@ abstract class AController implements IController{
             return $this->_params[$index];
         }
         else{
-             throw new PffException($errorMessage, $errorCode);
+            throw new PffException($errorMessage, $errorCode);
         }
     }
 
