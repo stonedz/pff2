@@ -18,6 +18,8 @@ class Session extends AModule implements IBeforeSystemHook {
      * @return mixed
      */
     public function doBeforeSystem() {
-        session_start();
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
     }
 }
