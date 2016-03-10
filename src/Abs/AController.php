@@ -285,6 +285,7 @@ abstract class AController implements IController{
     /**
      * @param string $moduleName Name of the module to load
      * @return AModule
+     * @deprecated Use ModuleManager::loadModule('module_name')
      */
     public function loadModule($moduleName) {
         return $this->_moduleManager->getModule($moduleName);
