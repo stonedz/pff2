@@ -29,7 +29,8 @@ To setup a new project:
         }
     ],
     "require": {
-        "stonedz/pff2": "~2"
+        "stonedz/pff2": "~2",
+        "pff2-doctrine": "*"
     },
     "autoload": {
         "psr-4": {
@@ -44,5 +45,20 @@ To setup a new project:
 
  - Run <code>php composer.phar install</code>
  - Run <code>vendor/bin/init</code> (and follow on screen instructions)
+
+## Docker integration
+
+Install docker and docker-compose on your system, then
+
+```
+  $ docker-compose up
+```
+
+The first time the containers are generated a new Mariadb admin password will be
+created and shown on the console, use that to connect your app to the DB. you
+can also use the same username and password in phpmyadmin to manage your db.
+
+You can modify the file docker-compose.yml to change ports and settings for the
+containers.
 
 **Please see the [Wiki](https://github.com/stonedz/pff2/wiki) for more informations.**
