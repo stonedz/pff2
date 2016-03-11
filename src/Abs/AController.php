@@ -155,36 +155,6 @@ abstract class AController implements IController{
      * Initializes Doctrine entity manager
      */
     private function initORM() {
-
-        /*if (true === $this->_config->getConfigData('development_environment')) {
-            $cache = new ArrayCache();
-        } else {
-            $cache = new ApcCache();
-            $cache->setNamespace($this->_app->getConfig()->getConfigData('app_name'));
-        }
-
-        $config = new Configuration();
-        $config->setMetadataCacheImpl($cache);
-        $driverImpl = $config->newDefaultAnnotationDriver(ROOT . DS . 'app' . DS . 'models');
-        $config->setMetadataDriverImpl($driverImpl);
-        $config->setQueryCacheImpl($cache);
-        $config->setProxyDir(ROOT . DS . 'app' . DS . 'proxies');
-        $config->setProxyNamespace('pff\proxies');
-
-        if (true === $this->_config->getConfigData('development_environment')) {
-            $config->setAutoGenerateProxyClasses(true);
-            $connectionOptions = $this->_config->getConfigData('databaseConfigDev');
-        } else {
-            $config->setAutoGenerateProxyClasses(false);
-            $connectionOptions = $this->_config->getConfigData('databaseConfig');
-        }
-
-
-        $this->_em = EntityManager::create($connectionOptions, $config);
-
-        ServiceContainer::set()['dm'] = $this->_em;
-        $platform = $this->_em->getConnection()->getDatabasePlatform();
-        $platform->registerDoctrineTypeMapping('enum', 'string');*/
         $this->_em = ServiceContainer::get('dm');
     }
 
