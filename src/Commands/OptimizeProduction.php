@@ -42,15 +42,6 @@ class OptimizeProduction extends Command {
             $output->writeln('<error>ERROR</error>');
         }
 
-        /*$output->write('Clear doctrine result cache...');
-        exec('vendor/bin/doctrine orm:clear-cache:result',$res, $ret);
-        if($ret == 0) {
-            $output->writeln('<info>DONE</info>');
-        }
-        else {
-            $output->writeln('<error>ERROR</error>');
-        }*/
-
         $output->write('Clear and generate doctrine proxies...');
         exec('rm -rf app/proxies/*', $res, $ret);
         exec('vendor/bin/doctrine orm:generate-proxies', $res, $ret);
