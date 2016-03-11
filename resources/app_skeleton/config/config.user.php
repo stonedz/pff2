@@ -77,6 +77,7 @@ $pffConfig['databaseConfigDev'] = array(
  * Modules to be loaded
  */
 $pffConfig['modules'] = array(
+    'pff2-doctrine'
     'logger',
     'main_layout'
 
