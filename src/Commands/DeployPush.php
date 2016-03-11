@@ -57,7 +57,7 @@ class DeployPush extends Command {
             $table->render();
 
             $ok = false;
-            while($ok == false) {
+            while($ok === false) {
                 $question = new Question('<question>Please enter a profile ID or a profile name to use (leave blank to exit):</question> ', null);
                 $user_choice = $questionHelper->ask($input, $output, $question);
 
