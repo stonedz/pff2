@@ -14,8 +14,6 @@
     ],
     "require": {
         "php": ">=5.5",
-        "doctrine/orm": "2.5.*",
-        "doctrine/cache": "1.6.*",
         "symfony/yaml": "2.*",
         "symfony/console": "2.*",
         "symfony/debug": "2.*",

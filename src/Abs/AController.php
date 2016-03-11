@@ -156,7 +156,7 @@ abstract class AController implements IController{
      */
     private function initORM() {
 
-        if (true === $this->_config->getConfigData('development_environment')) {
+        /*if (true === $this->_config->getConfigData('development_environment')) {
             $cache = new ArrayCache();
         } else {
             $cache = new ApcCache();
@@ -184,7 +184,8 @@ abstract class AController implements IController{
 
         ServiceContainer::set()['dm'] = $this->_em;
         $platform = $this->_em->getConnection()->getDatabasePlatform();
-        $platform->registerDoctrineTypeMapping('enum', 'string');
+        $platform->registerDoctrineTypeMapping('enum', 'string');*/
+        $this->_em = ServiceContainer::get('dm');
     }
 
     /**
