@@ -30,7 +30,7 @@ To setup a new project:
     ],
     "require": {
         "stonedz/pff2": "~2",
-        "pff2-doctrine": "*"
+        "stonedz/pff2-doctrine": "*"
     },
     "autoload": {
         "psr-4": {
