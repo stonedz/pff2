@@ -68,18 +68,18 @@ fi
 cd $tmp
 
 #Generate autoload files
-if ! command -v phpab &> /dev/null
-then
-    echo -e "\n${RED}[FAIL] Phpab command not found! install with the following commands \n
-     pear channel-discover pear.netpirates.net \n
-     pear channel-discover components.ez.no \n
-     pear install theseer/Autoload"
-    fail=true
-else
-    echo -ne "\n${CYAN}Generating autoload.php files..."
-    sh vendor/bin/generateAutoload.sh &> /dev/null
-    echo -e "${GREEN}[OK]"
-fi
+#if ! command -v phpab &> /dev/null
+#then
+#    echo -e "\n${RED}[FAIL] Phpab command not found! install with the following commands \n
+#     pear channel-discover pear.netpirates.net \n
+#     pear channel-discover components.ez.no \n
+#     pear install theseer/Autoload"
+#    fail=true
+#else
+#    echo -ne "\n${CYAN}Generating autoload.php files..."
+#    sh vendor/bin/generateAutoload.sh &> /dev/null
+#    echo -e "${GREEN}[OK]"
+#fi
 
 #Creating symlinks
 echo -ne "\n${CYAN}Moving css and js files"
