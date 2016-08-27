@@ -106,6 +106,7 @@ echo -e "${GREEN}[OK]"
 echo -ne "\n${CYAN}Copying site skel"
 cp vendor/stonedz/pff2/resources/site_skeleton/.gitignore .
 cp vendor/stonedz/pff2/resources/site_skeleton/index.php .
+cp vendor/stonedz/pff2/resources/site_skeleton/docker-compose.yml .
 echo -e "${GREEN}[OK]"
 
 #Copying build files
