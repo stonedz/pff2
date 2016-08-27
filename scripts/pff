@@ -5,6 +5,10 @@
  * Date: 11/11/14
  * Time: 11.45
  */
+if(!file_exists('vendor/autoload.php') && file_exists('composer.phar')){
+  exec('php composer.phar dumpautoload');
+}
+
 include 'vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
