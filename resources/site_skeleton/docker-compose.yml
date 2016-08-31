@@ -18,11 +18,13 @@ db:
     - "3307:3306"
 
 phpmyadmin:
-  image: maxexcloo/phpmyadmin
+  image: phpmyadmin/phpmyadmin
   ports:
     - "8008:80"
   links:
     - db:mariadb
+  environment:
+    PMA_HOST: mariadb
 
 redis:
   image: redis
