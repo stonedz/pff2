@@ -102,7 +102,7 @@ class MobileViews extends AModule implements IConfigurableModule, IBeforeHook {
         if(!isset($_SESSION[$this->_sessionAutoName]) && $this->_isTablet){
             $_SESSION[$this->_sessionAutoName] = $this->_allowMobileForTablet;
         }
-        elseif(!isset($_SESSION[$this->_sessionAutoName])) {
+        elseif(!isset($_SESSION[$this->_sessionAutoName]) || $_SESSION[$this->_sessionAutoName] == '') {
             $_SESSION[$this->_sessionAutoName] = $this->_defaultBehaviour;
         }
 
