@@ -34,7 +34,7 @@ done
 
 # command line dependecies"
 #CMDS="curl"
-PKGS="php5-curl php-apc"
+PKGS=""
 #######################################
 # START
 #######################################
