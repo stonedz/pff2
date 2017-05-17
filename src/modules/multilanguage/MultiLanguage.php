@@ -52,7 +52,10 @@ class MultiLanguage extends AModule implements IBeforeSystemHook {
      */
     private $_defaultLang;
 
+    private $_accepted_languages;
+
     public function __construct($confFile = 'multilanguage/module.conf.yaml') {
+        $this->_accepted_languages = array();
         $moduleconfig = $this->readConfig($confFile);
         $this->_loadConfig($moduleconfig);
     }
@@ -66,6 +69,14 @@ class MultiLanguage extends AModule implements IBeforeSystemHook {
         $this->_cookieName      = $parsedConfig['moduleConf']['cookie_name'];
         $this->_saveOnSession   = $parsedConfig['moduleConf']['save_on_session'];
         $this->_sessionKeyName  = $parsedConfig['moduleConf']['session_key_name'];
+        if(isset($parsedConfig['moduleConf']['accepted_languages'])) {
+            foreach ($parsedConfig['moduleConf']['accepted_languages'] as $l){
+                $this->_accepted_languages[] = $l;
+            }
+        }
+        else {
+            $this->_accepted_languages = null;
+        }
     }
 
     /**
@@ -98,7 +109,22 @@ class MultiLanguage extends AModule implements IBeforeSystemHook {
             $this->saveLanguage();
 
             $processedUrl = implode('/', $splittedUrl);
-        } else {
+        }
+        elseif(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && isset($langCodes[substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2)])) {
+            $this->_selectedLanguage = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+            if($this->_accepted_languages !== null) {
+                $this->_selectedLanguage = $this->_defaultLang;
+            }
+            elseif (is_array($this->_accepted_languages)){
+                if (!in_array($this->_selectedLanguage, $this->_accepted_languages)) {
+                    $this->_selectedLanguage = $this->_defaultLang;
+                }
+            }
+            $this->saveLanguage();
+
+            $processedUrl = $url;
+        }
+        else {
             $this->_selectedLanguage = $this->_defaultLang;
             $this->saveLanguage();
 

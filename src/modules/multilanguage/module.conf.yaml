@@ -6,3 +6,7 @@ moduleConf:
   # If set to true saves on session
   save_on_session: false
   session_key_name: pff_language
+  # List of accepted languages
+  accepted_languages:
+    - en
+    - it
