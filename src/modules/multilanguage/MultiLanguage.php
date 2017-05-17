@@ -105,14 +105,24 @@ class MultiLanguage extends AModule implements IBeforeSystemHook {
         $langCodes = $this->getCodes();
 
         if (isset($langCodes[$splittedUrl[0]])) {
-            $this->_selectedLanguage = array_shift($splittedUrl);
+            if($this->_accepted_languages !== null && is_array($this->_accepted_languages)) {
+                if( in_array($splittedUrl[0], $this->_accepted_languages)){
+                    $this->_selectedLanguage = array_shift($splittedUrl);
+                }
+                else {
+                    $this->_selectedLanguage = $this->_defaultLang;
+                }
+            }
+            else {
+                $this->_selectedLanguage = array_shift($splittedUrl);
+            }
             $this->saveLanguage();
 
             $processedUrl = implode('/', $splittedUrl);
         }
         elseif(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && isset($langCodes[substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2)])) {
             $this->_selectedLanguage = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-            if($this->_accepted_languages !== null) {
+            if($this->_accepted_languages === null) {
                 $this->_selectedLanguage = $this->_defaultLang;
             }
             elseif (is_array($this->_accepted_languages)){
