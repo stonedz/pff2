@@ -35,6 +35,12 @@ class DeployPush extends Command {
                 null,
                 InputOption::VALUE_NONE,
                 'Only write to stdout the commands, do not execute them'
+            )
+            ->addOption(
+                'full',
+                null,
+                InputOption::VALUE_NONE,
+                'Publishes all the files, even the ones in ignore list'
             );
     }
 
@@ -106,8 +112,11 @@ class DeployPush extends Command {
             $command = 'rsync -rltDvz ';
         }
 
-        foreach($profile_config['exclude'] as $exclude) {
-            $command .= '--exclude \''.$exclude.'\' ';
+        $is_full = $input->getOption('full');
+        if(!$is_full) {
+            foreach ($profile_config['exclude'] as $exclude) {
+                $command .= '--exclude \'' . $exclude . '\' ';
+            }
         }
 
         if(substr($profile_config['remote_dir'],-1,1) != '/') {
