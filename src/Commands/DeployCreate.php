@@ -76,7 +76,7 @@ class DeployCreate extends Command {
         $question->setAutocompleterValues($possible_groups);
         $remote_group = $questionHelper->ask($input, $output, $question);
 
-        $question = new ConfirmationQuestion('<question>Ue a .pem file to publish? (y/n)</question> ', false);
+        $question = new ConfirmationQuestion('<question>Use a .pem file to publish? (y/n)</question> ', false);
         $use_pem = $questionHelper->ask($input, $output, $question);
 
         if($use_pem) {
