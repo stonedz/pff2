@@ -25,7 +25,7 @@ $protocol = $isSecure ? 'https' : 'http';
 $ext_root =  $protocol . "://" . $_SERVER['HTTP_HOST'].'/';
 
 define('EXT_ROOT', $ext_root);
-if(isset($_GET['url']) && $_GET['url'][0] == '/') {
+if(isset($_GET['url']) && isset($_GET['url'][0]) && $_GET['url'][0] == '/') {
     $_GET['url'] = substr($_GET['url'],1);
 }
 (isset($_GET['url'])) ? $url = $_GET['url'] : $url='' ;
