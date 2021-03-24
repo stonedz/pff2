@@ -32,7 +32,6 @@
 $app = \pff\Core\ServiceContainer::get('app');
 $app->setUrl($url);
 $app->setErrorReporting();
-$app->removeMagicQuotes();
 $app->unregisterGlobals();
 
 \pff\Core\ServiceContainer::get('modulemanager')->initModules();
