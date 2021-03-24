@@ -102,18 +102,6 @@ class App {
     }
 
     /**
-     * Removes magic quotes from requests
-     * @codeCoverageIgnore
-     */
-    public function removeMagicQuotes() {
-        if (get_magic_quotes_gpc()) {
-            $_GET    = $this->stripSlashesDeep($_GET);
-            $_POST   = $this->stripSlashesDeep($_POST);
-            $_COOKIE = $this->stripSlashesDeep($_COOKIE);
-        }
-    }
-
-    /**
      * Check register globals and remove them
      *
      * @codeCoverageIgnore
