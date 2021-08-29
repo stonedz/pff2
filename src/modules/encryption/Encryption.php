@@ -10,7 +10,7 @@ use pff\Abs\AModule;
  */
 class Encryption extends AModule{
 
-    const MODE = MCRYPT_MODE_CBC;
+    const METHOD = 'aes-256-ctr';
 
     /**
      * The cypher method to be used
@@ -36,52 +36,68 @@ class Encryption extends AModule{
      * @param array $parsedConfig
      */
     private function loadConfig($parsedConfig) {
-        $this->_cypher = $parsedConfig['moduleConf']['cypher'];
-        $this->_key    = md5($parsedConfig['moduleConf']['key']);
+        $this->_key    = hex2bin($parsedConfig['moduleConf']['key']);
+    }
+
+
+    /**
+     * Encrypts (but does not authenticate) a message
+     * 
+     * @param string $message - plaintext message
+     * @param string $key - encryption key (raw binary expected)
+     * @param boolean $encode - set to TRUE to return a base64-encoded 
+     * @return string (raw binary)
+     */
+    public static function encrypt($message, $key = false, $encode = true)
+    {
+        $nonceSize = openssl_cipher_iv_length(self::METHOD);
+        $nonce = openssl_random_pseudo_bytes($nonceSize);
+
+        $ciphertext = openssl_encrypt(
+            $message,
+            self::METHOD,
+            $key,
+            OPENSSL_RAW_DATA,
+            $nonce
+        );
+
+        // Now let's pack the IV and the ciphertext together
+        // Naively, we can just concatenate
+        if ($encode) {
+            return base64_encode($nonce.$ciphertext);
+        }
+        return $nonce.$ciphertext;
     }
 
     /**
-     * Encrypts a text
-     *
-     * @param string $plaintext the text to encrypt
-     * @param null|string $key User specified
+     * Decrypts (but does not verify) a message
+     * 
+     * @param string $message - ciphertext message
+     * @param string $key - encryption key (raw binary expected)
+     * @param boolean $encoded - are we expecting an encoded string?
      * @return string
      */
-    public function encrypt($plaintext, $key = null) {
-        if(null !== $key) {
-            $this->_key = md5($key);
+    public static function decrypt($message, $key = false, $encoded = true)
+    {
+        if ($encoded) {
+            $message = base64_decode($message, true);
+            if ($message === false) {
+                throw new \Exception('Encryption failure');
+            }
         }
 
-        $td = mcrypt_module_open($this->_cypher, '', self::MODE, '');
-        $iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
-        mcrypt_generic_init($td, $this->_key, $iv);
-        $crypttext = mcrypt_generic($td, $plaintext);
-        mcrypt_generic_deinit($td);
-        return base64_encode($iv . $crypttext);
-    }
+        $nonceSize = openssl_cipher_iv_length(self::METHOD);
+        $nonce = mb_substr($message, 0, $nonceSize, '8bit');
+        $ciphertext = mb_substr($message, $nonceSize, null, '8bit');
 
-    /**
-     * Decrypt a previously encrypted text
-     *
-     * @param string $crypttext
-     * @param null|string $key User specified key
-     * @return string
-     */
-    public function decrypt($crypttext, $key = null) {
-        if(null !== $key) {
-            $this->_key = md5($key);
-        }
+        $plaintext = openssl_decrypt(
+            $ciphertext,
+            self::METHOD,
+            $key,
+            OPENSSL_RAW_DATA,
+            $nonce
+        );
 
-        $crypttext = base64_decode($crypttext);
-        $plaintext = '';
-        $td        = mcrypt_module_open($this->_cypher, '', self::MODE, '');
-        $ivsize    = mcrypt_enc_get_iv_size($td);
-        $iv        = substr($crypttext, 0, $ivsize);
-        $crypttext = substr($crypttext, $ivsize);
-        if ($iv) {
-            mcrypt_generic_init($td, $this->_key, $iv);
-            $plaintext = mdecrypt_generic($td, $crypttext);
-        }
-        return trim($plaintext);
+        return $plaintext;
     }
 }

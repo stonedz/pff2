@@ -1,5 +1,4 @@
 moduleConf:
-  # The cypher used (ex "blowfish", "rijndael-128")
-  cypher: blowfish
-  # CHANGE THIS! UST CHANGE IT! This is the key used to encrypt/decrypt data
-  key: pleaseChangeThis
+  # CHANGE THIS! JUST CHANGE IT! This is the key used to encrypt/decrypt data
+  # must be 64 char hex sting 
+  key: aaa102030405060e48090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f

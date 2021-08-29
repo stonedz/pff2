@@ -3,4 +3,4 @@ version: "0.1"
 desc: Helper 2 way encryption module
 class: Encryption
 requires_php_extension:
-  - mcrypt
+  - openssl
