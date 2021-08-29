@@ -1,11 +1,13 @@
 <?php
+
+use PHPUnit\Framework\TestCase;
+
 /**
  *
  * @author paolo.fagni<at>gmail.com
  */
-class MultiLanguageTest extends PHPUnit_Framework_TestCase
+class MultiLanguageTest extends TestCase
 {
-
     /**
      * @var \pff\modules\MultiLanguage
      */
@@ -15,12 +17,13 @@ class MultiLanguageTest extends PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new \pff\modules\MultiLanguage();
     }
 
-    public function testProcessUrlWithLanguage() {
+    public function testProcessUrlWithLanguage()
+    {
         $tmpUrl = $this->object->processUrl('it/controller/action/param1');
         $this->assertEquals('controller/action/param1', $tmpUrl);
         $this->assertEquals('it', $this->object->getSelectedLanguage());

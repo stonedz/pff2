@@ -81,4 +81,3 @@ $pffConfig['modules'] = array(
     'main_layout'
 
 );
-

@@ -65,11 +65,38 @@ class App {
      * @internal param ModuleManager $moduleManager
      * @internal param HookManager $hookManager
      */
-    public function __construct() {
-        $this->_config        = ServiceContainer::get('config');
-        $this->_hookManager   = ServiceContainer::get('hookmanager');
-        $this->_moduleManager = ServiceContainer::get('modulemanager');
-        $this->_helperManager = ServiceContainer::get('helpermanager');
+    public function __construct($config = null,
+                            $hookmanager = null,
+                            $modulemanager = null,
+                            $helpermanager = null) {
+
+        if($config){
+            $this->_config = $config;
+        }                    
+        else{
+            $this->_config        = ServiceContainer::get('config');
+        }
+
+        if($hookmanager){
+            $this->_hookManager = $hookmanager;
+        }
+        else {
+            $this->_hookManager   = ServiceContainer::get('hookmanager');
+        }
+
+        if($modulemanager) {
+            $this->_moduleManager = $modulemanager;
+        }
+        else {
+            $this->_moduleManager = ServiceContainer::get('modulemanager');
+        }
+
+        if($helpermanager) {
+            $this->_helperManager = $helpermanager;
+        }
+        else {
+            $this->_helperManager = ServiceContainer::get('helpermanager');
+        }
     }
 
     /**

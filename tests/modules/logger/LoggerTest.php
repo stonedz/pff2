@@ -1,10 +1,13 @@
 <?php
+
+use PHPUnit\Framework\TestCase;
+
 /**
  *
  * @author paolo.fagni<at>gmail.com
  */
-class LoggerTest extends PHPUnit_Framework_TestCase {
-
+class LoggerTest extends TestCase
+{
     /**
      * @var \pff\modules\Logger
      */
@@ -14,7 +17,8 @@ class LoggerTest extends PHPUnit_Framework_TestCase {
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp() {
+    protected function setUp(): void
+    {
         $this->object = pff\modules\Logger::getInstance();
     }
 
@@ -24,23 +28,26 @@ class LoggerTest extends PHPUnit_Framework_TestCase {
      *
      * @return void
      */
-    protected function tearDown() {
+    protected function tearDown(): void
+    {
     }
 
-    public function testInitialState() {
+    public function testInitialState()
+    {
         $tmpLoggerArray = $this->object->getLoggers();
-        $this->assertInternalType('array', $tmpLoggerArray);
+        $this->assertIsArray($tmpLoggerArray);
         $this->assertInstanceOf('\\pff\\modules\\Abs\\ALogger', $tmpLoggerArray[0]);
-
     }
 
-    public function testX() {
-        $this->setExpectedException('\\pff\\Exception\\ModuleException');
+    public function testX()
+    {
+        $this->expectException('\\pff\\Exception\\ModuleException');
         $this->object->reset();
         $this->object = \pff\modules\Logger::getInstance('nonononon.yaml');
     }
 
-    public function testFail() {
+    public function testFail()
+    {
         $this->assertTrue(true);
     }
 }

@@ -12,3 +12,4 @@ composer.lock
 composer.phar
 components
 phpunit.phar
+*.cache

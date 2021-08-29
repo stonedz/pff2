@@ -1,11 +1,14 @@
 <?php
+
+use PHPUnit\Framework\TestCase;
+
 /**
  * LoggerFile test class
  *
  * @author paolo.fagni<at>gmail.com
  */
-class LoggerFileTest extends PHPUnit_Framework_TestCase {
-
+class LoggerFileTest extends TestCase
+{
     /**
      * @var \pff\modules\Utils\LoggerFile
      */
@@ -15,7 +18,8 @@ class LoggerFileTest extends PHPUnit_Framework_TestCase {
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp() {
+    protected function setUp(): void
+    {
         $this->object = new pff\modules\Utils\LoggerFile();
     }
 
@@ -25,10 +29,12 @@ class LoggerFileTest extends PHPUnit_Framework_TestCase {
      *
      * @return void
      */
-    protected function tearDown() {
+    protected function tearDown(): void
+    {
     }
 
-    public function testInitialStateIsOk() {
+    public function testInitialStateIsOk()
+    {
         $this->assertNull($this->object->getFp());
     }
 
@@ -36,5 +42,4 @@ class LoggerFileTest extends PHPUnit_Framework_TestCase {
         $this->assertInternalType('resource', $this->object->getLogFile());
 
     }*/
-
 }
