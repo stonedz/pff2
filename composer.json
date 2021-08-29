@@ -13,17 +13,17 @@
         }
     ],
     "require": {
-        "php": ">=5.5",
-        "symfony/yaml": "2.*",
-        "symfony/console": "2.*",
-        "symfony/debug": "2.*",
-        "swiftmailer/swiftmailer": "5.4.*",
+        "php": ">=7",
+        "symfony/yaml": "~5.3",
+        "symfony/console": "~5.3",
+        "symfony/debug": "~4.4",
+        "swiftmailer/swiftmailer": "~6.2",
         "ezyang/htmlpurifier": "*",
         "mobiledetect/mobiledetectlib": "2.8.*",
         "components/normalize.css": "3.*",
-        "components/modernizr": "2.8.*",
-        "stonedz/pff2-installers": "*",
-        "pimple/pimple": "~3.0"
+        "components/modernizr": "3.*",
+        "stonedz/pff2-installers": "2.*",
+        "pimple/pimple": "~3.4"
     },
     "require-dev": {
         "codeception/codeception": "*"
