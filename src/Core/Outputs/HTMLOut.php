@@ -7,12 +7,12 @@
 
 namespace pff\Core\Outputs;
 
-
 use pff\Iface\IOutputs;
 
-class HTMLOut implements IOutputs{
-
-    public function outputHeader() {
+class HTMLOut implements IOutputs
+{
+    public function outputHeader()
+    {
         return true;
     }
 }

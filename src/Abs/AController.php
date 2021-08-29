@@ -22,7 +22,8 @@ use pff\Iface\IController;
  *
  * @author paolo.fagni<at>gmail.com
  */
-abstract class AController implements IController{
+abstract class AController implements IController
+{
     use ControllerTrait;
 
     /**
@@ -118,7 +119,8 @@ abstract class AController implements IController{
      * @param array $params An array with parameters passed to the action
      * @internal param \pff\Config $cfg App configuration
      */
-    public function __construct($controllerName, App $app, $action = 'index', $params = array()) {
+    public function __construct($controllerName, App $app, $action = 'index', $params = [])
+    {
         $this->_controllerName = $controllerName;
         $this->_action         = $action;
         $this->_app            = $app;
@@ -127,12 +129,11 @@ abstract class AController implements IController{
         $this->_moduleManager  = $this->_app->getModuleManager();
         $this->_helperManager  = $this->_app->getHelperManager();
         $this->_layout         = null;
-        $this->_view           = array();
+        $this->_view           = [];
 
         if ($this->_config->getConfigData('orm')) {
             $this->initORM();
-        }
-        else {
+        } else {
             $this->_em = null;
         }
 
@@ -147,27 +148,31 @@ abstract class AController implements IController{
      *
      * @return bool
      */
-    public function initController() {
+    public function initController()
+    {
         return true;
     }
 
     /**
      * Initializes Doctrine entity manager
      */
-    private function initORM() {
+    private function initORM()
+    {
         $this->_em = ServiceContainer::get('dm');
     }
 
     /**
      * Method executed before the action
      */
-    public function beforeAction() {
+    public function beforeAction()
+    {
     }
 
     /**
      * Method executed after the action
      */
-    public function afterAction() {
+    public function afterAction()
+    {
     }
 
     /**
@@ -175,7 +180,8 @@ abstract class AController implements IController{
      *
      * @param AView $view
      */
-    public function addView(AView $view) {
+    public function addView(AView $view)
+    {
         $this->_view[] = $view;
     }
 
@@ -184,7 +190,8 @@ abstract class AController implements IController{
      *
      * @param AView $view
      */
-    public function addViewPre(AView $view) {
+    public function addViewPre(AView $view)
+    {
         array_unshift($this->_view, $view);
     }
 
@@ -195,61 +202,64 @@ abstract class AController implements IController{
      *
      * @throws ViewException
      */
-    public function __destruct() {
+    public function __destruct()
+    {
         $this->_output->outputHeader();
 
-        if(!$this->_isRenderAction){
+        if (!$this->_isRenderAction) {
             if (isset($this->_view)) {
                 if (is_array($this->_view)) {
-                    $this->_app->getHookManager()->runBeforeView(array('controller' => $this));
+                    $this->_app->getHookManager()->runBeforeView(['controller' => $this]);
                     foreach ($this->_view as $view) {
                         $view->render();
                     }
                     $this->_app->getHookManager()->runAfterView();
                 } elseif (is_a($this->_view, '\\pff\\AView')) {
-                    $this->_app->getHookManager()->runBeforeView(array('controller' => $this));
+                    $this->_app->getHookManager()->runBeforeView(['controller' => $this]);
                     $this->_view->render();
                     $this->_app->getHookManager()->runAfterView();
                 } else {
                     throw new ViewException("The specified View is not valid.");
                 }
             }
-        }else{
+        } else {
             if (isset($this->_view)) {
                 if (is_array($this->_view)) {
                     foreach ($this->_view as $view) {
-                        $this->_app->getHookManager()->runBeforeView(array('controller' => $this));
+                        $this->_app->getHookManager()->runBeforeView(['controller' => $this]);
                         $view->render();
                     }
                 } elseif (is_a($this->_view, '\\pff\\AView')) {
-                    $this->_app->getHookManager()->runBeforeView(array('controller' => $this));
+                    $this->_app->getHookManager()->runBeforeView(['controller' => $this]);
                     $this->_view->render();
                 } else {
                     throw new ViewException("The specified View is not valid.");
                 }
             }
-
         }
     }
 
     /**
      * @return string
      */
-    public function getControllerName() {
+    public function getControllerName()
+    {
         return $this->_controllerName;
     }
 
     /**
      * @return string
      */
-    public function getAction() {
+    public function getAction()
+    {
         return $this->_action;
     }
 
     /**
      * @return \pff\App
      */
-    public function getApp() {
+    public function getApp()
+    {
         return $this->_app;
     }
 
@@ -258,7 +268,8 @@ abstract class AController implements IController{
      * @return AModule
      * @deprecated Use ModuleManager::loadModule('module_name')
      */
-    public function loadModule($moduleName) {
+    public function loadModule($moduleName)
+    {
         return $this->_moduleManager->getModule($moduleName);
     }
 
@@ -266,7 +277,8 @@ abstract class AController implements IController{
      * @param string $helperName Name of the helper to load
      * @return bool
      */
-    public function loadHelper($helperName) {
+    public function loadHelper($helperName)
+    {
         return $this->_helperManager->load($helperName);
     }
 
@@ -279,11 +291,11 @@ abstract class AController implements IController{
      * @throws PffException
      * @return string
      */
-    public function getParam($index, $errorMessage = "Page not found", $errorCode = 404) {
-        if(isset($this->_params[$index])){
+    public function getParam($index, $errorMessage = "Page not found", $errorCode = 404)
+    {
+        if (isset($this->_params[$index])) {
             return $this->_params[$index];
-        }
-        else{
+        } else {
             throw new PffException($errorMessage, $errorCode);
         }
     }
@@ -294,7 +306,8 @@ abstract class AController implements IController{
      * @param string $actionName
      * @param \callable $method
      */
-    public function registerBeforeFilter($actionName,$method) {
+    public function registerBeforeFilter($actionName, $method)
+    {
         $this->_beforeFilters[$actionName][] = $method;
     }
 
@@ -304,19 +317,21 @@ abstract class AController implements IController{
      * @param string $actionName
      * @param \callable $method
      */
-    public function registerAfterFilter($actionName, $method) {
+    public function registerAfterFilter($actionName, $method)
+    {
         $this->_afterFilters[$actionName][] = $method;
     }
 
     /**
      * Executes all the registered beforeFilters for the current action
      */
-    public function beforeFilter() {
-        if(!isset($this->_beforeFilters[$this->_action])) {
+    public function beforeFilter()
+    {
+        if (!isset($this->_beforeFilters[$this->_action])) {
             return false;
         }
 
-        foreach($this->_beforeFilters[$this->_action] as $method) {
+        foreach ($this->_beforeFilters[$this->_action] as $method) {
             call_user_func($method);
         }
     }
@@ -324,12 +339,13 @@ abstract class AController implements IController{
     /**
      * Execute all the registered afterFilters for the current action
      */
-    public function afterFilter() {
-        if(!isset($this->_afterFilters[$this->_action])) {
+    public function afterFilter()
+    {
+        if (!isset($this->_afterFilters[$this->_action])) {
             return false;
         }
 
-        foreach($this->_afterFilters[$this->_action] as $method) {
+        foreach ($this->_afterFilters[$this->_action] as $method) {
             call_user_func($method);
         }
     }
@@ -338,11 +354,11 @@ abstract class AController implements IController{
      * @return AView
      * @throws PffException
      */
-    public function getLayout(){
-        if($this->_layout) {
+    public function getLayout()
+    {
+        if ($this->_layout) {
             return $this->_layout;
-        }
-        else {
+        } else {
             throw new PffException('No layout has been set');
         }
     }
@@ -353,41 +369,48 @@ abstract class AController implements IController{
      *
      * @param $layout AView
      */
-    public function setLayout($layout){
+    public function setLayout($layout)
+    {
         $this->_layout = $layout;
-        if(isset($this->_view[0])) {
+        if (isset($this->_view[0])) {
             $this->resetViews();
         }
         $this->addView($layout);
     }
 
-    public function resetViews() {
+    public function resetViews()
+    {
         unset($this->_view);
-        $this->_view = array();
+        $this->_view = [];
     }
 
-    public function getViews() {
+    public function getViews()
+    {
         return $this->_view;
     }
     /**
      * @return mixed
      */
-    public function getOutput() {
+    public function getOutput()
+    {
         return $this->_output;
     }
 
     /**
      * @param mixed $output
      */
-    public function setOutput($output) {
+    public function setOutput($output)
+    {
         $this->_output = $output;
     }
 
-    public function setIsRenderAction($value) {
+    public function setIsRenderAction($value)
+    {
         $this->_isRenderAction = $value;
     }
 
-    public function getIsRenderAction() {
+    public function getIsRenderAction()
+    {
         return $this->_isRenderAction;
     }
 }

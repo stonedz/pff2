@@ -2,9 +2,8 @@
 
 namespace pff\Iface;
 
-
-interface IRenderable {
-
+interface IRenderable
+{
     /**
      * Sets a value to be passed to a View
      *
@@ -25,5 +24,4 @@ interface IRenderable {
      * @return mixed
      */
     public function renderHtml();
-
 }

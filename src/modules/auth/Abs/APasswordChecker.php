@@ -6,9 +6,8 @@ namespace pff\modules\Abs;
  *
  * @author paolo.fagni<at>gmail.com
  */
-abstract class APasswordChecker {
-
-
+abstract class APasswordChecker
+{
     /**
      * @abstract
      * @param string $pass Provided password (NOT encrypted)
@@ -17,5 +16,4 @@ abstract class APasswordChecker {
      * @return bool
      */
     abstract public function checkPass($pass, $encryptedPass, $salt = '');
-
 }

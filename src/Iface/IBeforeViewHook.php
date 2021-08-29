@@ -7,8 +7,8 @@ namespace pff\Iface;
  *
  * @author paolo.fagni<at>gmail.com
  */
-interface IBeforeViewHook extends IHookProvider {
-
+interface IBeforeViewHook extends IHookProvider
+{
     /**
      * Executes actions before the Views are rendered
      *

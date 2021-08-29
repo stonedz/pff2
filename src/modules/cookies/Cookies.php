@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\modules;
+
 use pff\Abs\AModule;
 
 /**
@@ -8,8 +9,8 @@ use pff\Abs\AModule;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class Cookies extends AModule {
-
+class Cookies extends AModule
+{
     /**
      * If true use encryped cookies
      *
@@ -17,7 +18,8 @@ class Cookies extends AModule {
      */
     private $_useEncryption;
 
-    public function __construct($confFile = 'cookies/module.conf.yaml') {
+    public function __construct($confFile = 'cookies/module.conf.yaml')
+    {
         $this->loadConfig($this->readConfig($confFile));
     }
 
@@ -26,7 +28,8 @@ class Cookies extends AModule {
      *
      * @param array $parsedConfig
      */
-    private function loadConfig($parsedConfig) {
+    private function loadConfig($parsedConfig)
+    {
         $this->_useEncryption = $parsedConfig['moduleConf']['useEncryption'];
     }
 
@@ -38,7 +41,8 @@ class Cookies extends AModule {
      * @param int|null $expire how many HOURS the cookie will be valid (set to 0 for session time)
      * @return bool
      */
-    public function setCookie($cookieName, $value = null, $expire = null) {
+    public function setCookie($cookieName, $value = null, $expire = null)
+    {
         if ($expire !== null) {
             $expire = time() + (60 * 60 * $expire);
         }
@@ -50,7 +54,8 @@ class Cookies extends AModule {
         }
     }
 
-    private function encodeCookie($value) {
+    private function encodeCookie($value)
+    {
         if ($this->_useEncryption) {
             return $this->getRequiredModules('encryption')->encrypt($value);
         } else {
@@ -58,7 +63,8 @@ class Cookies extends AModule {
         }
     }
 
-    private function decodeCookie($value) {
+    private function decodeCookie($value)
+    {
         if ($this->_useEncryption) {
             return $this->getRequiredModules('encryption')->decrypt($value);
         } else {
@@ -73,7 +79,8 @@ class Cookies extends AModule {
      * @return bool
      * @retrurn string
      */
-    public function getCookie($cookieName) {
+    public function getCookie($cookieName)
+    {
         if (isset($_COOKIE[$cookieName])) {
             return $this->decodeCookie($_COOKIE[$cookieName]);
         } else {
@@ -87,7 +94,8 @@ class Cookies extends AModule {
      * @param string $cookieName Name of the cookie to delete
      * @return bool
      */
-    public function deleteCookie($cookieName) {
+    public function deleteCookie($cookieName)
+    {
         if (isset($_COOKIE[$cookieName])) {
             if (setcookie($cookieName, null, time() - 6000, '/')) {
                 return true;

@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\modules;
+
 use pff\Abs\AModule;
 
 /**
@@ -10,20 +11,22 @@ use pff\Abs\AModule;
  */
 
 
-class Search extends AModule {
-
-    public function __construct() {
+class Search extends AModule
+{
+    public function __construct()
+    {
     }
 
     /**
      * @param $modelnames
      * @return Searcher
      */
-    public function createSearcher($modelnames) {
-        $params = array();
-        if(!is_array($modelnames)){
+    public function createSearcher($modelnames)
+    {
+        $params = [];
+        if (!is_array($modelnames)) {
             array_push($params, $modelnames);
-        }else{
+        } else {
             $params = $modelnames;
         }
         $factory = new Searcher($params);

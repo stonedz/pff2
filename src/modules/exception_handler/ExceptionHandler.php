@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\modules;
+
 use pff\Abs\AModule;
 use pff\Exception\PffException;
 use pff\Factory\FView;
@@ -11,40 +12,37 @@ use pff\Iface\IBeforeSystemHook;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class ExceptionHandler extends AModule implements IBeforeSystemHook {
-
+class ExceptionHandler extends AModule implements IBeforeSystemHook
+{
     /**
      * Executed before the system startup
      *
      * @return mixed
      */
-    public function doBeforeSystem() {
-        set_exception_handler(array($this, 'manageExceptions'));
+    public function doBeforeSystem()
+    {
+        set_exception_handler([$this, 'manageExceptions']);
     }
 
     /**
      * @param \Exception $exception
      */
-    public function manageExceptions(\Exception $exception) {
+    public function manageExceptions(\Exception $exception)
+    {
         $code = (int)$exception->getCode();
         header(' ', true, $code);
 
-        if(file_exists(ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS . 'templates' . DS .$code . '_View.tpl')){
+        if (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS . 'templates' . DS .$code . '_View.tpl')) {
             $viewPath = $code . '_View.tpl';
-        }
-        elseif (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . $code . '_View.php')) {
+        } elseif (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . $code . '_View.php')) {
             $viewPath = $code . '_View.php';
-        }
-        elseif(file_exists(ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS . 'templates' . DS .'defaultError_View.tpl')){
+        } elseif (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS . 'templates' . DS .'defaultError_View.tpl')) {
             $viewPath = 'defaultError_View.tpl';
-        }
-        elseif(file_exists(ROOT . DS . 'app' . DS . 'views' . DS . 'defaultError_View.php')) {
+        } elseif (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . 'defaultError_View.php')) {
             $viewPath = 'defaultError_View.php';
-        }
-        elseif (file_exists(ROOT_LIB . DS . 'src' . DS . 'modules' . DS . 'exception_handler' . DS . 'views' . DS . 'default' . $code . '_View.php')) {
+        } elseif (file_exists(ROOT_LIB . DS . 'src' . DS . 'modules' . DS . 'exception_handler' . DS . 'views' . DS . 'default' . $code . '_View.php')) {
             $viewPath = ROOT_LIB . DS . 'src' . DS . 'modules' . DS . 'exception_handler' . DS . 'views' . DS . 'default' . $code . '_View.php';
-        }
-        else {
+        } else {
             $viewPath = ROOT_LIB . DS . 'src' . DS . 'modules' . DS . 'exception_handler' . DS . 'views' . DS . 'defaultError_View.php';
         }
         $view = FView::create($viewPath, $this->getApp());
@@ -52,7 +50,7 @@ class ExceptionHandler extends AModule implements IBeforeSystemHook {
         $view->set('code', $exception->getCode());
         $view->set('trace', $exception->getTrace());
 
-        if(is_a($exception, '\pff\Exception\PffException')) {
+        if (is_a($exception, '\pff\Exception\PffException')) {
             /** @var PffException $exception */
             $exceptionParams = $exception->getViewParams();
             if ($exceptionParams !== null && is_array($exceptionParams)) {
@@ -62,7 +60,7 @@ class ExceptionHandler extends AModule implements IBeforeSystemHook {
                 }
             }
         }
-        if(isset($this->_controller)) {
+        if (isset($this->_controller)) {
             $this->_controller->resetViews();
         }
         $view->render();

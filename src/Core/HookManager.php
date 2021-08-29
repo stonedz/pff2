@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Core;
+
 use pff\Exception\HookException;
 use pff\Iface\IAfterHook;
 use pff\Iface\IAfterViewHook;
@@ -14,8 +15,8 @@ use pff\Iface\IHookProvider;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class HookManager {
-
+class HookManager
+{
     /**
      * Array of hooks to be executed before system startup
      *
@@ -57,11 +58,11 @@ class HookManager {
      */
     private $_config;
 
-    public function __construct($conf = null) {
-        if($conf) {
+    public function __construct($conf = null)
+    {
+        if ($conf) {
             $this->_config = $conf;
-        }
-        else {
+        } else {
             $this->_config = ServiceContainer::get('config');
         }
     }
@@ -74,30 +75,31 @@ class HookManager {
      * @param string|null $loadBefore Hook must be run before specified module name
      * @throws HookException
      */
-    public function registerHook(IHookProvider $prov, $moduleName, $loadBefore = null) {
+    public function registerHook(IHookProvider $prov, $moduleName, $loadBefore = null)
+    {
         $found = false;
 
-        if(is_a($prov, '\\pff\\Iface\\IBeforeHook')) {
+        if (is_a($prov, '\\pff\\Iface\\IBeforeHook')) {
             $found = $this->addHook($this->_beforeController, $prov, $moduleName, $loadBefore);
         }
 
-        if(is_a($prov, '\\pff\\Iface\\IAfterHook')) {
+        if (is_a($prov, '\\pff\\Iface\\IAfterHook')) {
             $found = $this->addHook($this->_afterController, $prov, $moduleName, $loadBefore);
         }
 
-        if(is_a($prov, '\\pff\\Iface\\IBeforeSystemHook')) {
+        if (is_a($prov, '\\pff\\Iface\\IBeforeSystemHook')) {
             $found = $this->addHook($this->_beforeSystem, $prov, $moduleName, $loadBefore);
         }
 
-        if(is_a($prov, '\\pff\\Iface\\IBeforeViewHook')) {
+        if (is_a($prov, '\\pff\\Iface\\IBeforeViewHook')) {
             $found = $this->addHook($this->_beforeView, $prov, $moduleName, $loadBefore);
         }
 
-        if(is_a($prov, '\\pff\\Iface\\IAfterViewHook')) {
+        if (is_a($prov, '\\pff\\Iface\\IAfterViewHook')) {
             $found = $this->addHook($this->_afterView, $prov, $moduleName, $loadBefore);
         }
 
-        if(!$found) {
+        if (!$found) {
             throw new HookException("Cannot add given class as a hook provider: ". get_class($prov));
         }
     }
@@ -109,15 +111,15 @@ class HookManager {
      * @param string|null $runBeforeModule
      * @return bool
      */
-    private function addHook(&$repository, $module, $moduleName, $runBeforeModule) {
-        if($runBeforeModule === null  || !array_key_exists($runBeforeModule, $repository)) {
+    private function addHook(&$repository, $module, $moduleName, $runBeforeModule)
+    {
+        if ($runBeforeModule === null  || !array_key_exists($runBeforeModule, $repository)) {
             $repository[$moduleName] = $module;
             return true;
-        }
-        else {
-            $new = array();
-            foreach($repository as $k => $v) {
-                if($k === $runBeforeModule) {
+        } else {
+            $new = [];
+            foreach ($repository as $k => $v) {
+                if ($k === $runBeforeModule) {
                     $new[$moduleName] = $module;
                 }
                 $new[$k] = $v;
@@ -132,9 +134,10 @@ class HookManager {
      *
      * @return void
      */
-    public function runBeforeSystem() {
-        if($this->_beforeSystem !== null) {
-            foreach($this->_beforeSystem as $hookProvider) {
+    public function runBeforeSystem()
+    {
+        if ($this->_beforeSystem !== null) {
+            foreach ($this->_beforeSystem as $hookProvider) {
                 $hookProvider->doBeforeSystem();
             }
         }
@@ -145,9 +148,10 @@ class HookManager {
      *
      * @return void
      */
-    public function runBefore() {
-        if($this->_beforeController !== null) {
-            foreach($this->_beforeController as $hookProvider) {
+    public function runBefore()
+    {
+        if ($this->_beforeController !== null) {
+            foreach ($this->_beforeController as $hookProvider) {
                 $hookProvider->doBefore();
             }
         }
@@ -158,9 +162,10 @@ class HookManager {
      *
      * @return void
      */
-    public function runAfter() {
-        if($this->_afterController !== null) {
-            foreach($this->_afterController as $hookProvider) {
+    public function runAfter()
+    {
+        if ($this->_afterController !== null) {
+            foreach ($this->_afterController as $hookProvider) {
                 $hookProvider->doAfter();
             }
         }
@@ -171,9 +176,10 @@ class HookManager {
      *
      * @return void
      */
-    public function runBeforeView($context = null) {
-        if($this->_beforeView !== null) {
-            foreach($this->_beforeView as $hookProvider) {
+    public function runBeforeView($context = null)
+    {
+        if ($this->_beforeView !== null) {
+            foreach ($this->_beforeView as $hookProvider) {
                 $hookProvider->doBeforeView($context);
             }
         }
@@ -184,9 +190,10 @@ class HookManager {
      *
      * @return void
      */
-    public function runAfterView() {
-        if($this->_afterView !== null) {
-            foreach($this->_afterView as $hookProvider) {
+    public function runAfterView()
+    {
+        if ($this->_afterView !== null) {
+            foreach ($this->_afterView as $hookProvider) {
                 $hookProvider->doAfterView();
             }
         }
@@ -195,35 +202,40 @@ class HookManager {
     /**
      * @return \pff\IAfterHook[]
      */
-    public function getAfterController() {
+    public function getAfterController()
+    {
         return $this->_afterController;
     }
 
     /**
      * @return IBeforeHook[]
      */
-    public function getBeforeController() {
+    public function getBeforeController()
+    {
         return $this->_beforeController;
     }
 
     /**
      * @return IBeforeSystemHook[]
      */
-    public function getBeforeSystem() {
+    public function getBeforeSystem()
+    {
         return $this->_beforeSystem;
     }
 
     /**
      * @return IAfterViewHook[]
      */
-    public function getAfterView() {
+    public function getAfterView()
+    {
         return $this->_afterView;
     }
 
     /**
      * @return IBeforeViewHook[]
      */
-    public function getBeforeView() {
+    public function getBeforeView()
+    {
         return $this->_beforeView;
     }
 }

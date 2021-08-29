@@ -7,8 +7,8 @@ namespace pff\Iface;
  *
  * @author paolo.fagni<at>gmail.com
  */
-interface IAfterViewHook extends IHookProvider {
-
+interface IAfterViewHook extends IHookProvider
+{
     /**
      * Executes actions after the views are rendered
      *

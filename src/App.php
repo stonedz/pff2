@@ -1,20 +1,21 @@
 <?php
 
 namespace pff;
+
 use pff\Core\HelperManager;
 use pff\Core\HookManager;
 use pff\Core\ModuleManager;
 use pff\Core\ServiceContainer;
 use pff\Exception\RoutingException;
-use \Symfony\Component\Debug\ErrorHandler;
+use Symfony\Component\Debug\ErrorHandler;
 
 /**
  * Main app
  *
  * @author paolo.fagni<at>gmail.com
  */
-class App {
-
+class App
+{
     /**
      * @var string
      */
@@ -65,36 +66,33 @@ class App {
      * @internal param ModuleManager $moduleManager
      * @internal param HookManager $hookManager
      */
-    public function __construct($config = null,
-                            $hookmanager = null,
-                            $modulemanager = null,
-                            $helpermanager = null) {
-
-        if($config){
+    public function __construct(
+        $config = null,
+        $hookmanager = null,
+        $modulemanager = null,
+        $helpermanager = null
+    ) {
+        if ($config) {
             $this->_config = $config;
-        }                    
-        else{
+        } else {
             $this->_config        = ServiceContainer::get('config');
         }
 
-        if($hookmanager){
+        if ($hookmanager) {
             $this->_hookManager = $hookmanager;
-        }
-        else {
+        } else {
             $this->_hookManager   = ServiceContainer::get('hookmanager');
         }
 
-        if($modulemanager) {
+        if ($modulemanager) {
             $this->_moduleManager = $modulemanager;
-        }
-        else {
+        } else {
             $this->_moduleManager = ServiceContainer::get('modulemanager');
         }
 
-        if($helpermanager) {
+        if ($helpermanager) {
             $this->_helperManager = $helpermanager;
-        }
-        else {
+        } else {
             $this->_helperManager = ServiceContainer::get('helpermanager');
         }
     }
@@ -102,7 +100,8 @@ class App {
     /**
      * Sets error reporting
      */
-    public function setErrorReporting() {
+    public function setErrorReporting()
+    {
         if (true ===  $this->_config->getConfigData('development_environment')) {
             error_reporting(E_ALL);
             ini_set('display_errors', 'On');
@@ -123,8 +122,9 @@ class App {
      * @return array|string
      * @codeCoverageIgnore
      */
-    private function stripSlashesDeep($value) {
-        $value = is_array($value) ? array_map(array($this, 'stripSlashesDeep'), $value) : stripslashes($value);
+    private function stripSlashesDeep($value)
+    {
+        $value = is_array($value) ? array_map([$this, 'stripSlashesDeep'], $value) : stripslashes($value);
         return $value;
     }
 
@@ -133,9 +133,10 @@ class App {
      *
      * @codeCoverageIgnore
      */
-    public function unregisterGlobals() {
+    public function unregisterGlobals()
+    {
         if (ini_get('register_globals')) {
-            $array = array('_SESSION', '_POST', '_GET', '_COOKIE', '_REQUEST', '_SERVER', '_ENV', '_FILES');
+            $array = ['_SESSION', '_POST', '_GET', '_COOKIE', '_REQUEST', '_SERVER', '_ENV', '_FILES'];
             foreach ($array as $value) {
                 foreach ($GLOBALS[$value] as $key => $var) {
                     if ($var === $GLOBALS[$key]) {
@@ -153,7 +154,8 @@ class App {
      * @param string $destinationPage
      * @throws \pff\Exception\RoutingException
      */
-    public function addStaticRoute($request, $destinationPage) {
+    public function addStaticRoute($request, $destinationPage)
+    {
         if (file_exists(PAGES. DS . $destinationPage)) {
             $this->_staticRoutes[$request] = $destinationPage;
         } else {
@@ -168,7 +170,8 @@ class App {
      * @param string $destinationController
      * @throws RoutingException
      */
-    public function addRoute($request, $destinationController) {
+    public function addRoute($request, $destinationController)
+    {
         $explodedDestination = explode('/', $destinationController);
         if (file_exists(CONTROLLERS . DS . ucfirst($explodedDestination[0]) . '_Controller.php')) {
             $this->_routes[$request] = $destinationController;
@@ -183,7 +186,8 @@ class App {
      * @param string $request
      * @return bool True if a match is found
      */
-    public function applyStaticRouting(&$request) {
+    public function applyStaticRouting(&$request)
+    {
         if (isset($this->_staticRoutes[$request])) {
             $request = $this->_staticRoutes[$request];
             $request = 'app' . DS . 'pages' . DS . $request;
@@ -200,7 +204,8 @@ class App {
      * @param null $urlArray array of parameters passed to the controller
      * @return bool True if a match is found
      */
-    public function applyRouting(&$request, &$action = null, &$urlArray = null) {
+    public function applyRouting(&$request, &$action = null, &$urlArray = null)
+    {
         if (isset($this->_routes[strtolower($request)])) {
             $route          = $this->_routes[strtolower($request)];
             $explodedTarget = explode('/', $route);
@@ -211,7 +216,7 @@ class App {
             $request = $explodedTarget[0];
             $request = ucfirst($request) . '_Controller';
             // Params, if more than 2 elements are specified
-            if(count($explodedTarget) > 2){
+            if (count($explodedTarget) > 2) {
                 $routeParams = array_slice($explodedTarget, 2);
                 $urlArray = array_merge($routeParams, $urlArray);
             }
@@ -223,7 +228,8 @@ class App {
     /**
      * Runs the application
      */
-    public function run() {
+    public function run()
+    {
         $this->_hookManager->runBeforeSystem();
 
         $urlArray = explode('/', $this->_url);
@@ -240,7 +246,7 @@ class App {
 
         //Prepare the GET params in order to pass them to the Controller
         $myGet = $_GET;
-        if(isset($myGet['url'])){
+        if (isset($myGet['url'])) {
             unset($myGet['url']);
         }
 
@@ -251,11 +257,11 @@ class App {
         } elseif ($this->applyRouting($tmpController, $action, $urlArray)) {
             ($action === null) ? $action = 'index' : $action;
             $tmpController = '\\pff\\controllers\\'.$tmpController;
-            $controller = new $tmpController($tmpController, $this, $action, array_merge($urlArray,$myGet));
+            $controller = new $tmpController($tmpController, $this, $action, array_merge($urlArray, $myGet));
         } elseif (file_exists(ROOT . DS . 'app' . DS . 'controllers' . DS . ucfirst($tmpController) . '_Controller.php')) {
             $action = isset($urlArray[0]) ? array_shift($urlArray) : 'index';
             $controllerClassName = '\\pff\\controllers\\'.ucfirst($tmpController) . '_Controller';
-            $controller          = new $controllerClassName($tmpController, $this, $action, array_merge($urlArray,$myGet));
+            $controller          = new $controllerClassName($tmpController, $this, $action, array_merge($urlArray, $myGet));
         } else {
             throw new RoutingException('Cannot find a valid controller.', 404);
         }
@@ -266,11 +272,11 @@ class App {
             ob_start();
             $this->_hookManager->runBefore(); // Runs before controller hooks
             if ((int)method_exists($controller, $this->_action)) {
-                call_user_func_array(array($controller, "beforeAction"), $urlArray);
-                call_user_func(array($controller, "beforeFilter"));
-                call_user_func_array(array($controller, $this->_action), $urlArray);
-                call_user_func(array($controller, "afterFilter"));
-                call_user_func_array(array($controller, "afterAction"), $urlArray);
+                call_user_func_array([$controller, "beforeAction"], $urlArray);
+                call_user_func([$controller, "beforeFilter"]);
+                call_user_func_array([$controller, $this->_action], $urlArray);
+                call_user_func([$controller, "afterFilter"]);
+                call_user_func_array([$controller, "afterAction"], $urlArray);
                 $this->_hookManager->runAfter(); // Runs after controller hooks
                 ob_end_flush();
             } else {
@@ -284,7 +290,8 @@ class App {
      *
      * @return string
      */
-    public function getExternalPath() {
+    public function getExternalPath()
+    {
         if (true === $this->_config->getConfigData('development_environment')) {
             $extPath = EXT_ROOT . $this->_config->getConfigData('base_path_dev');
         } else {
@@ -296,91 +303,104 @@ class App {
     /**
      * @param string $url
      */
-    public function setUrl($url) {
+    public function setUrl($url)
+    {
         $this->_url = $url;
     }
 
     /**
      * @return string
      */
-    public function getUrl() {
+    public function getUrl()
+    {
         return $this->_url;
     }
 
     /**
      * @return array
      */
-    public function getRoutes() {
+    public function getRoutes()
+    {
         return $this->_routes;
     }
 
     /**
      * @return array
      */
-    public function getStaticRoutes() {
+    public function getStaticRoutes()
+    {
         return $this->_staticRoutes;
     }
 
     /**
      * @return \pff\Config
      */
-    public function getConfig() {
+    public function getConfig()
+    {
         return $this->_config;
     }
 
     /**
      * @param HookManager $hookManager
      */
-    public function setHookManager($hookManager) {
+    public function setHookManager($hookManager)
+    {
         $this->_hookManager = $hookManager;
     }
 
     /**
      * @return HookManager
      */
-    public function getHookManager() {
+    public function getHookManager()
+    {
         return $this->_hookManager;
     }
 
     /**
      * @param ModuleManager $moduleManager
      */
-    public function setModuleManager($moduleManager) {
+    public function setModuleManager($moduleManager)
+    {
         $this->_moduleManager = $moduleManager;
     }
 
     /**
      * @return ModuleManager
      */
-    public function getModuleManager() {
+    public function getModuleManager()
+    {
         return $this->_moduleManager;
     }
 
     /**
      * @param HelperManager $helperManager
      */
-    public function setHelperManager($helperManager) {
+    public function setHelperManager($helperManager)
+    {
         $this->_helperManager = $helperManager;
     }
 
     /**
      * @return HelperManager
      */
-    public function getHelperManager() {
+    public function getHelperManager()
+    {
         return $this->_helperManager;
     }
 
     /**
      * @return string
      */
-    public function getAction() {
+    public function getAction()
+    {
         return $this->_action;
     }
 
     /**
      * @param string $action
      */
-    public function setAction($action) {
+    public function setAction($action)
+    {
         $this->_action = $action;
     }
 }

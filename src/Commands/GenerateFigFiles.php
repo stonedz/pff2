@@ -18,8 +18,8 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Yaml\Dumper;
 use Guzzle\Stream\Stream;
 
-class GenerateFigFiles extends Command {
-
+class GenerateFigFiles extends Command
+{
     /**
      * Name of the fig file used for dev
      *
@@ -48,8 +48,9 @@ class GenerateFigFiles extends Command {
      */
     private $db_host_prod;
 
-    protected function configure() {
-        require ('app/config/config.user.php');
+    protected function configure()
+    {
+        require('app/config/config.user.php');
         $this->db_host_dev  = $pffConfig['databaseConfigDev']['host'];
         $this->db_host_prod = $pffConfig['databaseConfig']['host'];
 
@@ -125,14 +126,15 @@ class GenerateFigFiles extends Command {
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $questionHelper = $this->getHelper('question');
 
-        if(!CommandUtils::checkCommand('docker') && !CommandUtils::checkCommand('docker.io')) {
+        if (!CommandUtils::checkCommand('docker') && !CommandUtils::checkCommand('docker.io')) {
             $output->writeln('<error>Docker does not seem to be installed, please install it!</error>');
             $question = new ConfirmationQuestion('<question>Continue anyway?</question> ', 'n');
 
-            if(!$questionHelper->ask($input, $output, $question)) {
+            if (!$questionHelper->ask($input, $output, $question)) {
                 return;
             }
         }
@@ -147,13 +149,12 @@ class GenerateFigFiles extends Command {
         $this->askForFile('dev-php.ini', $input, $output, $questionHelper);
         $this->askForFileNginx('dev-nginx.conf', $input, $output, $questionHelper);
 
-        if(!file_exists($this->fig_dev)) {
-
+        if (!file_exists($this->fig_dev)) {
             $output->write('Checking for nginx error log in app/logs/docker-logs/ ...');
-            if(!file_exists('app/logs/docker-logs')) {
+            if (!file_exists('app/logs/docker-logs')) {
                 mkdir('app/logs/docker-logs', 0777, true);
             }
-            if(!file_exists('app/logs/docker-logs/nginx-error.log')) {
+            if (!file_exists('app/logs/docker-logs/nginx-error.log')) {
                 touch('app/logs/docker-logs/nginx-error.log');
             }
             $output->writeln('<info>DONE</info>');
@@ -185,23 +186,21 @@ phpmyadmin:
     - db:mariadb";
             if (file_put_contents($this->fig_dev, $toBeWritten)) {
                 $output->writeln('<info>DONE</info>');
-            }
-            else {
+            } else {
                 $output->writeln('<error>ERROR</error>');
             }
-        }
-        else {
+        } else {
             $output->writeln('<comment>'.$this->fig_dev.' file already exists. Delete it or move it to recreate the file</comment>');
         }
 
-        if($input->getOption('create-production') != 1) {
+        if ($input->getOption('create-production') != 1) {
             return;
         }
 
         $this->askForFile('prod-php.ini', $input, $output, $questionHelper);
         $this->askForFileNginx('prod-nginx.conf', $input, $output, $questionHelper);
 
-        if(!file_exists($this->fig_prod)) {
+        if (!file_exists($this->fig_prod)) {
             $output->write('Generating fig_prod.yml for production...');
 
             $db_host      = $input->getOption('db-host');
@@ -231,58 +230,52 @@ db:
   ports:
     - \"$db_port:3306\"";
 
-            if(file_put_contents($this->fig_prod, $toBeWritten)) {
+            if (file_put_contents($this->fig_prod, $toBeWritten)) {
                 $output->writeln('<info>DONE</info>');
-            }
-            else {
+            } else {
                 $output->writeln('<error>ERROR</error>');
             }
 
             $question = new ConfirmationQuestion('<question>The database in production will use a separate volume data container to maintain data, it is called '.$app_name.'_db_data, do you want me to try to locate it and create it? </question>', 'n');
-            if($questionHelper->ask($input, $output, $question)) {
+            if ($questionHelper->ask($input, $output, $question)) {
                 $this->create_db_volume_data($input, $output, $app_name.'_db_data', $questionHelper);
-            }
-            else {
+            } else {
                 return;
             }
-
-        }
-        else {
+        } else {
             $output->writeln('<comment>'.$this->fig_prod.' file already exists. Delete it or move it to recreate the file</comment>');
         }
     }
 
-    protected function create_db_volume_data(InputInterface $input, OutputInterface $output, $container_name, QuestionHelper $question_helper) {
-        if(CommandUtils::checkCommand('docker')) {
+    protected function create_db_volume_data(InputInterface $input, OutputInterface $output, $container_name, QuestionHelper $question_helper)
+    {
+        if (CommandUtils::checkCommand('docker')) {
             $command = 'docker';
-        }
-        elseif(CommandUtils::checkCommand('docker.io')){
+        } elseif (CommandUtils::checkCommand('docker.io')) {
             $command = 'docker.io';
-        }
-        else {
+        } else {
             $output->writeln('<error>Can\'t find docker executable.</error>');
             return;
         }
 
         $question = new ConfirmationQuestion('<question>Do you want to use sudo? </question>', 'n');
-        if($question_helper->ask($input, $output, $question)) {
+        if ($question_helper->ask($input, $output, $question)) {
             $command = 'sudo '. $command;
         }
 
         $comman_create = $command.' run -v /var/lib/mysql --name '.$container_name.' busybox true';
 
         exec($comman_create, $res, $ret);
-        if(0 == $ret) {
+        if (0 == $ret) {
             $output->writeln('<info>Db data volume container created.</info>');
-        }
-        else {
+        } else {
             $output->writeln('<error>Cannot create db data volume container using the following command: </error>');
             $output->writeln('<error>'.$comman_create.'</error>');
         }
-
     }
 
-    protected function getPHPIniFiles($fileName) {
+    protected function getPHPIniFiles($fileName)
+    {
         $original = 'https://github.com/stonedz/dev-config/raw/master/'.$fileName;
         $dest = 'deployement/php/'.$fileName;
         copy($original, $dest);
@@ -296,7 +289,7 @@ db:
      * @param $questionHelper
      * @return bool
      */
-    protected function askForFile($fileName , InputInterface $input, OutputInterface $output, $questionHelper)
+    protected function askForFile($fileName, InputInterface $input, OutputInterface $output, $questionHelper)
     {
         $output->write('Checking for '.$fileName.'...');
         if (!file_exists('deployement/php/'.$fileName)) {
@@ -312,7 +305,8 @@ db:
         return true;
     }
 
-    protected function getNginxFiles($fileName) {
+    protected function getNginxFiles($fileName)
+    {
         $original = 'https://github.com/stonedz/dev-config/raw/master/'.$fileName;
         $dest = 'deployement/nginx/'.$fileName;
         copy($original, $dest);
@@ -325,7 +319,7 @@ db:
      * @param $questionHelper
      * @return bool
      */
-    protected function askForFileNginx($fileName , InputInterface $input, OutputInterface $output, $questionHelper)
+    protected function askForFileNginx($fileName, InputInterface $input, OutputInterface $output, $questionHelper)
     {
         $output->write('Checking for '.$fileName.'...');
         if (!file_exists('deployement/nginx/'.$fileName)) {
@@ -340,5 +334,4 @@ db:
 
         return true;
     }
-
 }

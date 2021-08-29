@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Core;
+
 use pff\Abs\AView;
 
 /**
@@ -8,14 +9,15 @@ use pff\Abs\AView;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class ViewSmarty extends AView {
-
+class ViewSmarty extends AView
+{
     /**
      * @var \Smarty
      */
     protected $_smarty;
 
-    public function __construct($templateName) {
+    public function __construct($templateName)
+    {
         $this->_smarty               = new \Smarty(); // The smarty instance should be accessible before
         $smartyDir                   = ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS;
         $this->_smarty->template_dir = $smartyDir. 'templates' . DS;
@@ -27,12 +29,13 @@ class ViewSmarty extends AView {
             throw new \pff\ViewException('Template file ' . $templatePath . ' does not exist');
         }
         parent::__construct($templateName);
-        $this->_smarty->registerPlugin('function', 'renderAction', array($this, 'smarty_plugin_renderAction'));
+        $this->_smarty->registerPlugin('function', 'renderAction', [$this, 'smarty_plugin_renderAction']);
     }
 
-    public function smarty_plugin_renderAction($params, $smarty) {
+    public function smarty_plugin_renderAction($params, $smarty)
+    {
         if (!isset($params['params'])) {
-            $params['params'] = array();
+            $params['params'] = [];
         }
 
         if (!isset($params['action'])) {
@@ -41,15 +44,18 @@ class ViewSmarty extends AView {
         $this->renderAction($params['controller'], ($params['action']), $params['params']);
     }
 
-    public function set($name, $value) {
+    public function set($name, $value)
+    {
         $this->_smarty->assign($name, $value);
     }
 
-    public function render() {
+    public function render()
+    {
         $this->_smarty->display($this->_templateFile);
     }
 
-    public function renderHtml() {
-        return $this->_smarty->fetch($this->_templateFile,null,null,null,false);
+    public function renderHtml()
+    {
+        return $this->_smarty->fetch($this->_templateFile, null, null, null, false);
     }
 }

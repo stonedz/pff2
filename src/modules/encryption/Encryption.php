@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\modules;
+
 use pff\Abs\AModule;
 
 /**
@@ -8,9 +9,9 @@ use pff\Abs\AModule;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class Encryption extends AModule{
-
-    const METHOD = 'aes-256-ctr';
+class Encryption extends AModule
+{
+    public const METHOD = 'aes-256-ctr';
 
     /**
      * The cypher method to be used
@@ -26,7 +27,8 @@ class Encryption extends AModule{
      */
     private $_key;
 
-    public function __construct($confFile = 'encryption/module.conf.yaml') {
+    public function __construct($confFile = 'encryption/module.conf.yaml')
+    {
         $this->loadConfig($this->readConfig($confFile));
     }
 
@@ -35,17 +37,18 @@ class Encryption extends AModule{
      *
      * @param array $parsedConfig
      */
-    private function loadConfig($parsedConfig) {
+    private function loadConfig($parsedConfig)
+    {
         $this->_key    = hex2bin($parsedConfig['moduleConf']['key']);
     }
 
 
     /**
      * Encrypts (but does not authenticate) a message
-     * 
+     *
      * @param string $message - plaintext message
      * @param string $key - encryption key (raw binary expected)
-     * @param boolean $encode - set to TRUE to return a base64-encoded 
+     * @param boolean $encode - set to TRUE to return a base64-encoded
      * @return string (raw binary)
      */
     public static function encrypt($message, $key = false, $encode = true)
@@ -71,7 +74,7 @@ class Encryption extends AModule{
 
     /**
      * Decrypts (but does not verify) a message
-     * 
+     *
      * @param string $message - ciphertext message
      * @param string $key - encryption key (raw binary expected)
      * @param boolean $encoded - are we expecting an encoded string?

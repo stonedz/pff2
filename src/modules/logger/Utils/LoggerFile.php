@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\modules\Utils;
+
 use pff\modules\Abs\ALogger;
 use pff\modules\Exception\LoggerException;
 use pff\modules\Exception\LoggerFileException;
@@ -10,8 +11,8 @@ use pff\modules\Exception\LoggerFileException;
  *
  * @author stonedz
  */
-class LoggerFile extends ALogger {
-
+class LoggerFile extends ALogger
+{
     /**
      * Logs directory
      *
@@ -31,7 +32,8 @@ class LoggerFile extends ALogger {
      * @param bool $debugActive True to activate debugmode
      * @throws LoggerException
      */
-    public function __construct($debugActive = false) {
+    public function __construct($debugActive = false)
+    {
         parent::__construct($debugActive);
 
         $this->_fp = null;
@@ -40,7 +42,8 @@ class LoggerFile extends ALogger {
     /**
      * Closes file resource when unsetting the logger
      */
-    public function __destruct() {
+    public function __destruct()
+    {
         if ($this->_fp) {
             fclose($this->_fp);
         }
@@ -52,8 +55,8 @@ class LoggerFile extends ALogger {
      * @throws LoggerException
      * @return null|resource
      */
-    public function getLogFile() {
-
+    public function getLogFile()
+    {
         if ($this->_fp === null) {
             $this->LOG_DIR = ROOT .DS. 'app' . DS .  'logs';
             $filename      = $this->LOG_DIR . DS . date("Y-m-d");
@@ -65,7 +68,6 @@ class LoggerFile extends ALogger {
         }
 
         return $this->_fp;
-
     }
 
     /**
@@ -76,7 +78,8 @@ class LoggerFile extends ALogger {
      * @return bool
      * @throws LoggerFileException
      */
-    public function logMessage($message, $level = 0) {
+    public function logMessage($message, $level = 0)
+    {
         $this->getLogFile();
         if (!flock($this->_fp, LOCK_EX)) {
             throw new LoggerFileException('Can\'t obtain file lock for: ');
@@ -96,7 +99,8 @@ class LoggerFile extends ALogger {
      *
      * @return resource
      */
-    public function getFp() {
+    public function getFp()
+    {
         return $this->_fp;
     }
 }

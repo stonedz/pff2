@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Factory;
+
 use pff\Abs\AView;
 use pff\App;
 use pff\Core\LayoutPHP;
@@ -13,8 +14,8 @@ use pff\Exception\ModuleException;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class FLayout {
-
+class FLayout
+{
     /**
      * Gets an ALayout object
      *
@@ -24,7 +25,8 @@ class FLayout {
      * @param string $templateType Te type of the template
      * @return AView
      */
-    static public function create($templateName, App $app, $templateType = null) {
+    public static function create($templateName, App $app, $templateType = null)
+    {
         if ($templateType === null) {
             $tmp          = explode('.', $templateName);
             $templateType = $tmp[count($tmp) - 1];
@@ -35,7 +37,8 @@ class FLayout {
         return self::loadTemplate($templateName, $app, $templateType);
     }
 
-    static private function loadTemplate($templateName, \pff\App $app, $templateType) {
+    private static function loadTemplate($templateName, \pff\App $app, $templateType)
+    {
         $mm = $app->getModuleManager();
 
         switch ($templateType) {
@@ -63,7 +66,8 @@ class FLayout {
      * @throws ModuleException
      * @return array
      */
-    private static function checkMobile($templateName, ModuleManager $mm, $type) {
+    private static function checkMobile($templateName, ModuleManager $mm, $type)
+    {
         if ($mm->isLoaded('mobile_views')) {
 
             /** @var \pff\modules\MobileViews $mobileViews */
@@ -73,26 +77,21 @@ class FLayout {
                 $tmp[0] .= '_mobile';
                 $tempTemplateName = implode('.', $tmp);
 
-                if($type == 'php') {
+                if ($type == 'php') {
                     $templatePath = ROOT . DS . 'app' . DS . 'views' . DS .  $tempTemplateName;
-                }
-                else{ // smarty
+                } else { // smarty
                     $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS . 'templates' . DS . $tempTemplateName;
                 }
 
                 if (file_exists($templatePath)) {
                     return $tempTemplateName;
-                }
-                else {
+                } else {
                     return $templateName;
                 }
-            }
-            else {
+            } else {
                 return $templateName;
             }
-
-        }
-        else {
+        } else {
             return $templateName;
         }
     }

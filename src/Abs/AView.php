@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Abs;
+
 use pff\Core\ModuleManager;
 use pff\Core\ServiceContainer;
 use pff\Iface\IRenderable;
@@ -10,8 +11,8 @@ use pff\Iface\IRenderable;
  *
  * @author paolo.fagni<at>gmail.com
  */
-abstract class AView implements IRenderable {
-
+abstract class AView implements IRenderable
+{
     /**
      * @var \pff\App
      */
@@ -42,7 +43,8 @@ abstract class AView implements IRenderable {
      */
     protected $_jsFolder;
 
-    public function __construct($templateName) {
+    public function __construct($templateName)
+    {
         $this->_app          = ServiceContainer::get('app');
         $this->_templateFile = $templateName;
         $this->_publicFolder = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS;
@@ -55,16 +57,16 @@ abstract class AView implements IRenderable {
         $this->updatePaths();
     }
 
-    public function updatePaths() {
+    public function updatePaths()
+    {
         $this->set('pff_path_public', $this->_publicFolder);
         $this->set('pff_path_css', $this->_cssFolder);
         $this->set('pff_path_img', $this->_imgFolder);
         $this->set('pff_path_js', $this->_jsFolder);
-        if(ModuleManager::isLoaded('pff2-s3')) {
+        if (ModuleManager::isLoaded('pff2-s3')) {
             $s3 = ModuleManager::loadModule('pff2-s3');
-            $this->set('pff_path_files', $s3->getCloudfrontUrl()?:$this->_filesFolder);
-        }
-        else {
+            $this->set('pff_path_files', $s3->getCloudfrontUrl() ?: $this->_filesFolder);
+        } else {
             $this->set('pff_path_files', $this->_filesFolder);
         }
         $this->set('pff_path_vendor', $this->_vendorFolder);
@@ -76,7 +78,8 @@ abstract class AView implements IRenderable {
      * @param string $action
      * @param array $params
      */
-    public function renderAction($controller, $action = 'index', $params = array()) {
+    public function renderAction($controller, $action = 'index', $params = [])
+    {
         $controllerClass = '\\pff\\controllers\\'.ucfirst($controller) . '_Controller';
         $tmpController   = new $controllerClass($controller, $this->_app, $action, $params);
         $tmpController->$action();
@@ -86,86 +89,100 @@ abstract class AView implements IRenderable {
     /**
      * @return string
      */
-    public function getTemplateFile() {
+    public function getTemplateFile()
+    {
         return $this->_templateFile;
     }
 
     /**
      * @return \pff\App
      */
-    public function getApp() {
+    public function getApp()
+    {
         return $this->_app;
     }
 
     /**
      * @param string $cssFolder
      */
-    public function setCssFolder($cssFolder) {
+    public function setCssFolder($cssFolder)
+    {
         $this->_cssFolder = $cssFolder;
     }
 
     /**
      * @return string
      */
-    public function getCssFolder() {
+    public function getCssFolder()
+    {
         return $this->_cssFolder;
     }
 
     /**
      * @param string $imgFolder
      */
-    public function setImgFolder($imgFolder) {
+    public function setImgFolder($imgFolder)
+    {
         $this->_imgFolder = $imgFolder;
     }
 
     /**
      * @return string
      */
-    public function getImgFolder() {
+    public function getImgFolder()
+    {
         return $this->_imgFolder;
     }
 
     /**
      * @param string $jsFolder
      */
-    public function setJsFolder($jsFolder) {
+    public function setJsFolder($jsFolder)
+    {
         $this->_jsFolder = $jsFolder;
     }
 
     /**
      * @return string
      */
-    public function getJsFolder() {
+    public function getJsFolder()
+    {
         return $this->_jsFolder;
     }
 
     /**
      * @param string $publicFolder
      */
-    public function setPublicFolder($publicFolder) {
+    public function setPublicFolder($publicFolder)
+    {
         $this->_publicFolder = $publicFolder;
     }
 
     /**
      * @return string
      */
-    public function getPublicFolder() {
+    public function getPublicFolder()
+    {
         return $this->_publicFolder;
     }
 
-    public function getFilesFolder() {
+    public function getFilesFolder()
+    {
         return $this->_filesFolder;
     }
 
-    public function setFilesFolder($filesFolder) {
+    public function setFilesFolder($filesFolder)
+    {
         $this->_filesFolder = $filesFolder;
     }
 
-    public function addContent(AView $v) {
+    public function addContent(AView $v)
+    {
         return null;
     }
 
-    public function content($index = 0) {
+    public function content($index = 0)
+    {
         return null;
     }
 }

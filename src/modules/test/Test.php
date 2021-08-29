@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\modules;
+
 use pff\Abs\AModule;
 
 /**
@@ -10,10 +11,10 @@ use pff\Abs\AModule;
  * Time: 11.39
  * To change this template use File | Settings | File Templates.
  */
-class Test extends AModule {
-
-    public function testOne($var) {
+class Test extends AModule
+{
+    public function testOne($var)
+    {
         return 'test '.$var;
     }
-
 }

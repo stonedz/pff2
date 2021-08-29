@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\modules;
+
 use pff\Abs\AModule;
 
 /**
@@ -8,9 +9,10 @@ use pff\Abs\AModule;
  * Date: 05/10/12
  * Time: 11.39
  */
-class Url extends AModule {
-
-    public function clear_string($str, $replace = array(), $delimiter = '-') {
+class Url extends AModule
+{
+    public function clear_string($str, $replace = [], $delimiter = '-')
+    {
         if (!empty($replace)) {
             $str = str_replace((array)$replace, ' ', $str);
         }
@@ -23,12 +25,14 @@ class Url extends AModule {
         return $clean;
     }
 
-    public function make_url($id, $text) {
+    public function make_url($id, $text)
+    {
         $result = $id . '-' . $this->clear_string($text);
         return $result;
     }
 
-    public function get_id($text) {
+    public function get_id($text)
+    {
         $result = explode("-", $text);
         return $result[0];
     }

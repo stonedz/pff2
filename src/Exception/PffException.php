@@ -7,8 +7,8 @@ namespace pff\Exception;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class PffException extends \Exception {
-
+class PffException extends \Exception
+{
     /**
      * Contains the backtrace for the caller
      *
@@ -25,10 +25,11 @@ class PffException extends \Exception {
      */
     private $viewParams;
 
-    public function __construct($message = "", $code = 0, $previous = null, $viewParams = null) {
+    public function __construct($message = "", $code = 0, $previous = null, $viewParams = null)
+    {
         parent::__construct($message, $code, $previous);
 
-        if($viewParams !== null) {
+        if ($viewParams !== null) {
             $this->setViewParams($viewParams);
         }
         $this->backtrace = debug_backtrace();
@@ -37,14 +38,16 @@ class PffException extends \Exception {
     /**
      * @param array $viewParams
      */
-    public function setViewParams($viewParams) {
+    public function setViewParams($viewParams)
+    {
         $this->viewParams = $viewParams;
     }
 
     /**
      * @return array
      */
-    public function getViewParams() {
+    public function getViewParams()
+    {
         return $this->viewParams;
     }
 }

@@ -7,8 +7,8 @@ namespace pff\Iface;
  *
  * @author paolo.fagni<at>gmail.com
  */
-interface IBeforeSystemHook extends IHookProvider {
-
+interface IBeforeSystemHook extends IHookProvider
+{
     /**
      * Executed before the system startup
      *

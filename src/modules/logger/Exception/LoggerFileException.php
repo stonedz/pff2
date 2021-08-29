@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\modules\Exception;
+
 use pff\Exception\PffException;
 
 /**
@@ -8,5 +9,6 @@ use pff\Exception\PffException;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class LoggerFileException extends PffException {
+class LoggerFileException extends PffException
+{
 }

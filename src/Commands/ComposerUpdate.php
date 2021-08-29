@@ -7,56 +7,52 @@
 
 namespace pff\Commands;
 
-
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class ComposerUpdate extends Command {
-
-    protected function configure() {
+class ComposerUpdate extends Command
+{
+    protected function configure()
+    {
         $this
             ->setName('composer:update')
             ->setDescription('Updates composer packages');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
-
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $command   = $this->getApplication()->find('composer:install');
-        $arguments = array('command' => 'composer:install');
+        $arguments = ['command' => 'composer:install'];
         $inputa    = new ArrayInput($arguments);
         $ret       = $command->run($inputa, $output);
 
 
         $output->writeln('Upgrading composer packages...');
 
-        if($ret == 0) {
+        if ($ret == 0) {
             passthru('php composer.phar update', $ret);
             $output->writeln('<info>DONE</info>');
-        }
-        else {
+        } else {
             $questionHelper = $this->getHelper('question');
             $question = new ConfirmationQuestion('<question>Composer not installed, do you want to install it</question> ', 'n');
-            if(!$questionHelper->ask($input, $output, $question)) {
+            if (!$questionHelper->ask($input, $output, $question)) {
                 return 1;
-            }
-            else {
+            } else {
                 $command   = $this->getApplication()->find('composer:install');
-                $arguments = array('command' => 'composer:install');
+                $arguments = ['command' => 'composer:install'];
                 $inputa    = new ArrayInput($arguments);
                 $ret       = $command->run($inputa, $output);
 
-                if($ret == 0) {
+                if ($ret == 0) {
                     $command   = $this->getApplication()->find('composer:update');
-                    $arguments = array('command' => 'composer:update');
+                    $arguments = ['command' => 'composer:update'];
                     $inputa    = new ArrayInput($arguments);
                     $ret       = $command->run($inputa, $output);
                 }
             }
         }
     }
-
 }
-

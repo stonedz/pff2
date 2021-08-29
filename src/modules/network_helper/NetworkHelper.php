@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\modules;
+
 use pff\Abs\AModule;
 
 /**
@@ -8,10 +9,10 @@ use pff\Abs\AModule;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class NetworkHelper extends AModule {
-
-
-    public function __construct() {
+class NetworkHelper extends AModule
+{
+    public function __construct()
+    {
     }
 
     /**
@@ -22,15 +23,16 @@ class NetworkHelper extends AModule {
      * @param array|null $headers Optional headers to be passed to the request
      * @return array Request response
      */
-    public function doGet($url, $port = 80, $headers = NULL) {
-        $retarr = array(); // Return value
+    public function doGet($url, $port = 80, $headers = null)
+    {
+        $retarr = []; // Return value
 
-        $curl_opts = array(CURLOPT_URL => $url,
+        $curl_opts = [CURLOPT_URL => $url,
             CURLOPT_PORT => $port,
             CURLOPT_POST => false,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true);
+            CURLOPT_RETURNTRANSFER => true, ];
 
         if ($headers) {
             $curl_opts[CURLOPT_HTTPHEADER] = $headers;
@@ -54,16 +56,17 @@ class NetworkHelper extends AModule {
      * @param array|null $headers Optional headers to be passed to the request
      * @return array Request response
      */
-    public function doPost($url, $postbody, $port = 80, $headers = NULL) {
-        $retarr = array(); // Return value
+    public function doPost($url, $postbody, $port = 80, $headers = null)
+    {
+        $retarr = []; // Return value
 
-        $curl_opts = array(CURLOPT_URL => $url,
+        $curl_opts = [CURLOPT_URL => $url,
             CURLOPT_PORT => $port,
             CURLOPT_POST => true,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_POSTFIELDS => $postbody,
-            CURLOPT_RETURNTRANSFER => true);
+            CURLOPT_RETURNTRANSFER => true, ];
 
         if ($headers) {
             $curl_opts[CURLOPT_HTTPHEADER] = $headers;
@@ -84,8 +87,9 @@ class NetworkHelper extends AModule {
      * @param array $curl_opts Curl options array
      * @return array Curl request response
      */
-    public function doCurl($curl_opts) {
-        $retarr = array(); // Return value
+    public function doCurl($curl_opts)
+    {
+        $retarr = []; // Return value
 
         if (!$curl_opts) {
             return $retarr;

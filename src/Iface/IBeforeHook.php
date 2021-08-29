@@ -7,8 +7,8 @@ namespace pff\Iface;
  *
  * @author paolo.fagni<at>gmail.com
  */
-interface IBeforeHook extends IHookProvider {
-
+interface IBeforeHook extends IHookProvider
+{
     /**
      * Executes actions before the Controller
      *

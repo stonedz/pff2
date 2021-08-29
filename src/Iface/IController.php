@@ -7,7 +7,6 @@
 
 namespace pff\Iface;
 
-
-interface IController {
-
-} 
+interface IController
+{
+}

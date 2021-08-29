@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Factory;
+
 use pff\Abs\AView;
 use pff\App;
 use pff\Core\ModuleManager;
@@ -13,8 +14,8 @@ use pff\Core\ViewSmarty;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class FView {
-
+class FView
+{
     /**
      * Gets an AView object
      *
@@ -24,7 +25,8 @@ class FView {
      * @param string $templateType Te type of the template
      * @return AView
      */
-    static public function create($templateName, App $app = null, $templateType = null) {
+    public static function create($templateName, App $app = null, $templateType = null)
+    {
         $standardTemplate = $templateName;
 
 
@@ -38,8 +40,8 @@ class FView {
         return self::loadTemplate($templateName, $templateType);
     }
 
-    static private function loadTemplate($templateName, $templateType) {
-
+    private static function loadTemplate($templateName, $templateType)
+    {
         switch ($templateType) {
             case 'php':
                 $templateName = self::checkMobile($templateName, 'php');
@@ -65,7 +67,8 @@ class FView {
      * @internal param ModuleManager $mm
      * @return array
      */
-    private static function checkMobile($templateName, $type) {
+    private static function checkMobile($templateName, $type)
+    {
         $mm = ServiceContainer::get('modulemanager');
         if ($mm->isLoaded('mobile_views')) {
 
@@ -76,25 +79,21 @@ class FView {
                 $tmp[0] .= '_mobile';
                 $tempTemplateName = implode('.', $tmp);
 
-                if($type == 'php') {
+                if ($type == 'php') {
                     $templatePath = ROOT . DS . 'app' . DS . 'views' . DS .  $tempTemplateName;
-                }
-                else{ // smarty
+                } else { // smarty
                     $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS . 'templates' . DS . $tempTemplateName;
                 }
 
                 if (file_exists($templatePath)) {
                     return $tempTemplateName;
-                }
-                else {
+                } else {
                     return $templateName;
                 }
-            }
-            else {
+            } else {
                 return $templateName;
             }
-        }
-        else {
+        } else {
             return $templateName;
         }
     }

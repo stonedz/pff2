@@ -7,9 +7,7 @@
 
 namespace pff\Iface;
 
-
-interface IOutputs {
-
+interface IOutputs
+{
     public function outputHeader();
-
-} 
+}

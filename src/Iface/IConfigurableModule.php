@@ -6,8 +6,8 @@ namespace pff\Iface;
  *
  * @author paolo.fagni<at>gmail.com
  */
-interface IConfigurableModule {
-
+interface IConfigurableModule
+{
     /**
      * @abstract
      * @param array $parsedConfig

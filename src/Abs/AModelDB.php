@@ -7,5 +7,6 @@ namespace pff\Abs;
  *
  * @author paolo.fagni<at>gmail.com
  */
-abstract class AModelDB extends AModel {
+abstract class AModelDB extends AModel
+{
 }

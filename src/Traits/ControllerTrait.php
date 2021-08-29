@@ -2,6 +2,7 @@
 
 namespace pff\Traits;
 
-trait ControllerTrait {
-    abstract function index();
+trait ControllerTrait
+{
+    abstract public function index();
 }

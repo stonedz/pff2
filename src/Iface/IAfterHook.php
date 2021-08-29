@@ -7,8 +7,8 @@ namespace pff\Iface;
  *
  * @author paolo.fagni<at>gmail.com
  */
-interface IAfterHook extends IHookProvider  {
-
+interface IAfterHook extends IHookProvider
+{
     /**
      * Executes actios after the controller has finished its work.
      *

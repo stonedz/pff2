@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Core;
+
 use pff\Abs\AView;
 
 /**
@@ -11,8 +12,8 @@ use pff\Abs\AView;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class LayoutPHP extends ViewPHP {
-
+class LayoutPHP extends ViewPHP
+{
     /**
      * @var AView[]
      */
@@ -23,7 +24,8 @@ class LayoutPHP extends ViewPHP {
      *
      * @param AView $view
      */
-    public function addContent(AView $view) {
+    public function addContent(AView $view)
+    {
         $this->_contentView[] = $view;
     }
 
@@ -35,13 +37,15 @@ class LayoutPHP extends ViewPHP {
      *
      * @param int $index
      */
-    public function content($index = 0) {
-        if(isset($this->_contentView[$index])){
-        $this->_contentView[$index]->render();
+    public function content($index = 0)
+    {
+        if (isset($this->_contentView[$index])) {
+            $this->_contentView[$index]->render();
         }
     }
 
-    public function getContentViews() {
+    public function getContentViews()
+    {
         return $this->_contentView;
     }
 }

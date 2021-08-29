@@ -1,11 +1,14 @@
 <?php
 
 namespace pff\modules\Exception;
+
 use pff\Exception\PffException;
 
 /**
  * Paypal related exception
  *
- * @author Marco Bernini <marco.bernini@neropaco.net> 
+ * @author Marco Bernini <marco.bernini@neropaco.net>
  */
-class PaypalException extends PffException {}
+class PaypalException extends PffException
+{
+}

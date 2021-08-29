@@ -7,16 +7,16 @@
 
 namespace pff\Commands;
 
-
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ComposerDumpAutoload extends Command{
-
-    protected function configure() {
+class ComposerDumpAutoload extends Command
+{
+    protected function configure()
+    {
         $this
             ->setName('composer:dumpautoload')
             ->setDescription('Creates (dumps) composer autload')
@@ -28,28 +28,26 @@ class ComposerDumpAutoload extends Command{
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $command   = $this->getApplication()->find('composer:install');
-        $arguments = array('command' => 'composer:install', '-c' => true);
+        $arguments = ['command' => 'composer:install', '-c' => true];
         $inputa    = new ArrayInput($arguments);
         $ret       = $command->run($inputa, $output);
 
-        if($ret == 0) {
+        if ($ret == 0) {
             $no_optimize = $input->getOption('no-optimize');
 
-            if($no_optimize) {
+            if ($no_optimize) {
                 passthru('php composer.phar dumpautoload', $ret);
-            }
-            else {
+            } else {
                 passthru('php composer.phar dumpautoload -o', $ret);
             }
-            if($ret == 0) {
+            if ($ret == 0) {
                 $output->writeln('<info>DONE</info>');
-            }
-            else {
+            } else {
                 $output->writeln('<error>ERROR</error>');
             }
         }
     }
-
 }

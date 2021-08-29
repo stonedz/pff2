@@ -1,5 +1,7 @@
 <?php
+
 namespace pff\modules;
+
 use pff\Abs\AModule;
 use pff\Factory\FLayout;
 use pff\Iface\IBeforeHook;
@@ -10,15 +12,16 @@ use pff\Iface\IBeforeHook;
  * Time: 3:24 PM
  */
 
-class Mainlayout extends AModule implements IBeforeHook{
-
+class Mainlayout extends AModule implements IBeforeHook
+{
     /**
      * Executes actions before the Controller
      *
      * @return mixed
      */
-    public function doBefore() {
-        if(count($this->_controller->getViews()) == 0) {
+    public function doBefore()
+    {
+        if (count($this->_controller->getViews()) == 0) {
             $l = FLayout::create('main_layout.php', $this->_app);
             $this->_controller->setLayout($l);
         }

@@ -7,12 +7,12 @@
 
 namespace pff\Core\Outputs;
 
-
 use pff\Iface\IOutputs;
 
-class JSONOut implements IOutputs{
-
-    public function outputHeader() {
+class JSONOut implements IOutputs
+{
+    public function outputHeader()
+    {
         header('Content-type: application/json');
     }
 }

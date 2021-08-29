@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\modules;
+
 use pff\Abs\AModule;
 use pff\Factory\FView;
 use pff\Iface\IAfterHook;
@@ -12,10 +13,8 @@ use pff\Iface\IConfigurableModule;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class AutomaticHeaderFooter
-    extends AModule
-    implements IBeforeViewHook, IAfterHook, IConfigurableModule {
-
+class AutomaticHeaderFooter extends AModule implements IBeforeViewHook, IAfterHook, IConfigurableModule
+{
     /**
      * @var bool
      */
@@ -37,7 +36,8 @@ class AutomaticHeaderFooter
     private $_headerGlobal;
 
 
-    public function __construct($confFile = 'automatic_header_footer/module.conf.yaml') {
+    public function __construct($confFile = 'automatic_header_footer/module.conf.yaml')
+    {
         $moduleconfig = $this->readConfig($confFile);
         $this->loadConfig($moduleconfig);
     }
@@ -48,7 +48,8 @@ class AutomaticHeaderFooter
      * @param array $parsedConfig A parsed config in the form of an array
      * @return mixed|void
      */
-    public function loadConfig($parsedConfig) {
+    public function loadConfig($parsedConfig)
+    {
         $this->_footerController = $parsedConfig['moduleConf']['automatic_controller_footer'];
         $this->_footerGlobal     = $parsedConfig['moduleConf']['automatic_global_footer'];
         $this->_headerController = $parsedConfig['moduleConf']['automatic_controller_header'];
@@ -61,7 +62,8 @@ class AutomaticHeaderFooter
      *
      * @return mixed
      */
-    public function doBeforeView($context = null) {
+    public function doBeforeView($context = null)
+    {
         if ($this->_headerController) {
             $viewPath = ROOT . DS . 'app' . DS . 'views' . DS .
                 strtolower($this->_controller->getControllerName()) . DS .
@@ -83,7 +85,8 @@ class AutomaticHeaderFooter
      *
      * @return mixed
      */
-    public function doAfter() {
+    public function doAfter()
+    {
         if ($this->_footerController) {
             $viewPath = ROOT . DS . 'app' . DS . 'views' . DS .
                 strtolower($this->_controller->getControllerName()) . DS .

@@ -13,8 +13,8 @@ use pff\modules\Utils\Sha256PasswordChecker;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class Auth extends AModule implements IConfigurableModule {
-
+class Auth extends AModule implements IConfigurableModule
+{
     /*
      * The model class name
      *
@@ -81,11 +81,13 @@ class Auth extends AModule implements IConfigurableModule {
     /**
      * @param string $confFile Path to configuration file
      */
-    public function __construct($confFile = 'auth/module.conf.yaml') {
+    public function __construct($confFile = 'auth/module.conf.yaml')
+    {
         $this->loadConfig($this->readConfig($confFile));
     }
 
-    public function loadConfig($parsedConfig) {
+    public function loadConfig($parsedConfig)
+    {
         $this->_modelName         = $parsedConfig['moduleConf']['userModelClass'];
         $this->_usernameAttribute = $parsedConfig['moduleConf']['usernameAttribute'];
         $this->_methodGetPassword = $parsedConfig['moduleConf']['userGetPassword'];
@@ -105,7 +107,7 @@ class Auth extends AModule implements IConfigurableModule {
             case 'SHA256':
                 $this->_encryptionStrategy = new Sha256PasswordChecker();
                 break;
-            default : // If no encrytion is selected choose md5
+            default: // If no encrytion is selected choose md5
                 $this->_encryptionStrategy = new Md5PasswordChecker();
                 break;
         }
@@ -116,7 +118,8 @@ class Auth extends AModule implements IConfigurableModule {
      *
      * @return bool
      */
-    public function checkAuth() {
+    public function checkAuth()
+    {
         if (isset($_SESSION[$this->_sessionVarName]) &&
             $_SESSION[$this->_sessionVarName] == 1
         ) {
@@ -134,12 +137,13 @@ class Auth extends AModule implements IConfigurableModule {
      * @param \Doctrine\ORM\EntityManager $entityManager
      * @return bool
      */
-    public function login($username, $password, $entityManager) {
+    public function login($username, $password, $entityManager)
+    {
         $tmp = $entityManager
             ->getRepository('pff\models\\' . $this->_modelName)
-            ->findOneBy(array($this->_usernameAttribute => $username));
+            ->findOneBy([$this->_usernameAttribute => $username]);
         if ($tmp) {
-            if ($this->_encryptionStrategy->checkPass($password, call_user_func(array($tmp, $this->_methodGetPassword)), ($this->_useSalt)?(call_user_func(array($tmp,$this->_methodGetSalt))):'')) {
+            if ($this->_encryptionStrategy->checkPass($password, call_user_func([$tmp, $this->_methodGetPassword]), ($this->_useSalt) ? (call_user_func([$tmp,$this->_methodGetSalt])) : '')) {
                 $this->_logUser();
                 return true;
             } else {
@@ -155,36 +159,42 @@ class Auth extends AModule implements IConfigurableModule {
      *
      * @return bool
      */
-    public function logout() {
+    public function logout()
+    {
         if (isset($_SESSION[$this->_sessionVarName])) {
             unset($_SESSION[$this->_sessionVarName]);
         }
         return true;
     }
 
-    private function _logUser() {
+    private function _logUser()
+    {
         $_SESSION[$this->_sessionVarName] = 1;
     }
 
-    public function getModelName() {
+    public function getModelName()
+    {
         return $this->_modelName;
     }
 
-    public function setModelName($modelName) {
+    public function setModelName($modelName)
+    {
         $this->_modelName = $modelName;
     }
 
     /**
      * @return string
      */
-    public function getUsernameAttribute() {
-      return $this->_usernameAttribute;
+    public function getUsernameAttribute()
+    {
+        return $this->_usernameAttribute;
     }
 
     /**
      * @param string $usernameAttribute
      */
-    public function setUsernameAttribute($usernameAttribute) {
-      $this->_usernameAttribute = $usernameAttribute;
+    public function setUsernameAttribute($usernameAttribute)
+    {
+        $this->_usernameAttribute = $usernameAttribute;
     }
 }

@@ -7,5 +7,6 @@ namespace pff\Exception;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class HookException extends PffException {
+class HookException extends PffException
+{
 }

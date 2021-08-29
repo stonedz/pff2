@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\Core;
+
 use pff\Abs\AView;
 use pff\App;
 use pff\Exception\ViewException;
@@ -10,8 +11,8 @@ use pff\Exception\ViewException;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class ViewPHP extends AView {
-
+class ViewPHP extends AView
+{
     /**
      * @var array Contains the data to be used in the template file
      */
@@ -19,10 +20,9 @@ class ViewPHP extends AView {
 
     public function __construct($templateName)
     {
-        if (substr($templateName, 0, 1) != '/'){
+        if (substr($templateName, 0, 1) != '/') {
             $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $templateName;
-        }
-        else {
+        } else {
             $templatePath = $templateName;
         }
         if (!file_exists($templatePath)) {
@@ -31,11 +31,13 @@ class ViewPHP extends AView {
         parent::__construct($templateName);
     }
 
-    public function set($name, $value) {
+    public function set($name, $value)
+    {
         $this->_data[$name] = $value;
     }
 
-    public function render() {
+    public function render()
+    {
         $templatePath = $this->getTemplatePath();
         if (!file_exists($templatePath)) {
             throw new ViewException('Template file ' . $templatePath . ' does not exist');
@@ -43,10 +45,11 @@ class ViewPHP extends AView {
         if (is_array($this->_data)) {
             extract($this->_data); // Extract set data to scope vars
         }
-        include ($templatePath);
+        include($templatePath);
     }
 
-    public function renderHtml() {
+    public function renderHtml()
+    {
         $templatePath = $this->getTemplatePath();
         if (!file_exists($templatePath)) {
             throw new ViewException('Template file ' . $templatePath . ' does not exist');
@@ -55,7 +58,7 @@ class ViewPHP extends AView {
             extract($this->_data); // Extract set data to scope vars
         }
 
-        include ($templatePath);
+        include($templatePath);
         $output = ob_get_contents();
         ob_clean();
         return $output;
@@ -67,7 +70,8 @@ class ViewPHP extends AView {
      * @param string $output HTML output string
      * @return string
      */
-    public function preView($output) {
+    public function preView($output)
+    {
         /** @var $purifierConfig \HTMLPurifier_Config */
         $purifierConfig = \HTMLPurifier_Config::createDefault();
         $purifierConfig->set('Core.Encoding', 'UTF-8');
@@ -83,7 +87,8 @@ class ViewPHP extends AView {
     /**
      * @return string
      */
-    private function getTemplatePath() {
+    private function getTemplatePath()
+    {
         if (substr($this->_templateFile, 0, 1) != '/') {
             $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $this->_templateFile;
             return $templatePath;

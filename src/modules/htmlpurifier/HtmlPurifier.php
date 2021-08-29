@@ -1,15 +1,17 @@
 <?php
 
 namespace pff\modules;
+
 use pff\Abs\AModule;
 
 /**
  *
  * @author paolo.fagni<at>gmail.com
  */
-class HtmlPurifier extends AModule {
-
-    public function __construct() {
+class HtmlPurifier extends AModule
+{
+    public function __construct()
+    {
         if (!defined('HTMLPURIFIER_PREFIX')) {
             define('HTMLPURIFIER_PREFIX', realpath(dirname(__FILE__) . '/../../vendor/ezyang/htmlpurifier/library'));
         }
@@ -21,7 +23,8 @@ class HtmlPurifier extends AModule {
      * @param string $output
      * @return string
      */
-    public function purify($output) {
+    public function purify($output)
+    {
         /** @var $purifierConfig \HTMLPurifier_Config */
         $purifierConfig = \HTMLPurifier_Config::createDefault();
         $purifierConfig->set('Core.Encoding', 'UTF-8');

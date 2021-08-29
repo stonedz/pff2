@@ -1,6 +1,7 @@
 <?php
 
 namespace pff;
+
 use pff\Exception\ConfigException;
 
 /**
@@ -11,16 +12,17 @@ use pff\Exception\ConfigException;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class Config {
-
+class Config
+{
     /**
      * @var array Contains app configuarations
      */
     private $_config;
 
-    public function __construct($configFile = 'config.user.php', $configPath = 'app/config') {
-        $this->_config = array();
-        $this->loadConfig($configFile,$configPath); // Load main config file
+    public function __construct($configFile = 'config.user.php', $configPath = 'app/config')
+    {
+        $this->_config = [];
+        $this->loadConfig($configFile, $configPath); // Load main config file
     }
 
     /**
@@ -31,7 +33,8 @@ class Config {
      * @throws ConfigException
      * @return void
      */
-    public function loadConfig($configFile = 'config.user.php', $configPath = 'app/config') {
+    public function loadConfig($configFile = 'config.user.php', $configPath = 'app/config')
+    {
         $completePath = ROOT . DS . $configPath . DS . $configFile;
 
         if (!file_exists($completePath)) {
@@ -55,7 +58,8 @@ class Config {
      * @throws ConfigException
      * @return array|mixed
      */
-    public function getConfigData($data = null) {
+    public function getConfigData($data = null)
+    {
         if ($data !== null && isset($this->_config[$data])) {
             return $this->_config[$data];
         } elseif ($data === null) {
@@ -75,7 +79,8 @@ class Config {
      * @deprecated Use getConfigData instead
      * @see getConfigData
      */
-    public function getConfig($data = null) {
+    public function getConfig($data = null)
+    {
         return $this->getConfigData($data);
     }
 
@@ -86,7 +91,8 @@ class Config {
      * @param mixed $value
      * @throws ConfigException
      */
-    public function setConfig($data, $value) {
+    public function setConfig($data, $value)
+    {
         if (is_string($data)) {
             $this->_config[$data] = $value;
         } else {

@@ -3,14 +3,15 @@
  * Helpers for PHPRuner
  */
 
-if (!function_exists("phpr_getImageName")){
+if (!function_exists("phpr_getImageName")) {
     /**
      * Gets the image filename
      *
      * @param string $json
      * @return string
      */
-    function phpr_getImageName($json) {
+    function phpr_getImageName($json)
+    {
         $arr        = json_decode($json);
         $path_parts = pathinfo($arr[0]->name);
 
@@ -19,14 +20,15 @@ if (!function_exists("phpr_getImageName")){
     }
 }
 
-if (!function_exists("phpr_getThumbName")){
+if (!function_exists("phpr_getThumbName")) {
     /**
      * Gets the thumbnail filename
      *
      * @param string $json
      * @return string
      */
-    function phpr_getThumbName($json) {
+    function phpr_getThumbName($json)
+    {
         $arr        = json_decode($json);
         $path_parts = pathinfo($arr[0]->thumbnail);
 
@@ -35,14 +37,15 @@ if (!function_exists("phpr_getThumbName")){
     }
 }
 
-if (!function_exists("phpr_getPdfName")){
+if (!function_exists("phpr_getPdfName")) {
     /**
      * Gets the pdf filename
      *
      * @param string $json
      * @return string
      */
-    function phpr_getPdfName($json) {
+    function phpr_getPdfName($json)
+    {
         $arr        = json_decode($json);
         $path_parts = pathinfo($arr[0]->name);
 

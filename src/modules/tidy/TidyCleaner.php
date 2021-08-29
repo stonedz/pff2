@@ -1,6 +1,7 @@
 <?php
 
 namespace pff\modules;
+
 use pff\Abs\AModule;
 use pff\Iface\IAfterViewHook;
 use pff\Iface\IBeforeViewHook;
@@ -9,15 +10,16 @@ use pff\Iface\IBeforeViewHook;
  *
  * @author paolo.fagni<at>gmail.com
  */
-class TidyCleaner extends AModule implements IBeforeViewHook, IAfterViewHook {
-
+class TidyCleaner extends AModule implements IBeforeViewHook, IAfterViewHook
+{
     /**
      * Executes actions before the Views are rendered
      *
      * @return mixed
      */
-    public function doBeforeView($context = null) {
-        ob_start(array($this,'preView'));
+    public function doBeforeView($context = null)
+    {
+        ob_start([$this,'preView']);
     }
 
     /**
@@ -25,7 +27,8 @@ class TidyCleaner extends AModule implements IBeforeViewHook, IAfterViewHook {
      *
      * @return mixed
      */
-    public function doAfterView() {
+    public function doAfterView()
+    {
         ob_end_flush();
     }
 
@@ -34,8 +37,9 @@ class TidyCleaner extends AModule implements IBeforeViewHook, IAfterViewHook {
      * @param $output
      * @return \tidy
      */
-    public function preView($output) {
-        $config = array(
+    public function preView($output)
+    {
+        $config = [
             'show-body-only' => false,
             'clean' => true,
             'char-encoding' => 'UTF8',
@@ -80,7 +84,7 @@ class TidyCleaner extends AModule implements IBeforeViewHook, IAfterViewHook {
             'merge-divs' => false,
             'repeated-attributes' => 'keep-last',
             'break-before-br' => true,
-        );
+        ];
         header('Content-type: text/html; charset=utf-8');
         $tidy = new \tidy();
         $tidy->parseString($output, $config, 'UTF8');
