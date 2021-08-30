@@ -22,7 +22,7 @@
         "mobiledetect/mobiledetectlib": "2.8.*",
         "components/normalize.css": "3.*",
         "components/modernizr": "3.*",
-        "stonedz/pff2-installers": "2.*",
+        "stonedz/pff2-installers": "2.0.7",
         "pimple/pimple": "~3.4"
     },
     "require-dev": {
