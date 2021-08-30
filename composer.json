@@ -14,7 +14,6 @@
     ],
     "require": {
         "php": ">=7",
-        "stonedz/pff2-installers": "2.0.7",
         "symfony/yaml": "~5.3",
         "symfony/console": "~5.3",
         "symfony/debug": "~4.4",
