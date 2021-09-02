@@ -22,7 +22,7 @@ class ComposerUpdate extends Command
             ->setDescription('Updates composer packages');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output):int
     {
         $command   = $this->getApplication()->find('composer:install');
         $arguments = ['command' => 'composer:install'];
@@ -54,5 +54,6 @@ class ComposerUpdate extends Command
                 }
             }
         }
+        return 0;
     }
 }

@@ -31,7 +31,7 @@ if (APPLICATION_ENV == "development") {
 
 } else {
 
-    $cache = new \Doctrine\Common\Cache\ApcCache();
+    $cache = new \Doctrine\Common\Cache\ArrayCache();
 }
 
 $config->setMetadataCacheImpl($cache);

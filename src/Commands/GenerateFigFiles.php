@@ -126,7 +126,7 @@ class GenerateFigFiles extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output):int
     {
         $questionHelper = $this->getHelper('question');
 
@@ -135,7 +135,7 @@ class GenerateFigFiles extends Command
             $question = new ConfirmationQuestion('<question>Continue anyway?</question> ', 'n');
 
             if (!$questionHelper->ask($input, $output, $question)) {
-                return;
+                return 0;
             }
         }
 

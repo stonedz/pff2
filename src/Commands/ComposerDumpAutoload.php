@@ -28,7 +28,7 @@ class ComposerDumpAutoload extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) :int
     {
         $command   = $this->getApplication()->find('composer:install');
         $arguments = ['command' => 'composer:install', '-c' => true];
@@ -49,5 +49,6 @@ class ComposerDumpAutoload extends Command
                 $output->writeln('<error>ERROR</error>');
             }
         }
+        return 0;
     }
 }

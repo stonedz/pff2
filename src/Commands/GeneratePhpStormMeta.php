@@ -23,7 +23,7 @@ class GeneratePhpStormMeta extends Command
             ->setDescription('generate .phpstorm.meta.php file');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output):int
     {
         $output->write('Generating .phpstorm.meta.php file...');
         $fileContent =
@@ -68,6 +68,7 @@ class GeneratePhpStormMeta extends Command
         file_put_contents($filePath, $fileContent);
 
         $output->writeln('<info>DONE</info>');
+        return 0;
     }
 
     /**

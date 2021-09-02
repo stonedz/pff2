@@ -43,7 +43,7 @@ class DeployPush extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output):int
     {
         /** @var QuestionHelper $questionHelper */
         $questionHelper = $this->getHelper('question');
@@ -91,7 +91,7 @@ class DeployPush extends Command
      * @param OutputInterface $output
      * @param string $profile_name
      */
-    protected function publish(InputInterface $input, OutputInterface $output, $profile_name)
+    protected function publish(InputInterface $input, OutputInterface $output, $profile_name):int
     {
         $output->writeln('<info>Publishing to '.$profile_name.'...</info>');
         $parser = new Parser();
@@ -184,6 +184,7 @@ class DeployPush extends Command
             passthru($permissions_commands);
         }
         $output->writeln('<info>PERMISSIONS DONE</info>');
+         return 0;
     }
 
     protected function getDeployementProfiles()

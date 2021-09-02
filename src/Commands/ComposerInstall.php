@@ -27,7 +27,7 @@ class ComposerInstall extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output):int
     {
         $only_chekc = $input->getOption('only-check');
 
@@ -59,5 +59,6 @@ class ComposerInstall extends Command
                 return 1;
             }
         }
+        return 0;
     }
 }

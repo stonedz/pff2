@@ -21,7 +21,7 @@ class OptimizeProduction extends Command
             ->setDescription('Generates doctrine proxies, clears doctrine caches and dump optimized composer autoload.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output):int
     {
         $output->writeln('Optimizing environment for production...');
 
@@ -55,5 +55,6 @@ class OptimizeProduction extends Command
         $arguments = ['command' => 'composer:dumpautoload'];
         $inputa    = new ArrayInput($arguments);
         $ret       = $command->run($inputa, $output);
+        return 0;
     }
 }

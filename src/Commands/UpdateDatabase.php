@@ -34,7 +34,7 @@ class UpdateDatabase extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output):int
     {
         if (!$input->getOption('no-backup')) {
             $mysql_port = $input->getOption('port');
@@ -49,5 +49,6 @@ class UpdateDatabase extends Command
         foreach ($res as $r) {
             echo $r,"\n";
         }
+        return 0;
     }
 }

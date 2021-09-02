@@ -37,13 +37,13 @@ class BackupDatabase extends Command
               );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output):int
     {
         $questionHelper = $this->getHelper('question');
 
         if (!CommandUtils::checkCommand('mysqldump')) {
             $output->writeln('<error>Mysql client not found. Please install it!</error>');
-            return;
+            return 1;
         }
 
         require('app/config/config.user.php');
@@ -114,6 +114,7 @@ class BackupDatabase extends Command
         }
 
         $this->cleanOldBkp($input, $output, $backup_dir, $backup_prefix);
+        return 0;
     }
 
     /**

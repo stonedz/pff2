@@ -38,7 +38,7 @@ class DeployCreate extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output):int
     {
         /** @var QuestionHelper $questionHelper */
         $questionHelper = $this->getHelper('question');
@@ -134,5 +134,6 @@ class DeployCreate extends Command
         } else {
             $output->writeln('<error>Error while writing output file!</error>');
         }
+        return 0;
     }
 }
