@@ -137,6 +137,7 @@ class GenerateFigFiles extends Command
             if (!$questionHelper->ask($input, $output, $question)) {
                 return 0;
             }
+            return 0;
         }
 
         CommandUtils::checkDeployement();
@@ -194,7 +195,7 @@ phpmyadmin:
         }
 
         if ($input->getOption('create-production') != 1) {
-            return;
+            return 0;
         }
 
         $this->askForFile('prod-php.ini', $input, $output, $questionHelper);
@@ -240,7 +241,7 @@ db:
             if ($questionHelper->ask($input, $output, $question)) {
                 $this->create_db_volume_data($input, $output, $app_name.'_db_data', $questionHelper);
             } else {
-                return;
+                return 0;
             }
         } else {
             $output->writeln('<comment>'.$this->fig_prod.' file already exists. Delete it or move it to recreate the file</comment>');
