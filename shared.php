@@ -27,8 +27,6 @@
     return new \Symfony\Component\Yaml\Parser();
 };
 
-
-
 $app = \pff\Core\ServiceContainer::get('app');
 $app->setUrl($url);
 $app->setErrorReporting();
