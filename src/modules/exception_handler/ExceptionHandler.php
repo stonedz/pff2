@@ -27,7 +27,7 @@ class ExceptionHandler extends AModule implements IBeforeSystemHook
     /**
      * @param \Exception $exception
      */
-    public function manageExceptions(\Exception $exception)
+    public function manageExceptions(\Throwable $exception)
     {
         $code = (int)$exception->getCode();
         header(' ', true, $code);
