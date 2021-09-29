@@ -28,7 +28,7 @@ To setup a new project:
     ],
     "require": {
         "stonedz/pff2": "~2",
-        "stonedz/pff2-installers": "v2.0.7"
+        "stonedz/pff2-installers": "v2.0.7",
         "stonedz/pff2-doctrine": "*"
     },
     "autoload": {
