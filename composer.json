@@ -17,7 +17,7 @@
         "symfony/yaml": "~5.3",
         "symfony/console": "~5.3",
         "symfony/debug": "~4.4",
-        "swiftmailer/swiftmailer": "~6.2",
+        "swiftmailer/swiftmailer": "5.4.12",
         "ezyang/htmlpurifier": "*",
         "mobiledetect/mobiledetectlib": "2.8.*",
         "components/normalize.css": "3.*",

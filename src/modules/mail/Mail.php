@@ -10,7 +10,7 @@ namespace pff\modules;
 
 use pff\Abs\AModule;
 
-require_once(ROOT . DS . 'vendor/swiftmailer/swiftmailer/lib/swift_required.php');
+require_once(ROOT . DS . 'vendor/swiftmailer/swiftmailer/lib/swift_init.php');
 
 class Mail extends AModule
 {
@@ -76,6 +76,7 @@ class Mail extends AModule
             $this->message->setReplyTo($addressReply);
         }
         if (null !== $attachment) {
+            $attachment = \Swift_Attachment::newInstance($attachment, $attachment_name, 'application/pdf');
             $attachment = \Swift_Attachment::newInstance($attachment, $attachment_name, $attachment_type);
             $this->message->attach($attachment);
         }
