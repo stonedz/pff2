@@ -63,7 +63,7 @@ class Mail extends AModule
         }
     }
 
-    public function sendMail($to, $from, $fromName, $subject, $body, $addressReply = null, $attachment = null, $attachment_name = 'attachment.pdf', $cc = null, $bcc = null)
+    public function sendMail($to, $from, $fromName, $subject, $body, $addressReply = null, $attachment = null, $attachment_name = 'attachment.pdf', $cc = null, $bcc = null, $attachment_type = 'application/pdf')
     {
         $this->message = new \Swift_Message();
         $this->message->setTo($to);
@@ -76,7 +76,7 @@ class Mail extends AModule
             $this->message->setReplyTo($addressReply);
         }
         if (null !== $attachment) {
-            $attachment = \Swift_Attachment::newInstance($attachment, $attachment_name, 'application/pdf');
+            $attachment = \Swift_Attachment::newInstance($attachment, $attachment_name, $attachment_type);
             $this->message->attach($attachment);
         }
         if (null !== $cc) {
@@ -87,4 +87,5 @@ class Mail extends AModule
         }
         return $this->mailer->send($this->message);
     }
+
 }
