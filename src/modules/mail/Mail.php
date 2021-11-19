@@ -76,7 +76,6 @@ class Mail extends AModule
             $this->message->setReplyTo($addressReply);
         }
         if (null !== $attachment) {
-            $attachment = \Swift_Attachment::newInstance($attachment, $attachment_name, 'application/pdf');
             $attachment = \Swift_Attachment::newInstance($attachment, $attachment_name, $attachment_type);
             $this->message->attach($attachment);
         }
