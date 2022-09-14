@@ -128,6 +128,7 @@ class DeployPush extends Command
             'chmod -R 770 '.$profile_config['remote_dir'].'app/proxies',
             'chmod -R 770 '.$profile_config['remote_dir'].'app/public',
             'chmod -R 770 '.$profile_config['remote_dir'].'app/tmp',
+            'chmod -R 770 '.$profile_config['remote_dir'].'tmp',
         ];
 
         $permissions_commands = 'ssh '
