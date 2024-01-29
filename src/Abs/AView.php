@@ -43,6 +43,17 @@ abstract class AView implements IRenderable
      */
     protected $_jsFolder;
 
+    /**
+     * @var string Path to the files folder
+     */
+    protected $_filesFolder;
+    
+    /**
+     * @var string Path to the composer's vendor folder
+     */
+    protected $_vendorFolder;
+
+
     public function __construct($templateName)
     {
         $this->_app          = ServiceContainer::get('app');
