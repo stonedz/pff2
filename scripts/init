@@ -67,6 +67,18 @@ else
 fi
 cd $tmp
 
+
+# GENERATE tmp FOLDER
+echo -ne "\n${CYAN}Creating tmp directory..."
+tmp=`pwd`
+if [ ! -d "tmp" ]
+then
+    mkdir tmp
+    echo -e "${GREEN}[OK]"
+else
+    echo -e "${GREEN}[OK]${NC} (tmp/ folder already present)"
+fi
+cd $tmp
 #Generate autoload files
 #if ! command -v phpab &> /dev/null
 #then
