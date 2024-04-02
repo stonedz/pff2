@@ -79,6 +79,19 @@ else
     echo -e "${GREEN}[OK]${NC} (tmp/ folder already present)"
 fi
 cd $tmp
+
+# GENERATE proxy FOLDER
+echo -ne "\n${CYAN}Creating proxy directory..."
+tmp=`pwd`
+if [ ! -d "app/proxies" ]
+then
+    mkdir app/proxies
+    chmod 777 app/proxies
+    echo -e "${GREEN}[OK]"
+else
+    echo -e "${GREEN}[OK]${NC} (app/proxies folder already present)"
+fi
+cd $tmp
 #Generate autoload files
 #if ! command -v phpab &> /dev/null
 #then
