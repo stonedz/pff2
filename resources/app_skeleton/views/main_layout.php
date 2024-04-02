@@ -14,7 +14,6 @@
 
         <link rel="stylesheet" href="<?=$pff_path_css?>normalize.css">
         <link rel="stylesheet" href="<?=$pff_path_css?>main.css">
-        <script src="<?=$pff_path_js?>modernizr.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>

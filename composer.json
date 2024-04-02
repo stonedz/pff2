@@ -21,7 +21,6 @@
         "ezyang/htmlpurifier": "*",
         "mobiledetect/mobiledetectlib": "2.8.*",
         "components/normalize.css": "3.*",
-        "components/modernizr": "3.*",
         "pimple/pimple": "~3.4"
     },
     "require-dev": {
