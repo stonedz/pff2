@@ -7,7 +7,6 @@ use pff\Core\HookManager;
 use pff\Core\ModuleManager;
 use pff\Core\ServiceContainer;
 use pff\Exception\RoutingException;
-use Symfony\Component\Debug\ErrorHandler;
 
 /**
  * Main app
@@ -110,7 +109,6 @@ class App
                 error_reporting(E_ALL);
                 ini_set('display_errors', 'On');
             }
-            ErrorHandler::register();
         } else {
             error_reporting(E_ALL);
             ini_set('display_errors', 'Off');
