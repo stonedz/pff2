@@ -1,4 +1,5 @@
 <?php
+
 /**
  * App configuration file
  *
@@ -18,7 +19,7 @@ $pffConfig['app_name'] = 'My new app';
  * enter the application path with a TRAILING SLASH. For example 'path/to/application/'
  * If the developmente_environment is set to true the base_path_dev will be used.
  */
-$pffConfig['base_path'] = 'pff2/';
+$pffConfig['base_path'] = '';
 $pffConfig['base_path_dev'] = 'pff2/';
 
 /*
@@ -31,6 +32,10 @@ $pffConfig['development_environment'] = true;
  */
 $pffConfig['default_action'] = 'index';
 
+/**
+ * Show deprecated, notice and strict errors. ONLY WORKS IN DEVELOPMENT MODE
+ */
+$pffConfig['show_all_errors'] = true;
 
 ///////////////////////////////////////
 // Database
