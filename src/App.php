@@ -103,7 +103,7 @@ class App
     public function setErrorReporting()
     {
         if (true ===  $this->_config->getConfigData('development_environment')) {
-            if (isset($this->_config->getConfigData('show_all_errors')) && $this->_config->getConfigData('show_all_errors') === true) {
+            if ($this->_config->getConfigData('show_all_errors') === true) {
                 error_reporting(E_ALL && ~E_DEPRECATED && ~E_NOTICE && ~E_STRICT);
                 ini_set('display_errors', 'On');
             } else {

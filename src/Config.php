@@ -55,7 +55,6 @@ class Config
      * Gets configuration
      *
      * @param null|string $data Wanted config param
-     * @throws ConfigException
      * @return array|mixed
      */
     public function getConfigData($data = null)
@@ -65,7 +64,7 @@ class Config
         } elseif ($data === null) {
             return $this->_config;
         } else {
-            throw new ConfigException("Error while requesting config value: " . $data);
+            return false;
         }
     }
 
