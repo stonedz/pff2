@@ -106,11 +106,10 @@ class App
             if (isset($this->_config->getConfigData('show_all_errors')) && $this->_config->getConfigData('show_all_errors') === true) {
                 error_reporting(E_ALL && ~E_DEPRECATED && ~E_NOTICE && ~E_STRICT);
                 ini_set('display_errors', 'On');
-            }
-            else {
+            } else {
                 error_reporting(E_ALL);
                 ini_set('display_errors', 'On');
-            } 
+            }
             ErrorHandler::register();
         } else {
             error_reporting(E_ALL);
@@ -161,7 +160,7 @@ class App
      */
     public function addStaticRoute($request, $destinationPage)
     {
-        if (file_exists(PAGES. DS . $destinationPage)) {
+        if (file_exists(PAGES . DS . $destinationPage)) {
             $this->_staticRoutes[$request] = $destinationPage;
         } else {
             throw new RoutingException('Non existant static route specified: ' . $destinationPage);
@@ -198,7 +197,7 @@ class App
             $request = 'app' . DS . 'pages' . DS . $request;
             return true;
         }
-        return false;url
+        return false;
     }
 
     /**
@@ -261,11 +260,11 @@ class App
             $this->_hookManager->runAfter(); // Runs after controller hooks
         } elseif ($this->applyRouting($tmpController, $action, $urlArray)) {
             ($action === null) ? $action = 'index' : $action;
-            $tmpController = '\\pff\\controllers\\'.$tmpController;
+            $tmpController = '\\pff\\controllers\\' . $tmpController;
             $controller = new $tmpController($tmpController, $this, $action, array_merge($urlArray, $myGet));
         } elseif (file_exists(ROOT . DS . 'app' . DS . 'controllers' . DS . ucfirst($tmpController) . '_Controller.php')) {
             $action = isset($urlArray[0]) ? array_shift($urlArray) : 'index';
-            $controllerClassName = '\\pff\\controllers\\'.ucfirst($tmpController) . '_Controller';
+            $controllerClassName = '\\pff\\controllers\\' . ucfirst($tmpController) . '_Controller';
             $controller          = new $controllerClassName($tmpController, $this, $action, array_merge($urlArray, $myGet));
         } else {
             throw new RoutingException('Cannot find a valid controller.', 404);
