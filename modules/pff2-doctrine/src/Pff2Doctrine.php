@@ -1,4 +1,5 @@
 <?php
+
 /**
  * User: stonedz
  * Date: 2/8/15
@@ -81,7 +82,7 @@ class Pff2Doctrine extends AModule implements IConfigurableModule, IBeforeSystem
 
 
         $config = new Configuration();
-        if(!$config_pff->getConfigData('development_environment')){
+        if (!$config_pff->getConfigData('development_environment')) {
             $config->setMetadataCache(CacheAdapter::wrap($cache));
             $config->setQueryCacheImpl($cache);
             $config->setResultCacheImpl($cache);
@@ -99,11 +100,10 @@ class Pff2Doctrine extends AModule implements IConfigurableModule, IBeforeSystem
             $connectionOptions = $config_pff->getConfigData('databaseConfig');
         }
 
-
-        $this->db= EntityManager::create($connectionOptions, $config);
+        $this->db = EntityManager::create($connectionOptions, $config);
 
         ServiceContainer::set()['dm'] = $this->db;
-        $platform = $this->db->getConnection()->getDatabasePlatform();
-        $platform->registerDoctrineTypeMapping('enum', 'string');
+        //$platform = $this->db->getConnection()->getDatabasePlatform();
+        //$platform->registerDoctrineTypeMapping('enum', 'string');
     }
 }

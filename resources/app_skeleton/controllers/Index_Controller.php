@@ -1,20 +1,28 @@
 <?php
 
 namespace pff\controllers;
+
 use pff\Abs\AController;
 
 /**
  * Index controller
  */
-class Index_Controller extends AController {
+class Index_Controller extends AController
+{
 
     /**
      * Index action.
      *
      * @return mixed
      */
-    public function index() {
+    public function index()
+    {
         echo 'Welcome to pff!';
     }
 
+    public function test()
+    {
+
+        echo 'Welcome to test pff!';
+    }
 }

@@ -54,6 +54,14 @@
             ]
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "pff\\": "app",
+            "pff\\models\\": "app/models",
+            "pff\\services\\": "app/services",
+            "pff\\controllers\\": "app/controllers"
+        }
+    },
     "scripts": {
         "post-install-cmd": [
             "ln -s resources/app_skeleton app",

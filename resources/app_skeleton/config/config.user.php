@@ -20,7 +20,7 @@ $pffConfig['app_name'] = 'My new app';
  * If the developmente_environment is set to true the base_path_dev will be used.
  */
 $pffConfig['base_path'] = '';
-$pffConfig['base_path_dev'] = 'pff2/';
+$pffConfig['base_path_dev'] = '';
 
 /*
  * Set to true if in DEBUG mode
