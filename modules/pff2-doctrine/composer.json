@@ -1,0 +1,31 @@
+{
+	"name": "stonedz/pff2-doctrine",
+	"type": "pff2-module",
+	"description": "Doctrine for pff2",
+	"license": "MIT",
+	"keywords": [
+		"pff2", "module", "db", "doctrine"
+	],
+	"authors": [
+		{
+			"name": "Paolo Fagni",
+			"email": "paolo.fagni@gmail.com",
+			"role": "Developer"
+		}
+	],
+	"homepage": "https://github.com/stonedz/pff2-doctrine",
+	"require": {
+		"stonedz/pff2-installers": "*",
+		"doctrine/orm": "2.*",
+		"doctrine/cache": "1.12.1",
+		"doctrine/annotations": "1.*"
+	},
+	"require-dev": {
+		"stonedz/pff2": "3.0.x-dev"
+	},
+	"autoload": {
+		"psr-4": {
+			"pff\\modules\\": "src/"
+		}
+	}
+}

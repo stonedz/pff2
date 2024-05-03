@@ -1,0 +1,7 @@
+moduleConf:
+  # Set to true to use redis as a cache
+  redis: false
+  redis_port: 6379
+  redis_host: redis
+  # Leave empty if not used
+  redis_password:

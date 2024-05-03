@@ -18,12 +18,13 @@
         "pimple/pimple": "~3.5",
         "php": ">=8.1",
         "swiftmailer/swiftmailer": "5.4.12",
-        "symfony/console": "~5.3",
+        "symfony/console": "~7",
         "symfony/yaml": "~5.3"
     },
     "require-dev": {
         "codeception/codeception": "*",
-        "phpunit/phpunit": "~11"
+        "phpunit/phpunit": "~11",
+        "stonedz/pff2-doctrine": "3.0.x-dev"
     },
     "bin": ["scripts/init", "scripts/pff"],
     "autoload": {
@@ -51,6 +52,17 @@
                 "src/modules/url"
 
             ]
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "ln -s resources/app_skeleton app",
+            "ln -s resources/site_skeleton/index.php index.php"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "stonedz/pff2-installers": true
         }
     }
 }

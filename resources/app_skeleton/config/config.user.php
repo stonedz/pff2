@@ -64,10 +64,11 @@ $pffConfig['databaseConfig'] = array(
  * Db connection data if DEVELOPMENT_ENVIRONMENT is true
  */
 $pffConfig['databaseConfigDev'] = array(
-    'dbname' => '',
-    'user' => '',
-    'password' => '',
-    'host' => '',
+    'dbname' => 'test_db',
+    'user' => 'test',
+    'password' => 'test',
+    'host' => 'localhost',
+    'port' => '33061',
     'driver' => 'pdo_mysql',
     'driverOptions' => array(
         1002 => 'SET NAMES utf8'

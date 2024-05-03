@@ -1,0 +1,5 @@
+name: pff2-doctrine
+version: "0.1"
+desc: Doctrine for pff2
+class: Pff2Doctrine
+
