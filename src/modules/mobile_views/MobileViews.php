@@ -89,7 +89,7 @@ class MobileViews extends AModule implements IConfigurableModule, IBeforeHook
             $this->_allowMobileForTablet = $parsedConfig['moduleConf']['allowMobileForTablet'];
         }
 
-        $this->_md = new \Mobile_Detect();
+        $this->_md = new \Detection\MobileDetect();
     }
 
     /**
@@ -123,7 +123,8 @@ class MobileViews extends AModule implements IConfigurableModule, IBeforeHook
     public function isMobile()
     {
         if (($this->_isTablet || $this->_isMobile)
-            && $_SESSION[$this->_sessionAutoName]) {
+            && $_SESSION[$this->_sessionAutoName]
+        ) {
             return true;
         } else {
             return false;
