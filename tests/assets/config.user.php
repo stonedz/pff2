@@ -1,4 +1,5 @@
 <?php
+
 /**
  * App configuration file
  *
@@ -31,7 +32,7 @@ $pffConfig['development_environment'] = true;
  */
 $pffConfig['default_action'] = 'index';
 
-
+$pffConfig['show_all_errors'] = true;
 ///////////////////////////////////////
 // Database
 ///////////////////////////////////////

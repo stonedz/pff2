@@ -110,8 +110,6 @@ cd $tmp
 echo -ne "\n${CYAN}Moving css and js files"
 tmp=`pwd`
 cd vendor
-cd components/normalize.css
-cp normalize.css ${tmp}/app/public/css
 echo -e "${GREEN}[OK]"
 cd ${tmp}
 
