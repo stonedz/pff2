@@ -1,7 +1,7 @@
 moduleConf:
-  Type:
-  Host:
-  Encryption:
-  Port:
-  Username:
-  Password:
+ Type: smtp
+ Host: mailcatcher
+ Encryption:
+ Port: 1025
+ Username: 
+ Password: 

@@ -16,9 +16,10 @@
 	"homepage": "https://github.com/stonedz/pff2-doctrine",
 	"require": {
 		"stonedz/pff2-installers": "*",
-		"doctrine/orm": "2.*",
-		"doctrine/cache": "1.12.1",
-		"doctrine/annotations": "1.*"
+		"doctrine/orm": "^3",
+		"doctrine/dbal": "^4",
+		"symfony/cache": "^7",
+		"doctrine/annotations": "2.*"
 	},
 	"require-dev": {
 		"stonedz/pff2": "3.0.x-dev"
@@ -26,6 +27,11 @@
 	"autoload": {
 		"psr-4": {
 			"pff\\modules\\": "src/"
+		}
+	},
+	"config": {
+		"allow-plugins": {
+			"stonedz/pff2-installers": true
 		}
 	}
 }

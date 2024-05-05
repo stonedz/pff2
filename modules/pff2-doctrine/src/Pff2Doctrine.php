@@ -8,10 +8,6 @@
 
 namespace pff\modules;
 
-use Doctrine\Common\Cache\PhpFileCache;
-use Doctrine\Common\Cache\Psr6\CacheAdapter;
-use Doctrine\Common\Cache\RedisCache;
-use Doctrine\ORM\EntityManager;
 use pff\Abs\AModule;
 use pff\Core\ServiceContainer;
 use pff\Iface\IBeforeSystemHook;
@@ -19,6 +15,11 @@ use pff\Iface\IConfigurableModule;
 use Doctrine\ORM\Configuration;
 use pff\Config;
 use pff\Exception\PffException;
+
+use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
+use Doctrine\ORM\ORMSetup;
 
 class Pff2Doctrine extends AModule implements IConfigurableModule, IBeforeSystemHook
 {
@@ -61,49 +62,28 @@ class Pff2Doctrine extends AModule implements IConfigurableModule, IBeforeSystem
 
     private function initORM()
     {
-        /** @var Config */
         $config_pff = ServiceContainer::get('config');
-        if (false === $this->redis || $config_pff->getConfigData('development_environment')) {
-            $cache =  new PhpFileCache(ROOT . DS . 'tmp' . DS);
+        $paths = [ROOT . DS . 'app' . DS . 'models'];
+
+        if (true === $config_pff->getConfigData('development_environment')) {
+            $dbParams = $config_pff->getConfigData('databaseConfigDev');
+            $isDevMode = true;
         } else {
-            $redis = new \Redis();
-            if (!$redis->connect($this->redis_host, $this->redis_port)) {
-                throw new PffException("Cannot connect to redis", 500);
-            }
-            if ($this->redis_password != '') {
-                if (!$redis->auth($this->redis_password)) {
-                    throw new PffException('Cannot authh to redis', 500);
-                }
-            }
-            $cache = new RedisCache();
-            $cache->setRedis($redis);
-            $cache->setNamespace($config_pff->getConfigData('app_name'));
+            $dbParams = $config_pff->getConfigData('databaseConfig');
+            $isDevMode = false;
         }
 
+        $config = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
 
-        $config = new Configuration();
-        if (!$config_pff->getConfigData('development_environment')) {
-            $config->setMetadataCache(CacheAdapter::wrap($cache));
-            $config->setQueryCacheImpl($cache);
-            $config->setResultCacheImpl($cache);
-        }
-        $driverImpl = $config->newDefaultAnnotationDriver(ROOT . DS . 'app' . DS . 'models');
-        $config->setMetadataDriverImpl($driverImpl);
         $config->setProxyDir(ROOT . DS . 'app' . DS . 'proxies');
         $config->setProxyNamespace('pff\proxies');
 
-        if (true === $config_pff->getConfigData('development_environment')) {
-            $config->setAutoGenerateProxyClasses(true);
-            $connectionOptions = $config_pff->getConfigData('databaseConfigDev');
-        } else {
-            $config->setAutoGenerateProxyClasses(false);
-            $connectionOptions = $config_pff->getConfigData('databaseConfig');
-        }
+        $driverImpl = new AttributeDriver([ROOT . DS . 'app' . DS . 'models'], true);
+        $config->setMetadataDriverImpl($driverImpl);
 
-        $this->db = EntityManager::create($connectionOptions, $config);
+        $connection = DriverManager::getConnection($dbParams, $config);
+        $this->db = new EntityManager($connection, $config);
 
         ServiceContainer::set()['dm'] = $this->db;
-        //$platform = $this->db->getConnection()->getDatabasePlatform();
-        //$platform->registerDoctrineTypeMapping('enum', 'string');
     }
 }

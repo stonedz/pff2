@@ -67,14 +67,28 @@ $pffConfig['databaseConfigDev'] = array(
     'dbname' => 'test_db',
     'user' => 'test',
     'password' => 'test',
-    'host' => 'localhost',
-    'port' => '33061',
+    'host' => 'mysql',
+    'port' => '3306',
     'driver' => 'pdo_mysql',
     'driverOptions' => array(
         1002 => 'SET NAMES utf8'
     )
 );
 
+/*
+ * Db connection data to use with the CLI ***OUTSIDE*** the container is true
+ */
+$pffConfig['databaseConfigCli'] = array(
+    'dbname' => 'test_db',
+    'user' => 'test',
+    'password' => 'test',
+    'host' => '127.0.01',
+    'port' => '33061',
+    'driver' => 'pdo_mysql',
+    'driverOptions' => array(
+        1002 => 'SET NAMES utf8'
+    )
+);
 ///////////////////////////////////////
 // Modules
 ///////////////////////////////////////

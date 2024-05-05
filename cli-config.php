@@ -3,65 +3,47 @@
 /**
  * @author paolo.fagni<at>gmail.com
  */
+
+use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
+use Doctrine\ORM\ORMSetup;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+
 if (php_sapi_name() != "cli") {
     throw new \Exception('can\'t do that');
 }
 require 'vendor/autoload.php';
 require 'app/config/config.user.php';
 
-// Define application environment
-define('APPLICATION_ENV', "development");
 
-// configuration (2)
-$config = new Doctrine\ORM\Configuration();
+$paths = ['app/models'];
 
-// Proxies (3)
+/** @var array $pffConfig */
+$dbParams = $pffConfig['databaseConfigCli'];
+$isDevMode = false;
+
+$config = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
+
 $config->setProxyDir('app/proxies');
 $config->setProxyNamespace('pff\proxies');
 
-$config->setAutoGenerateProxyClasses((APPLICATION_ENV == "development"));
-
-// Driver (4)
-$driverImpl = $config->newDefaultAnnotationDriver(array('app/models'));
+$driverImpl = new AttributeDriver($paths);
 $config->setMetadataDriverImpl($driverImpl);
 
-// Caching Configuration (5)
-if (APPLICATION_ENV == "development") {
+$connection = DriverManager::getConnection($dbParams, $config);
+$db = new EntityManager($connection, $config);
 
-    $cache = new \Doctrine\Common\Cache\ArrayCache();
-} else {
+$commands = [
+    // If you want to add your own custom console commands,
+    // you can do so here.
+];
 
-    $cache = new \Doctrine\Common\Cache\ArrayCache();
-}
-
-$config->setMetadataCacheImpl($cache);
-$config->setQueryCacheImpl($cache);
-
-if (true === $pffConfig['development_environment']) {
-    $connectionOptions = $pffConfig['databaseConfigDev'];
-} else {
-    $connectionOptions = $pffConfig['databaseConfig'];
-}
+ConsoleRunner::run(
+    new SingleManagerProvider($db),
+    $commands
+);
 
 
-$em = \Doctrine\ORM\EntityManager::create($connectionOptions, $config);
-
-$helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
-    //    'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()),
-    'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em)
-));
-
-$platform = $em->getConnection()->getDatabasePlatform();
-$platform->registerDoctrineTypeMapping('enum', 'string');
-
-foreach ($GLOBALS as $helperSetCandidate) {
-    if ($helperSetCandidate instanceof \Symfony\Component\Console\Helper\HelperSet) {
-        $helperSet = $helperSetCandidate;
-        break;
-    }
-}
-
-$helperSet = ($helperSet) ?: new \Symfony\Component\Console\Helper\HelperSet();
-
-\Doctrine\ORM\Tools\Console\ConsoleRunner::run($helperSet);
-return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($em);
+// configuration (2)
