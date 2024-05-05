@@ -13,7 +13,7 @@ function help() {
     echo -e "${NC}-f    Force the update";
 }
 
-echo -e "${GREEN}========== \n${BLUE} pf${RED}f${GREEN}2 ${BLUE}init \n${GREEN}=========="
+echo -e "${GREEN}========== \n${BLUE} pf${RED}f${GREEN}2 ${BLUE}update \n${GREEN}=========="
 
 # Gets the parameters
 while getopts ":f" opt; do
@@ -72,11 +72,11 @@ cd $tmp
 #Creating cli-config for doctrine
 echo -ne "\n${CYAN}Updating cli-config for doctrine"
 rm cli-config.php
-cp vendor/stonedz/pff2/scripts/cli-config.php .
+cp vendor/stonedz/pff2/cli-config.php .
 echo -e "${GREEN}[OK]"
 
 
-echo -ne "\n${CYAN}Updating cli-config for doctrine"
+echo -ne "\n${CYAN}Updating index.php"
 rm index.php
 cp vendor/stonedz/pff2/resources/site_skeleton/index.php .
 echo -e "${GREEN}[OK]"
