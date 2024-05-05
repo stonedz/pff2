@@ -26,7 +26,7 @@
         "phpunit/phpunit": "~11",
         "stonedz/pff2-doctrine": "4.0.x-dev"
     },
-    "bin": ["scripts/init", "scripts/pff"],
+    "bin": ["scripts/init", "scripts/pff", "scripts/update"],
     "autoload": {
         "psr-4": {
             "pff\\": "src",

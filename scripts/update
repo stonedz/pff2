@@ -1,5 +1,4 @@
 #!/bin/bash
-
 green='\e[0;32m'
 GREEN='\e[1;32m'
 red='\e[0;31m'
@@ -10,30 +9,83 @@ cyan='\e[0;36m'
 CYAN='\e[1;36m'
 NC='\e[0m' # No Color
 
-echo -e "${GREEN}========== \n${BLUE} pf${RED}f ${BLUE}update \n${GREEN}=========="
+function help() {
+    echo -e "${NC}-f    Force the update";
+}
 
+echo -e "${GREEN}========== \n${BLUE} pf${RED}f${GREEN}2 ${BLUE}init \n${GREEN}=========="
 
-echo -e "${CYAN}Checking for updated modules configuration..."
-cd ..
-
-for module in `ls lib/app_skeleton/config/modules/`; do
-    if [ ! -d 'app/config/modules/'${module} ]; then
-        echo -ne "${CYAN}New module configuration for "${module}"..."
-        cp -r 'lib/app_skeleton/config/modules/'${module} 'app/config/modules/'
-        echo -e "${GREEN}[COPIED]"
-    else
-        diff 'lib/app_skeleton/config/modules/'${module}'/module.conf.yaml' \
-            'app/config/modules/'${module}'/module.conf.yaml' &> /dev/null
-
-        if [ $? -ne 0 ] ; then
-           echo -e ${red}"- "${module}" configuration in app/config/modules/${module} differs, check it!"
-        fi
-
-    fi
+# Gets the parameters
+while getopts ":f" opt; do
+    case $opt in
+        f)
+            force=true
+            echo -e "${red}Force update!"
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            echo -e "\n"
+            help
+            exit
+            ;;
+    esac
 done
 
-#Runs the init
-cd scripts
-./init -f
 
-echo -e ${NC}
+# command line dependecies"
+#CMDS="curl"
+PKGS=""
+#######################################
+# START
+#######################################
+fail=false
+
+
+# GENERATE tmp FOLDER
+echo -ne "\n${CYAN}Checking tmp directory..."
+tmp=`pwd`
+if [ ! -d "tmp" ]
+then
+    mkdir tmp
+    chmod -R 777 tmp
+    echo -e "${GREEN}[OK]"
+else
+    chmod -R 777 tmp
+    echo -e "${GREEN}[OK]${NC} (tmp/ folder already present)"
+fi
+cd $tmp
+
+# GENERATE proxy FOLDER
+echo -ne "\n${CYAN}Checking proxy directory..."
+tmp=`pwd`
+if [ ! -d "app/proxies" ]
+then
+    mkdir app/proxies
+    chmod 777 app/proxies
+    echo -e "${GREEN}[OK]"
+else
+    chmod 777 app/proxies
+    echo -e "${GREEN}[OK]${NC} (app/proxies folder already present)"
+fi
+cd $tmp
+
+#Creating cli-config for doctrine
+echo -ne "\n${CYAN}Updating cli-config for doctrine"
+rm cli-config.php
+cp vendor/stonedz/pff2/scripts/cli-config.php .
+echo -e "${GREEN}[OK]"
+
+
+echo -ne "\n${CYAN}Updating cli-config for doctrine"
+rm index.php
+cp vendor/stonedz/pff2/resources/site_skeleton/index.php .
+echo -e "${GREEN}[OK]"
+
+
+# Final message
+if [ "$fail" == "false" ]
+then
+    echo -e "\n${NC}Everything should be in place :D Have fun!"
+else
+    echo -e "\n${red}Something went wrong!${NC}"
+fi
