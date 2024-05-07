@@ -9,6 +9,7 @@ jobs:
     # Install php packages and run tests
     docker:
       - image: cimg/php:8.2.7-node
+    resource-class: small
     steps:
       - checkout
       - php/install-packages
