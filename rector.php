@@ -19,7 +19,7 @@ return RectorConfig::configure()
         __DIR__ . '/resources/app_skeleton/config/config.user.php',
     ])
     // uncomment to reach your current PHP version
-    ->withPhpSets(php56: true);
+    ->withPhpSets(php70: true);
     // ->withRules([
     //     AddVoidReturnTypeWhereNoReturnRector::class,
     // ]);
