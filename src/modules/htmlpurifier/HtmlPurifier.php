@@ -13,7 +13,7 @@ class HtmlPurifier extends AModule
     public function __construct()
     {
         if (!defined('HTMLPURIFIER_PREFIX')) {
-            define('HTMLPURIFIER_PREFIX', realpath(dirname(__FILE__) . '/../../vendor/ezyang/htmlpurifier/library'));
+            define('HTMLPURIFIER_PREFIX', realpath(__DIR__ . '/../../vendor/ezyang/htmlpurifier/library'));
         }
     }
 

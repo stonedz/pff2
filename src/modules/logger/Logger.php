@@ -75,7 +75,7 @@ class Logger extends AModule implements IConfigurableModule
     public static function getInstance($confFile = 'logger/logger.conf.yaml')
     {
         if (!isset(self::$_instance)) {
-            $className       = __CLASS__;
+            $className       = self::class;
             self::$_instance = new $className($confFile);
         }
         return self::$_instance;
