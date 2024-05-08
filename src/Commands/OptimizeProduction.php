@@ -25,10 +25,10 @@ class OptimizeProduction extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         //check if doctrine executable extists
-        if (!file_exists('cli-config')) {
+        if (!file_exists('cli-config.php')) {
             $output->writeln('<error>ERROR</error>');
         } else {
-            $doctrine_executable = 'php cli-config';
+            $doctrine_executable = 'php cli-config.php';
         }
 
         $output->writeln('Optimizing environment for production...');
