@@ -26,7 +26,7 @@ class OptimizeProduction extends Command
     {
         //check if doctrine executable extists
         if (!file_exists('vendor/bin/doctrine')) {
-            $doctrine_executable = 'scripts/doctrine';
+            $doctrine_executable = 'cli-config.php';
         } else {
             $doctrine_executable = 'vendor/bin/doctrine';
         }
