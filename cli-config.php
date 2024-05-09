@@ -21,7 +21,12 @@ require 'app/config/config.user.php';
 $paths = ['app/models'];
 
 /** @var array $pffConfig */
-$dbParams = $pffConfig['databaseConfigCli'];
+if ($pffConfig['development_environment'] === true) {
+    $dbParams = $pffConfig['databaseConfigCli'];
+} else {
+    $dbParams = $pffConfig['databaseConfig'];
+}
+
 $isDevMode = false;
 
 $config = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
