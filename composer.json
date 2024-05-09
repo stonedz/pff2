@@ -51,7 +51,6 @@
                 "src/modules/session",
                 "src/modules/tidy",
                 "src/modules/url"
-
             ]
         }
     },
