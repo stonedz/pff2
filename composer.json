@@ -14,7 +14,7 @@
     ],
     "require": {
         "ezyang/htmlpurifier": "*",
-        "mobiledetect/mobiledetectlib": "4.8.*",
+        "mobiledetect/mobiledetectlib": "3.*",
         "pimple/pimple": "~3.5",
         "php": ">=8.1",
         "swiftmailer/swiftmailer": "5.4.12",
