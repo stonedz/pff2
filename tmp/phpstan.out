@@ -1,0 +1,33 @@
+ ------ ----------------------------------------------------------------------- 
+  Line   src/Commands/GenerateFigFiles.php                                      
+ ------ ----------------------------------------------------------------------- 
+  :204   Method pff\Commands\GenerateFigFiles::execute() should return int but  
+         return statement is missing.                                           
+ ------ ----------------------------------------------------------------------- 
+
+ ------ --------------------------------------------------------------------- 
+  Line   src/Core/ViewSmarty.php                                              
+ ------ --------------------------------------------------------------------- 
+  :21    Instantiated class Smarty not found.                                 
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols  
+  :29    Instantiated class pff\ViewException not found.                      
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols  
+ ------ --------------------------------------------------------------------- 
+
+ ------ --------------------------------------------------------------------- 
+  Line   src/modules/mobile_views/Exception/MobileViewsException.php          
+ ------ --------------------------------------------------------------------- 
+  :9     Class pff\modules\Exception\MobileViewsException extends unknown     
+         class pff\PffException.                                              
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols  
+ ------ --------------------------------------------------------------------- 
+
+ ------ --------------------------------------------------------------------- 
+  Line   src/modules/multilanguage/MultiLanguage.php                          
+ ------ --------------------------------------------------------------------- 
+  :170   Caught class pff\ConfigException not found.                          
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols  
+ ------ --------------------------------------------------------------------- 
+
+ [ERROR] Found 5 errors                                                         
+

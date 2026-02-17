@@ -2,7 +2,9 @@
     "name": "stonedz/pff2",
     "type": "pff2-core",
     "description": "A simple yet robust PHP MVC framework",
-    "keywords": ["framework"],
+    "keywords": [
+        "framework"
+    ],
     "homepage": "https://github.com/stonedz/pff2",
     "license": "MIT",
     "authors": [
@@ -17,17 +19,22 @@
         "mobiledetect/mobiledetectlib": "4.8.*",
         "pimple/pimple": "~3.5",
         "php": ">=8.1",
-        "swiftmailer/swiftmailer": "5.4.12",
+        "symfony/mailer": "~7",
         "symfony/console": "~7",
         "symfony/yaml": "~5.3"
     },
     "require-dev": {
-        "codeception/codeception": "*",
-        "phpunit/phpunit": "~11",
+        "codeception/codeception": "^5.3",
+        "phpunit/phpunit": "^11.5",
         "stonedz/pff2-doctrine": "4.0.x-dev",
-        "rector/rector": "^1.0"
+        "rector/rector": "^1.2",
+        "phpstan/phpstan": "^1.12"
     },
-    "bin": ["scripts/init", "scripts/pff", "scripts/update"],
+    "bin": [
+        "scripts/init",
+        "scripts/pff",
+        "scripts/update"
+    ],
     "autoload": {
         "psr-4": {
             "pff\\": "src",
@@ -64,8 +71,7 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "ln -s resources/app_skeleton app",
-            "ln -s resources/site_skeleton/index.php index.php"
+            "@php -r \"echo 'pff2 installed. Run vendor/bin/init to scaffold app files.'.PHP_EOL;\""
         ]
     },
     "config": {
