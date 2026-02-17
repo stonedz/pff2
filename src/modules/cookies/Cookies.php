@@ -18,6 +18,67 @@ class Cookies extends AModule
      */
     private $_useEncryption;
 
+    /**
+     * Returns true if current request is HTTPS (including reverse proxies).
+     *
+     * @return bool
+     */
+    private function isSecureRequest()
+    {
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' && $_SERVER['HTTPS'] !== '') {
+            return true;
+        }
+
+        if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower((string) $_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') {
+            return true;
+        }
+
+        if (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower((string) $_SERVER['HTTP_X_FORWARDED_SSL']) === 'on') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array
+     */
+    private function getCookieOptions($expire = null)
+    {
+        $config = $this->getConfig();
+
+        $httpOnly = $config->getConfigData('security_cookie_httponly');
+        if (!is_bool($httpOnly)) {
+            $httpOnly = true;
+        }
+
+        $sameSite = $config->getConfigData('security_cookie_samesite');
+        if (!is_string($sameSite) || !in_array(strtolower($sameSite), ['lax', 'strict', 'none'], true)) {
+            $sameSite = 'Lax';
+        } else {
+            $sameSite = ucfirst(strtolower($sameSite));
+        }
+
+        $secureCookieConfig = $config->getConfigData('security_cookie_secure');
+        if (is_bool($secureCookieConfig)) {
+            $secure = $secureCookieConfig;
+        } else {
+            $secure = $this->isSecureRequest();
+        }
+
+        if ($sameSite === 'None') {
+            $secure = true;
+        }
+
+        return [
+            'expires' => $expire,
+            'path' => '/',
+            'secure' => $secure,
+            'httponly' => $httpOnly,
+            'samesite' => $sameSite,
+        ];
+    }
+
     public function __construct($confFile = 'cookies/module.conf.yaml')
     {
         $this->loadConfig($this->readConfig($confFile));
@@ -47,7 +108,7 @@ class Cookies extends AModule
             $expire = time() + (60 * 60 * $expire);
         }
 
-        if (setcookie($cookieName, $this->encodeCookie($value), $expire, "/")) {
+        if (setcookie($cookieName, $this->encodeCookie($value), $this->getCookieOptions($expire))) {
             return true;
         } else {
             return false;
@@ -57,7 +118,11 @@ class Cookies extends AModule
     private function encodeCookie($value)
     {
         if ($this->_useEncryption) {
-            return $this->getRequiredModules('encryption')->encrypt($value);
+            $encryptionModule = $this->getRequiredModules('encryption');
+            if ($encryptionModule !== null && method_exists($encryptionModule, 'encrypt')) {
+                return $encryptionModule->encrypt($value);
+            }
+            return $value;
         } else {
             return $value;
         }
@@ -66,7 +131,11 @@ class Cookies extends AModule
     private function decodeCookie($value)
     {
         if ($this->_useEncryption) {
-            return $this->getRequiredModules('encryption')->decrypt($value);
+            $encryptionModule = $this->getRequiredModules('encryption');
+            if ($encryptionModule !== null && method_exists($encryptionModule, 'decrypt')) {
+                return $encryptionModule->decrypt($value);
+            }
+            return $value;
         } else {
             return $value;
         }
@@ -97,7 +166,7 @@ class Cookies extends AModule
     public function deleteCookie($cookieName)
     {
         if (isset($_COOKIE[$cookieName])) {
-            if (setcookie($cookieName, null, time() - 6000, '/')) {
+            if (setcookie($cookieName, null, $this->getCookieOptions(time() - 6000))) {
                 return true;
             } else {
                 return false;

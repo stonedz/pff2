@@ -37,6 +37,21 @@ $pffConfig['default_action'] = 'index';
  */
 $pffConfig['show_all_errors'] = true;
 
+/*
+ * Show exception details (message and stack trace) in error views.
+ * If omitted, it follows development_environment. Keep false in production.
+ */
+$pffConfig['show_exception_details'] = true;
+
+/*
+ * Cookie and session security defaults.
+ * security_cookie_secure: true|false|null(auto-detect HTTPS/proxy headers)
+ */
+$pffConfig['security_cookie_httponly'] = true;
+$pffConfig['security_cookie_samesite'] = 'Lax';
+$pffConfig['security_cookie_secure'] = null;
+$pffConfig['security_session_strict_mode'] = true;
+
 ///////////////////////////////////////
 // Database
 ///////////////////////////////////////
