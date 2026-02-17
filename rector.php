@@ -18,8 +18,7 @@ return RectorConfig::configure()
     ->withSkip([
         __DIR__ . '/resources/app_skeleton/config/config.user.php',
     ])
-    // uncomment to reach your current PHP version
-    ->withPhpSets(php70: true);
-    // ->withRules([
-    //     AddVoidReturnTypeWhereNoReturnRector::class,
-    // ]);
+    ->withPhpSets(php81: true)
+    ->withRules([
+        AddVoidReturnTypeWhereNoReturnRector::class,
+    ]);

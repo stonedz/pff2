@@ -60,7 +60,7 @@ class Pff2Doctrine extends AModule implements IConfigurableModule, IBeforeSystem
         $this->initORM();
     }
 
-    private function initORM()
+    private function initORM(): void
     {
         $config_pff = ServiceContainer::get('config');
         $paths = [ROOT . DS . 'app' . DS . 'models'];
