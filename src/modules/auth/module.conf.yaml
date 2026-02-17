@@ -8,8 +8,8 @@ moduleConf:
   # Method of the class to get the encrypted password
   userGetPassword: getPassword
 
-  # Password encryption algorithm
-  passwordType: md5
+  # Password verification algorithm. Use password_hash() to generate hashes.
+  passwordType: password_hash
 
   # name of the session's var
   sessionVarName: pff_logged
