@@ -1,10 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Abs;
 
-use Doctrine\Common\Cache\ApcCache;
-use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use pff\App;
 use pff\Core\HelperManager;
@@ -27,109 +26,68 @@ abstract class AController implements IController
     use ControllerTrait;
 
     /**
-     * @var string
+     * @var AView[]
      */
-    protected $_controllerName;
+    protected array $_view;
 
-    /**
-     * @var string
-     */
-    protected $_action;
+    protected \pff\Config $_config;
 
-    /**
-     * @var AView
-     */
-    protected $_view;
-
-    /**
-     * @var \pff\Config
-     */
-    protected $_config;
-
-    /**
-     * The app that is running
-     *
-     * @var \pff\App
-     */
-    protected $_app;
-
-    /**
-     * @var EntityManager
-     */
-    public $_em;
-
-    /**
-     * Array of parameters passed to the specified action
-     *
-     * @var array
-     */
-    protected $_params;
+    public ?\Doctrine\ORM\EntityManager $_em = null;
 
     /**
      * Reference to app's module manager
      *
      * Used to access loaded modules or load new modules
-     *
-     * @var ModuleManager
      */
-    protected $_moduleManager;
+    protected ModuleManager $_moduleManager;
 
-    /**
-     * @var HelperManager
-     */
-    protected $_helperManager;
+    protected HelperManager $_helperManager;
 
     /**
      * Contains the registered beforeFilters
      *
-     * @var array
+     * @var array<string, array<callable>>
      */
-    protected $_beforeFilters;
+    protected array $_beforeFilters = [];
 
     /**
      * Contains the registered afterFilters
      *
-     * @var array
+     * @var array<string, array<callable>>
      */
-    protected $_afterFilters;
+    protected array $_afterFilters = [];
 
     /**
      * May contain the default layout (used by main_layout module for example)
-     *
-     * @var AView
      */
-    protected $_layout;
+    protected ?AView $_layout = null;
 
-    /**
-     * @var IOutputs
-     */
-    protected $_output;
+    protected IOutputs $_output;
 
-    /**
-     * * @var boolean
-     * */
-    protected $_isRenderAction = false;
+    protected bool $_isRenderAction = false;
 
     /**
      * Creates a controller
      *
-     * @param string $controllerName The controller's name (used to load correct model)
-     * @param \pff\App $app
-     * @param string $action Action to perform
-     * @param array $params An array with parameters passed to the action
+     * @param string $_controllerName The controller's name (used to load correct model)
+     * @param \pff\App $_app
+     * @param string $_action Action to perform
+     * @param array $_params An array with parameters passed to the action
      * @internal param \pff\Config $cfg App configuration
      */
-    public function __construct($controllerName, App $app, $action = 'index', $params = [])
-    {
-        $this->_controllerName = $controllerName;
-        $this->_action         = $action;
-        $this->_app            = $app;
-        $this->_config         = $app->getConfig(); //Even if we have an \pff\App reference we keep this for legacy reasons.
-        $this->_params         = $params;
-        $this->_moduleManager  = $this->_app->getModuleManager();
-        $this->_helperManager  = $this->_app->getHelperManager();
-        $this->_layout         = null;
-        $this->_view           = [];
+    public function __construct(
+        protected string $_controllerName,
+        protected ?\pff\App $_app,
+        protected string $_action = 'index', /**
+              * Array of parameters passed to the specified action
+              */
+        protected array $_params = []
+    ) {
+        $this->_config = $this->_app->getConfig();
+        $this->_moduleManager = $this->_app->getModuleManager();
+        $this->_helperManager = $this->_app->getHelperManager();
+        $this->_layout = null;
+        $this->_view = [];
 
         if ($this->_config->getConfigData('orm')) {
             $this->initORM();
@@ -148,49 +106,56 @@ abstract class AController implements IController
      *
      * @return bool
      */
-    public function initController()
+    public function initController(): bool
     {
         return true;
     }
 
     /**
-     * Initializes Doctrine entity manager
+     * Initializes Doctrine entity manager and wires APCu-backed metadata/query caches when available.
      */
-    private function initORM()
+    private function initORM(): void
     {
         $this->_em = ServiceContainer::get('dm');
+
+        // Wire APCu-backed metadata and query caches (PSR-6) when available
+        if ($this->_em !== null
+            && function_exists('apcu_fetch')
+            && class_exists('\Symfony\Component\Cache\Adapter\ApcuAdapter')
+        ) {
+            $namespace = (string) $this->_config->getConfigData('app_name') . '_doctrine';
+            $pool = new \Symfony\Component\Cache\Adapter\ApcuAdapter($namespace);
+            $this->_em->getConfiguration()->setMetadataCache($pool);
+            $this->_em->getConfiguration()->setQueryCache($pool);
+        }
     }
 
     /**
      * Method executed before the action
      */
-    public function beforeAction()
+    public function beforeAction(): void
     {
     }
 
     /**
      * Method executed after the action
      */
-    public function afterAction()
+    public function afterAction(): void
     {
     }
 
     /**
      * Adds a view
-     *
-     * @param AView $view
      */
-    public function addView(AView $view)
+    public function addView(AView $view): void
     {
         $this->_view[] = $view;
     }
 
     /**
      * Adds a view at the top of the stack
-     *
-     * @param AView $view
      */
-    public function addViewPre(AView $view)
+    public function addViewPre(AView $view): void
     {
         array_unshift($this->_view, $view);
     }
@@ -204,6 +169,10 @@ abstract class AController implements IController
      */
     public function __destruct()
     {
+        if (!isset($this->_output) || !isset($this->_app)) {
+            return;
+        }
+
         $this->_output->outputHeader();
 
         if (!$this->_isRenderAction) {
@@ -242,23 +211,17 @@ abstract class AController implements IController
     /**
      * @return string
      */
-    public function getControllerName()
+    public function getControllerName(): string
     {
         return $this->_controllerName;
     }
 
-    /**
-     * @return string
-     */
-    public function getAction()
+    public function getAction(): string
     {
         return $this->_action;
     }
 
-    /**
-     * @return \pff\App
-     */
-    public function getApp()
+    public function getApp(): \pff\App
     {
         return $this->_app;
     }
@@ -268,16 +231,15 @@ abstract class AController implements IController
      * @return AModule
      * @deprecated Use ModuleManager::loadModule('module_name')
      */
-    public function loadModule($moduleName)
+    public function loadModule(string $moduleName): AModule
     {
         return $this->_moduleManager->getModule($moduleName);
     }
 
     /**
      * @param string $helperName Name of the helper to load
-     * @return bool
      */
-    public function loadHelper($helperName)
+    public function loadHelper(string $helperName): bool
     {
         return $this->_helperManager->load($helperName);
     }
@@ -291,7 +253,7 @@ abstract class AController implements IController
      * @throws PffException
      * @return string
      */
-    public function getParam($index, $errorMessage = "Page not found", $errorCode = 404)
+    public function getParam(int|string $index, string $errorMessage = "Page not found", int $errorCode = 404): string
     {
         if (isset($this->_params[$index])) {
             return $this->_params[$index];
@@ -304,20 +266,17 @@ abstract class AController implements IController
      * Registers a BeforeFilter
      *
      * @param string $actionName
-     * @param \callable $method
+     * @param callable $method
      */
-    public function registerBeforeFilter($actionName, $method)
+    public function registerBeforeFilter(string $actionName, callable $method): void
     {
         $this->_beforeFilters[$actionName][] = $method;
     }
 
     /**
      * Registers an AfterFilter
-     *
-     * @param string $actionName
-     * @param \callable $method
      */
-    public function registerAfterFilter($actionName, $method)
+    public function registerAfterFilter(string $actionName, callable $method): void
     {
         $this->_afterFilters[$actionName][] = $method;
     }
@@ -325,10 +284,10 @@ abstract class AController implements IController
     /**
      * Executes all the registered beforeFilters for the current action
      */
-    public function beforeFilter()
+    public function beforeFilter(): void
     {
         if (!isset($this->_beforeFilters[$this->_action])) {
-            return false;
+            return;
         }
 
         foreach ($this->_beforeFilters[$this->_action] as $method) {
@@ -339,10 +298,10 @@ abstract class AController implements IController
     /**
      * Execute all the registered afterFilters for the current action
      */
-    public function afterFilter()
+    public function afterFilter(): void
     {
         if (!isset($this->_afterFilters[$this->_action])) {
-            return false;
+            return;
         }
 
         foreach ($this->_afterFilters[$this->_action] as $method) {
@@ -354,7 +313,7 @@ abstract class AController implements IController
      * @return AView
      * @throws PffException
      */
-    public function getLayout()
+    public function getLayout(): AView
     {
         if ($this->_layout) {
             return $this->_layout;
@@ -369,7 +328,7 @@ abstract class AController implements IController
      *
      * @param $layout AView
      */
-    public function setLayout($layout)
+    public function setLayout(AView $layout): void
     {
         $this->_layout = $layout;
         if (isset($this->_view[0])) {
@@ -378,38 +337,36 @@ abstract class AController implements IController
         $this->addView($layout);
     }
 
-    public function resetViews()
+    public function resetViews(): void
     {
         unset($this->_view);
         $this->_view = [];
     }
 
-    public function getViews()
+    /**
+     * @return AView[]
+     */
+    public function getViews(): array
     {
         return $this->_view;
     }
-    /**
-     * @return mixed
-     */
-    public function getOutput()
+
+    public function getOutput(): IOutputs
     {
         return $this->_output;
     }
 
-    /**
-     * @param mixed $output
-     */
-    public function setOutput($output)
+    public function setOutput(IOutputs $output): void
     {
         $this->_output = $output;
     }
 
-    public function setIsRenderAction($value)
+    public function setIsRenderAction(bool $value): void
     {
         $this->_isRenderAction = $value;
     }
 
-    public function getIsRenderAction()
+    public function getIsRenderAction(): bool
     {
         return $this->_isRenderAction;
     }

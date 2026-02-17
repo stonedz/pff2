@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Abs;
 
 /**
@@ -9,12 +11,9 @@ namespace pff\Abs;
  */
 abstract class AModel
 {
-    /**
-     * @var \pff\App
-     */
-    protected $_app;
+    protected ?\pff\App $_app = null;
 
-    public function setApp(\pff\App $app)
+    public function setApp(\pff\App $app): void
     {
         $this->_app = $app;
     }

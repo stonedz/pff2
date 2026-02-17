@@ -1,7 +1,8 @@
 <?php
 
-namespace pff\Abs;
+declare(strict_types=1);
 
+namespace pff\Abs;
 /**
  * Model that will use ORM to obtain object persistance
  *

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Abs;
 
 use pff\Core\ModuleManager;
@@ -13,51 +15,24 @@ use pff\Iface\IRenderable;
  */
 abstract class AView implements IRenderable
 {
-    /**
-     * @var \pff\App
-     */
-    private $_app;
+    private readonly \pff\App $_app;
 
-    /**
-     * @var string The template file
-     */
-    protected $_templateFile;
+    protected string $_publicFolder;
 
-    /**
-     * @var string Path to the public folder
-     */
-    protected $_publicFolder;
+    protected string $_cssFolder;
 
-    /**
-     * @var string Path to public css path
-     */
-    protected $_cssFolder;
+    protected string $_imgFolder;
 
-    /**
-     * @var string Path to public img path
-     */
-    protected $_imgFolder;
+    protected string $_jsFolder;
 
-    /**
-     * @var string Path to the javascript folder
-     */
-    protected $_jsFolder;
+    protected string $_filesFolder;
 
-    /**
-     * @var string Path to the files folder
-     */
-    protected $_filesFolder;
-
-    /**
-     * @var string Path to the composer's vendor folder
-     */
-    protected $_vendorFolder;
+    protected string $_vendorFolder;
 
 
-    public function __construct($templateName)
+    public function __construct(protected string $_templateFile)
     {
         $this->_app = ServiceContainer::get('app');
-        $this->_templateFile = $templateName;
         $this->_publicFolder = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS;
         $this->_cssFolder = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS . 'css' . DS;
         $this->_imgFolder = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS . 'img' . DS;
@@ -68,7 +43,7 @@ abstract class AView implements IRenderable
         $this->updatePaths();
     }
 
-    public function updatePaths()
+    public function updatePaths(): void
     {
         $this->set('pff_path_public', $this->_publicFolder);
         $this->set('pff_path_css', $this->_cssFolder);
@@ -89,7 +64,7 @@ abstract class AView implements IRenderable
      * @param string $action
      * @param array $params
      */
-    public function renderAction($controller, $action = 'index', $params = [])
+    public function renderAction(string $controller, string $action = 'index', array $params = []): void
     {
         $controllerClass = '\\pff\\controllers\\' . ucfirst($controller) . '_Controller';
         $tmpController = new $controllerClass($controller, $this->_app, $action, $params);
@@ -97,92 +72,62 @@ abstract class AView implements IRenderable
         $tmpController->setIsRenderAction(true);
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplateFile()
+    public function getTemplateFile(): string
     {
         return $this->_templateFile;
     }
 
-    /**
-     * @return \pff\App
-     */
-    public function getApp()
+    public function getApp(): \pff\App
     {
         return $this->_app;
     }
 
-    /**
-     * @param string $cssFolder
-     */
-    public function setCssFolder($cssFolder)
+    public function setCssFolder(string $cssFolder): void
     {
         $this->_cssFolder = $cssFolder;
     }
 
-    /**
-     * @return string
-     */
-    public function getCssFolder()
+    public function getCssFolder(): string
     {
         return $this->_cssFolder;
     }
 
-    /**
-     * @param string $imgFolder
-     */
-    public function setImgFolder($imgFolder)
+    public function setImgFolder(string $imgFolder): void
     {
         $this->_imgFolder = $imgFolder;
     }
 
-    /**
-     * @return string
-     */
-    public function getImgFolder()
+    public function getImgFolder(): string
     {
         return $this->_imgFolder;
     }
 
-    /**
-     * @param string $jsFolder
-     */
-    public function setJsFolder($jsFolder)
+    public function setJsFolder(string $jsFolder): void
     {
         $this->_jsFolder = $jsFolder;
     }
 
-    /**
-     * @return string
-     */
-    public function getJsFolder()
+    public function getJsFolder(): string
     {
         return $this->_jsFolder;
     }
 
-    /**
-     * @param string $publicFolder
-     */
-    public function setPublicFolder($publicFolder)
+    public function setPublicFolder(string $publicFolder): void
     {
         $this->_publicFolder = $publicFolder;
     }
 
-    /**
-     * @return string
-     */
-    public function getPublicFolder()
+    public function getPublicFolder(): string
     {
         return $this->_publicFolder;
     }
 
-    public function getFilesFolder()
+    public function getFilesFolder(): string
     {
         return $this->_filesFolder;
     }
 
-    public function setFilesFolder($filesFolder)
+    public function setFilesFolder(string $filesFolder): void
     {
         $this->_filesFolder = $filesFolder;
     }
@@ -223,13 +168,11 @@ abstract class AView implements IRenderable
         return $this->e($value, $context);
     }
 
-    public function addContent(AView $v)
+    public function addContent(AView $v): void
     {
-        return null;
     }
 
-    public function content($index = 0)
+    public function content(int $index = 0): void
     {
-        return null;
     }
 }

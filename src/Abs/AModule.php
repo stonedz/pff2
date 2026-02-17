@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Abs;
 
 use pff\Exception\ModuleException;
@@ -11,102 +13,61 @@ use pff\Exception\ModuleException;
  */
 abstract class AModule
 {
-    /**
-     * The module name
-     *
-     * @var string
-     */
-    private $_moduleName;
+    private string $_moduleName = '';
 
-    /**
-     * The module version
-     *
-     * @var string
-     */
-    private $_moduleVersion;
+    private string $_moduleVersion = '';
 
-    /**
-     * Module description
-     *
-     * @var string
-     */
-    private $_moduleDescription;
+    private string $_moduleDescription = '';
 
     /**
      * Array of modules names required by this module
      *
-     * @var array
+     * @var string[]
      */
-    private $_moduleRequirements;
+    private array $_moduleRequirements = [];
 
     /**
      * Contains modules required by this module
      *
      * @var AModule[]
      */
-    private $_requiredModules;
+    private array $_requiredModules = [];
 
-    /**
-     * @var \pff\Config
-     */
-    private $_config;
+    private ?\pff\Config $_config = null;
 
-    /**
-     * @var AController
-     */
-    protected $_controller;
+    protected ?AController $_controller = null;
 
     /**
      * Reference to main app
-     *
-     * @var \pff\App
      */
-    protected $_app;
+    protected ?\pff\App $_app = null;
 
-    /**
-     * @param string $moduleName
-     */
-    public function setModuleName($moduleName)
+    public function setModuleName(string $moduleName): void
     {
         $this->_moduleName = $moduleName;
     }
 
-    /**
-     * @return string
-     */
-    public function getModuleName()
+    public function getModuleName(): string
     {
         return $this->_moduleName;
     }
 
-    /**
-     * @param string $moduleVersion
-     */
-    public function setModuleVersion($moduleVersion)
+    public function setModuleVersion(string $moduleVersion): void
     {
         $this->_moduleVersion = $moduleVersion;
     }
 
-    /**
-     * @return string
-     */
-    public function getModuleVersion()
+    public function getModuleVersion(): string
     {
         return $this->_moduleVersion;
     }
 
-    /**
-     * @return string
-     */
-    public function getModuleDescription()
+    public function getModuleDescription(): string
     {
         return $this->_moduleDescription;
     }
 
-    /**
-     * @param string $moduleDescription
-     */
-    public function setModuleDescription($moduleDescription)
+    public function setModuleDescription(string $moduleDescription): void
     {
         $this->_moduleDescription = $moduleDescription;
     }
@@ -116,7 +77,7 @@ abstract class AModule
      *
      * @param AModule $module
      */
-    public function registerRequiredModule(AModule $module)
+    public function registerRequiredModule(AModule $module): void
     {
         $this->_requiredModules[strtolower($module->getModuleName())] = $module;
     }
@@ -127,7 +88,7 @@ abstract class AModule
      * @param string $moduleName
      * @return AModule|null
      */
-    public function getRequiredModules($moduleName)
+    public function getRequiredModules(string $moduleName): ?AModule
     {
         $moduleName = strtolower($moduleName);
         if (isset($this->_requiredModules[$moduleName])) {
@@ -138,65 +99,47 @@ abstract class AModule
     }
 
     /**
-     * @param array $moduleRequirements
+     * @param string[] $moduleRequirements
      */
-    public function setModuleRequirements($moduleRequirements)
+    public function setModuleRequirements(array $moduleRequirements): void
     {
         $this->_moduleRequirements = $moduleRequirements;
     }
 
     /**
-     * @return array
+     * @return string[]
      */
-    public function getModuleRequirements()
+    public function getModuleRequirements(): array
     {
         return $this->_moduleRequirements;
     }
 
-    /**
-     * @param \pff\Config $config
-     */
-    public function setConfig($config)
+    public function setConfig(\pff\Config $config): void
     {
         $this->_config = $config;
     }
 
-    /**
-     * @return \pff\Config
-     */
-    public function getConfig()
+    public function getConfig(): ?\pff\Config
     {
         return $this->_config;
     }
 
-    /**
-     * @param AController $controller
-     */
-    public function setController($controller)
+    public function setController(AController $controller): void
     {
         $this->_controller = $controller;
     }
 
-    /**
-     * @return AController
-     */
-    public function getController()
+    public function getController(): ?AController
     {
         return $this->_controller;
     }
 
-    /**
-     * @param \pff\App $app
-     */
-    public function setApp($app)
+    public function setApp(\pff\App $app): void
     {
         $this->_app = $app;
     }
 
-    /**
-     * @return \pff\App
-     */
-    public function getApp()
+    public function getApp(): ?\pff\App
     {
         return $this->_app;
     }
@@ -208,13 +151,13 @@ abstract class AModule
      * @throws ModuleException
      * @return array
      */
-    public function readConfig($configFile)
+    public function readConfig(string $configFile): array
     {
-        $yamlParser   = new \Symfony\Component\Yaml\Parser();
+        $yamlParser = new \Symfony\Component\Yaml\Parser();
         $userConfPath = ROOT . DS . 'app' . DS . 'config' . DS . 'modules' . DS . $configFile;
-        $userCustomPath = ROOT. DS . 'app'. DS.'modules'.DS.$configFile;
+        $userCustomPath = ROOT . DS . 'app' . DS . 'modules' . DS . $configFile;
         $composerConfPath = ROOT . DS . 'modules' . DS . $configFile;
-        $libConfPath  = ROOT_LIB . DS . 'src' . DS . 'modules' . DS . $configFile;
+        $libConfPath = ROOT_LIB . DS . 'src' . DS . 'modules' . DS . $configFile;
         if (file_exists($userConfPath)) {
             $confPath = $userConfPath;
         } elseif (file_exists($userCustomPath)) {
