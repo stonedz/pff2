@@ -39,7 +39,15 @@ class Encryption extends AModule
      */
     private function loadConfig($parsedConfig)
     {
-        $this->_key    = hex2bin($parsedConfig['moduleConf']['key']);
+        $key = (string) ($parsedConfig['moduleConf']['key'] ?? '');
+
+        if ($key !== '' && ctype_xdigit($key) && strlen($key) % 2 === 0) {
+            $decoded = hex2bin($key);
+            $this->_key = $decoded === false ? $key : $decoded;
+            return;
+        }
+
+        $this->_key = $key;
     }
 
 
@@ -67,9 +75,9 @@ class Encryption extends AModule
         // Now let's pack the IV and the ciphertext together
         // Naively, we can just concatenate
         if ($encode) {
-            return base64_encode($nonce.$ciphertext);
+            return base64_encode($nonce . $ciphertext);
         }
-        return $nonce.$ciphertext;
+        return $nonce . $ciphertext;
     }
 
     /**
