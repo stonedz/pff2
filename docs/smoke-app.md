@@ -31,7 +31,7 @@ Create `composer.json`:
 {
   "name": "stonedz/pff2-smoke",
   "require": {
-    "stonedz/pff2": "4.0.x-dev"
+    "stonedz/pff2": "dev-master"
   },
   "repositories": [
     {
@@ -60,9 +60,63 @@ composer update
 composer dump-autoload -o
 ```
 
-Why `4.0.x-dev` and not `dev-4.0`?
+Why `dev-master` and not `4.1.1`?
 
-- Composer resolves this branch as `4.0.x-dev`.
+- This smoke app consumes the local framework checkout through a `path` repository.
+- The local checkout is resolved as `dev-master`, so requiring `dev-master` avoids repository-priority conflicts.
+- Use a stable tag like `4.1.1` only when you want to test the packaged release from Packagist (without the local path override).
+
+### Local mode vs release mode
+
+Use one of these `composer.json` variants depending on what you are validating.
+
+#### A) Local mode (test latest local framework changes)
+
+```json
+{
+  "name": "stonedz/pff2-smoke",
+  "require": {
+    "stonedz/pff2": "dev-master"
+  },
+  "repositories": [
+    {
+      "name": "pff2",
+      "type": "path",
+      "url": "/home/stonedz/work/pff2",
+      "options": {
+        "symlink": false
+      }
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "pff\\controllers\\": "app/controllers",
+      "pff\\models\\": "app/models",
+      "pff\\services\\": "app/services"
+    }
+  }
+}
+```
+
+#### B) Release mode (test published Packagist release)
+
+```json
+{
+  "name": "stonedz/pff2-smoke",
+  "require": {
+    "stonedz/pff2": "4.1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "pff\\controllers\\": "app/controllers",
+      "pff\\models\\": "app/models",
+      "pff\\services\\": "app/services"
+    }
+  }
+}
+```
+
+If you keep a `path` repository while requiring `4.1.1`, set `"canonical": false` on that repository or remove it entirely.
 
 Why `"symlink": false`?
 
