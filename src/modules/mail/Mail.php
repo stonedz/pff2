@@ -9,14 +9,18 @@ namespace pff\modules;
  */
 
 use pff\Abs\AModule;
-
-require_once(ROOT . DS . 'vendor/swiftmailer/swiftmailer/lib/swift_init.php');
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Part\DataPart;
 
 class Mail extends AModule
 {
     private $mailer;
 
-    private $transport;
+    private $transportDsn;
 
     private $message;
 
@@ -24,7 +28,7 @@ class Mail extends AModule
     {
         $this->loadConfig($this->readConfig($confFile));
 
-        $this->mailer = new \Swift_Mailer($this->transport);
+        $this->mailer = new Mailer(Transport::fromDsn($this->transportDsn));
     }
 
     /**
@@ -34,58 +38,111 @@ class Mail extends AModule
      */
     private function loadConfig($parsedConfig)
     {
-        if (isset($parsedConfig['moduleConf']['Type']) && $parsedConfig['moduleConf']['Type'] == "smtp") {
-            $this->transport = \Swift_SmtpTransport::newInstance();
+        $moduleConf = isset($parsedConfig['moduleConf']) && is_array($parsedConfig['moduleConf']) ? $parsedConfig['moduleConf'] : [];
 
-            if (isset($parsedConfig['moduleConf']['Host']) && $parsedConfig['moduleConf']['Host'] != "") {
-                $this->transport->setHost($parsedConfig['moduleConf']['Host']);
+        $type = strtolower((string) ($this->getConfigValue($moduleConf, 'Type', 'smtp')));
+        if ($type === 'smtp') {
+            $host = (string) $this->getConfigValue($moduleConf, 'Host', '127.0.0.1');
+            $port = (int) $this->getConfigValue($moduleConf, 'Port', 25);
+            $username = (string) $this->getConfigValue($moduleConf, 'Username', '');
+            $password = (string) $this->getConfigValue($moduleConf, 'Password', '');
+            $encryption = strtolower((string) $this->getConfigValue($moduleConf, 'Encryption', ''));
+
+            if ($encryption === 'tls' || $encryption === 'ssl') {
+                $scheme = 'smtps';
+            } else {
+                $scheme = 'smtp';
             }
 
-            if (isset($parsedConfig['moduleConf']['Port']) && $parsedConfig['moduleConf']['Port'] != "") {
-                $this->transport->setPort($parsedConfig['moduleConf']['Port']);
+            if ($username !== '' && $password !== '') {
+                $userInfo = rawurlencode($username) . ':' . rawurlencode($password) . '@';
+            } else {
+                $userInfo = '';
             }
 
-            if (isset($parsedConfig['moduleConf']['Username']) && $parsedConfig['moduleConf']['Username'] != "") {
-                $this->transport->setUsername($parsedConfig['moduleConf']['Username']);
-            }
-
-            if (isset($parsedConfig['moduleConf']['Password']) && $parsedConfig['moduleConf']['Password'] != "") {
-                $this->transport->setPassword($parsedConfig['moduleConf']['Password']);
-            }
-
-            if (isset($parsedConfig['moduleConf']['Encryption']) && $parsedConfig['moduleConf']['Encryption'] != "") {
-                $this->transport->setEncryption($parsedConfig['moduleConf']['Encryption']);
-            }
-        } elseif (isset($parsedConfig['moduleConf']['Type']) && $parsedConfig['moduleConf']['Type'] == "sendmail") {
-            $this->transport = \Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
+            $this->transportDsn = $scheme . '://' . $userInfo . $host . ':' . $port;
+        } elseif ($type === 'sendmail') {
+            $this->transportDsn = 'sendmail://default';
         } else {
-            $this->transport = \Swift_MailTransport::newInstance();
+            $this->transportDsn = 'native://default';
         }
+    }
+
+    /**
+     * @param array<string, mixed> $conf
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    private function getConfigValue(array $conf, $key, $default = null)
+    {
+        if (array_key_exists($key, $conf)) {
+            return $conf[$key];
+        }
+
+        $lowerKey = strtolower($key);
+        foreach ($conf as $configKey => $value) {
+            if (strtolower((string) $configKey) === $lowerKey) {
+                return $value;
+            }
+        }
+
+        return $default;
     }
 
     public function sendMail($to, $from, $fromName, $subject, $body, $addressReply = null, $attachment = null, $attachment_name = 'attachment.pdf', $cc = null, $bcc = null, $attachment_type = 'application/pdf')
     {
-        $this->message = new \Swift_Message();
-        $this->message->setTo($to);
-        $this->message->setFrom([$from => $fromName]);
-        $this->message->setSubject($subject);
-        $this->message->setBody($body);
-        $this->message->setCharset("UTF-8");
-        $this->message->setContentType("text/html");
+        $this->message = (new Email())
+            ->subject((string) $subject)
+            ->from(new Address((string) $from, (string) $fromName))
+            ->html((string) $body);
+
+        if (is_array($to)) {
+            foreach ($to as $recipient) {
+                $this->message->addTo((string) $recipient);
+            }
+        } else {
+            $this->message->to((string) $to);
+        }
+
         if (null !== $addressReply) {
-            $this->message->setReplyTo($addressReply);
+            $this->message->replyTo((string) $addressReply);
         }
+
         if (null !== $attachment) {
-            $attachment = \Swift_Attachment::newInstance($attachment, $attachment_name, $attachment_type);
-            $this->message->attach($attachment);
+            if (is_string($attachment) && file_exists($attachment)) {
+                $this->message->addPart(DataPart::fromPath($attachment, (string) $attachment_name, (string) $attachment_type));
+            } else {
+                $this->message->addPart(new DataPart($attachment, (string) $attachment_name, (string) $attachment_type));
+            }
         }
+
         if (null !== $cc) {
-            $this->message->setCc($cc);
+            if (is_array($cc)) {
+                foreach ($cc as $email) {
+                    $this->message->addCc((string) $email);
+                }
+            } else {
+                $this->message->cc((string) $cc);
+            }
         }
+
         if (null !== $bcc) {
-            $this->message->setBcc($bcc);
+            if (is_array($bcc)) {
+                foreach ($bcc as $email) {
+                    $this->message->addBcc((string) $email);
+                }
+            } else {
+                $this->message->bcc((string) $bcc);
+            }
         }
-        return $this->mailer->send($this->message);
+
+        try {
+            $this->mailer->send($this->message);
+            return true;
+        } catch (TransportExceptionInterface $e) {
+            return false;
+        }
     }
 
 }

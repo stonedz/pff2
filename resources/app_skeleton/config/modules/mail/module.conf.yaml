@@ -1,7 +1,12 @@
 moduleConf:
+ # Transport type: smtp | sendmail | mail
  Type: smtp
+
+ # SMTP host and port when Type=smtp
  Host: mailcatcher
  Encryption:
  Port: 1025
+
+ # Optional SMTP credentials
  Username: 
  Password: 
