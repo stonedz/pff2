@@ -6,9 +6,14 @@
  *
  * @author paolo.fagni<at>gmail.com
  */
-require_once (ROOT . DS . 'vendor'. DS .'autoload.php');
-require_once (ROOT_LIB  . DS . 'shared.php');
-require_once (ROOT . DS . 'app' . DS . 'config'. DS . 'routes.user.php');
+require_once(ROOT . DS . 'vendor' . DS . 'autoload.php');
+require_once(ROOT_LIB . DS . 'shared.php');
+
+// Route caching: try APCu first, fall back to loading routes file
+if (!$app->loadRouteCache()) {
+    require_once(ROOT . DS . 'app' . DS . 'config' . DS . 'routes.user.php');
+    $app->storeRouteCache();
+}
 
 $app->run();
 /** @codeCoverageIgnoreStop */

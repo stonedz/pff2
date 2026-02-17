@@ -45,6 +45,7 @@ $application->add(new \pff\Commands\GenerateFigFiles());
 $application->add(new \pff\Commands\BackupDatabase());
 $application->add(new \pff\Commands\UpdateDatabase());
 $application->add(new \pff\Commands\OptimizeProduction());
+$application->add(new \pff\Commands\OptimizeModules());
 $application->add(new \pff\Commands\ComposerInstall());
 $application->add(new \pff\Commands\ComposerUpdate());
 $application->add(new \pff\Commands\ComposerDumpAutoload());

@@ -158,3 +158,33 @@
   - "Add a new Smarty template under `app/views/smarty/templates/` and wire it through a layout created with `FLayout`."
   - "Add a module configuration file under `app/config/modules/my_module/module.yaml` and register the module in `$pffConfig['modules']`."
 - Mention full namespaces (`pff\controllers`, `pff\models`, `pff\modules`) so the AI keeps class names and locations consistent with the framework.
+
+## Performance & caching
+
+### APCu requirement
+- The framework uses **APCu** (not the legacy APC extension) for in-memory caching of module configs, route tables, and Doctrine metadata/query caches.
+- **Fallback**: when APCu is not loaded all caching is silently disabled — the framework behaves exactly as before, parsing YAML and resolving routes on every request.
+- Replace any remaining `apc_*` calls with `apcu_*` equivalents and guard with `function_exists('apcu_fetch')`.
+
+### Route caching
+- On first request, `App::loadRouteCache()` attempts to load routes from APCu. On cache miss the `app/config/routes.user.php` file is required and `App::storeRouteCache()` persists the result.
+- **Cache key**: `<app_name>:routes:<sha1 of app/config/config.user.php>`. Changing the config file automatically invalidates the route cache.
+- **Manual invalidation**: call `$app->clearRouteCache()` or run `./scripts/pff deploy:optimize` (which clears APCu entirely).
+- Editing `routes.user.php` alone does **not** invalidate the cache unless the config file also changes or the cache is cleared manually. This is intentional to keep production deploys explicit.
+
+### Module config precompilation
+- Run `./scripts/pff optimize:modules` to parse all `module.conf*.yaml` files and write a single PHP array to `tmp/module-configs.php`.
+- `AModule::readConfig()` checks for this file first and returns the cached config without YAML parsing when it exists.
+- `deploy:optimize` automatically runs `optimize:modules` as part of the production optimization pipeline.
+- To revert to dynamic YAML parsing, simply delete `tmp/module-configs.php`.
+
+### Doctrine metadata & query caches
+- When APCu is available and `symfony/cache` is installed, `AController::initORM()` wires an `ApcuAdapter` pool as both metadata cache and DQL query cache for Doctrine ORM.
+- **Result caching** is *not* enabled globally — it remains opt-in at the individual query level (`$query->enableResultCache(...)`).
+- In development mode Doctrine already disables most caching, so these pools are primarily beneficial in production.
+
+### CLI commands
+| Command | Description |
+|---|---|
+| `./scripts/pff optimize:modules` | Precompile module YAML configs into `tmp/module-configs.php` |
+| `./scripts/pff deploy:optimize` | Full production optimization (Doctrine caches, proxies, autoload, module precompile, APCu clear) |
