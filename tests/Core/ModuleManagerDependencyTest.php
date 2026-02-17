@@ -26,7 +26,8 @@ class ModuleManagerDependencyTest extends TestCase
 
         ServiceContainer::set()['config'] = $config;
         ServiceContainer::set()['yamlparser'] = new Parser();
-        ServiceContainer::set()['app'] = new stdClass();
+        $appMock = $this->createMock(\pff\App::class);
+        ServiceContainer::set()['app'] = $appMock;
         ServiceContainer::set()['hookmanager'] = new HookManager($config);
 
         $modulesProperty = new ReflectionProperty(ModuleManager::class, '_modules');
@@ -52,7 +53,8 @@ class ModuleManagerDependencyTest extends TestCase
         ServiceContainer::set()['hookmanager'] = $hookManager;
         ServiceContainer::set()['config'] = $config;
         ServiceContainer::set()['yamlparser'] = new Parser();
-        ServiceContainer::set()['app'] = new stdClass();
+        $appMock2 = $this->createMock(\pff\App::class);
+        ServiceContainer::set()['app'] = $appMock2;
 
         $modulesProperty = new ReflectionProperty(ModuleManager::class, '_modules');
         $modulesProperty->setValue(null, []);

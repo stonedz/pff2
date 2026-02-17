@@ -13,12 +13,9 @@ class ViewPHPPreViewTest extends TestCase
     {
         ServiceContainer::$pimple = null;
         ServiceContainer::initPimple();
-        ServiceContainer::set()['app'] = new class {
-            public function getExternalPath()
-            {
-                return '/';
-            }
-        };
+        $appMock = $this->createMock(\pff\App::class);
+        $appMock->method('getExternalPath')->willReturn('/');
+        ServiceContainer::set()['app'] = $appMock;
 
         $this->templatePath = ROOT . DS . 'tmp' . DS . 'viewphp-pre-test.php';
         file_put_contents($this->templatePath, 'x');

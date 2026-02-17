@@ -22,17 +22,16 @@ class HookManagerTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testInitialStateIsValid()
+    public function testInitialStateIsValid(): void
     {
         $this->assertEmpty($this->object->getBeforeController());
         $this->assertEmpty($this->object->getAfterController());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testRegisterABeforeProvider()
+    public function testRegisterABeforeProvider(): void
     {
         $beforeHookMock = $this->createMock(IBeforeHook::class);
-        $beforeHookMock->method('doBefore')->willReturn('done');
 
         $this->object->registerHook($beforeHookMock, 'name');
 
@@ -41,39 +40,37 @@ class HookManagerTest extends TestCase
         $this->assertNotEmpty($beforeControllerHooks);
         $this->assertEmpty($this->object->getAfterController());
         $this->assertEmpty($this->object->getBeforeSystem());
-        $this->assertEquals('done', $beforeControllerHooks['name']->doBefore());
+        $this->assertSame($beforeHookMock, $beforeControllerHooks['name']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testRegisterAnAfterProvider()
+    public function testRegisterAnAfterProvider(): void
     {
         $afterHookMock = $this->createMock(IAfterHook::class);
-        $afterHookMock->method('doAfter')->willReturn('done');
 
         $this->object->registerHook($afterHookMock, 'name');
 
         $afterControllerHooks = $this->object->getAfterController();
 
         $this->assertNotEmpty($afterControllerHooks);
-        $this->assertEquals('done', $afterControllerHooks['name']->doAfter());
+        $this->assertSame($afterHookMock, $afterControllerHooks['name']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testRegisterABeforeSystemProvider()
+    public function testRegisterABeforeSystemProvider(): void
     {
         $beforeSystemHookMock = $this->createMock(IBeforeSystemHook::class);
-        $beforeSystemHookMock->method('doBeforeSystem')->willReturn('done');
 
         $this->object->registerHook($beforeSystemHookMock, 'name');
 
         $beforeSystemHooks = $this->object->getBeforeSystem();
 
         $this->assertNotEmpty($beforeSystemHooks);
-        $this->assertEquals('done', $beforeSystemHooks['name']->doBeforeSystem());
+        $this->assertSame($beforeSystemHookMock, $beforeSystemHooks['name']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testFailsToRegisterAnEmptyProvider()
+    public function testFailsToRegisterAnEmptyProvider(): void
     {
         $this->expectException(HookException::class);
 

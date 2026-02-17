@@ -15,12 +15,9 @@ class FViewTest extends TestCase
         ServiceContainer::$pimple = null;
         ServiceContainer::initPimple();
 
-        ServiceContainer::set()['app'] = new class {
-            public function getExternalPath()
-            {
-                return '/';
-            }
-        };
+        $appMock = $this->createMock(\pff\App::class);
+        $appMock->method('getExternalPath')->willReturn('/');
+        ServiceContainer::set()['app'] = $appMock;
 
         ServiceContainer::set()['modulemanager'] = new class {
             public function isLoaded($name)

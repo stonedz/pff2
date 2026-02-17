@@ -13,12 +13,9 @@ class LayoutPHPTest extends TestCase
     {
         ServiceContainer::$pimple = null;
         ServiceContainer::initPimple();
-        ServiceContainer::set()['app'] = new class {
-            public function getExternalPath()
-            {
-                return '/';
-            }
-        };
+        $appMock = $this->createMock(\pff\App::class);
+        $appMock->method('getExternalPath')->willReturn('/');
+        ServiceContainer::set()['app'] = $appMock;
 
         $this->layoutTemplatePath = ROOT . DS . 'tmp' . DS . 'layout-php-test.php';
         file_put_contents($this->layoutTemplatePath, '<div>layout</div>');

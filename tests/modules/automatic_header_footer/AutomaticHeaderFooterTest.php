@@ -32,13 +32,13 @@ class AutomaticHeaderFooterTest extends TestCase
     {
     }
 
-    public function testReadConfigFile()
+    public function testReadConfigFile(): void
     {
         $conf = $this->object->readConfig('automatic_header_footer/module.conf.yaml');
         $this->assertArrayHasKey('moduleConf', $conf);
     }
 
-    public function testReadConfigFailsWithInvalidFile()
+    public function testReadConfigFailsWithInvalidFile(): void
     {
         $this->expectException('\\pff\\Exception\\ModuleException');
         $this->object->readConfig('automatic_header_footer/i_do_not_exist_and_never_will.conf.jdjd');

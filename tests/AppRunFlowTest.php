@@ -5,12 +5,12 @@ namespace pff\controllers {
     {
         public static array $called = [];
 
-        public function index()
+        public function index(): void
         {
             self::$called[] = 'index';
         }
 
-        public function show()
+        public function show(): void
         {
             self::$called[] = 'show';
         }

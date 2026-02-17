@@ -22,7 +22,7 @@ class EncryptionTest extends TestCase
         $this->object = new \pff\modules\Encryption();
     }
 
-    public function testEncryption()
+    public function testEncryption(): void
     {
         $string = "A string";
         $encryptedString = $this->object->encrypt($string);
@@ -31,7 +31,7 @@ class EncryptionTest extends TestCase
         $this->assertEquals($string, $decryptedString);
     }
 
-    public function testEncryptionWithUserSpecifiedKey()
+    public function testEncryptionWithUserSpecifiedKey(): void
     {
         $string = "A string";
         $key    = "aKey";

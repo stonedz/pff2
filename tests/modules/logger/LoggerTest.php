@@ -32,21 +32,21 @@ class LoggerTest extends TestCase
     {
     }
 
-    public function testInitialState()
+    public function testInitialState(): void
     {
         $tmpLoggerArray = $this->object->getLoggers();
         $this->assertIsArray($tmpLoggerArray);
         $this->assertInstanceOf('\\pff\\modules\\Abs\\ALogger', $tmpLoggerArray[0]);
     }
 
-    public function testX()
+    public function testX(): void
     {
         $this->expectException('\\pff\\Exception\\ModuleException');
         $this->object->reset();
         $this->object = \pff\modules\Logger::getInstance('nonononon.yaml');
     }
 
-    public function testFail()
+    public function testFail(): void
     {
         $this->assertTrue(true);
     }

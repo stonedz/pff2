@@ -6,7 +6,7 @@ class NetworkHelperResponseTestDouble extends \pff\modules\NetworkHelper
 {
     public array $mockResponse = [];
 
-    public function doCurl($curl_opts)
+    public function doCurl(array $curl_opts): array
     {
         return $this->mockResponse;
     }

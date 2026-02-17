@@ -26,13 +26,13 @@ class AppTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testGetUrl()
+    public function testGetUrl(): void
     {
         $this->assertEquals('one/two/three', $this->app->getUrl());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testSetRoutes()
+    public function testSetRoutes(): void
     {
         $this->app->addRoute('test', 'test');
         $routes = $this->app->getRoutes();
@@ -42,7 +42,7 @@ class AppTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testApplyRouting()
+    public function testApplyRouting(): void
     {
         $this->app->addRoute('test', 'test');
         $request = 'test';
@@ -52,7 +52,7 @@ class AppTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testSetRoutesFails()
+    public function testSetRoutesFails(): void
     {
         $this->expectException(RoutingException::class);
 
@@ -60,7 +60,7 @@ class AppTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testSetStaticRoutes()
+    public function testSetStaticRoutes(): void
     {
         $this->app->addStaticRoute('test', 'testPage.php');
         $routes = $this->app->getStaticRoutes();
@@ -70,7 +70,7 @@ class AppTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testApplyStaticRouting()
+    public function testApplyStaticRouting(): void
     {
         $this->app->addStaticRoute('test', 'testPage.php');
         $request = 'test';
@@ -80,7 +80,7 @@ class AppTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testSetStaticRoutesFails()
+    public function testSetStaticRoutesFails(): void
     {
         $this->expectException(RoutingException::class);
 
@@ -88,7 +88,7 @@ class AppTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testApplyStaticRoutesFailsWithInvalidRoute()
+    public function testApplyStaticRoutesFailsWithInvalidRoute(): void
     {
         $request = 'NO_I_DO_NOT_EXIST';
 
@@ -96,7 +96,7 @@ class AppTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testApplyRoutesFailsWithInvalidRoute()
+    public function testApplyRoutesFailsWithInvalidRoute(): void
     {
         $request = 'NO_I_DO_NOT_EXIST';
 
@@ -104,7 +104,7 @@ class AppTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function testRunFailsWithInvalidController()
+    public function testRunFailsWithInvalidController(): void
     {
         $this->expectException(RoutingException::class);
 

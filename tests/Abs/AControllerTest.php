@@ -5,12 +5,12 @@ namespace pff\controllers {
     {
         public static array $log = [];
 
-        public function index()
+        public function index(): void
         {
             self::$log[] = 'index';
         }
 
-        public function show()
+        public function show(): void
         {
             self::$log[] = 'show';
         }

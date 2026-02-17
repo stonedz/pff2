@@ -46,7 +46,7 @@ class ConfigTest extends TestCase
     #[\PHPUnit\Framework\Attributes\Test]
     public function setAConfigurationFailsWithoutAString(): void
     {
-        $this->expectException(ConfigException::class);
+        $this->expectException(\TypeError::class);
         $this->config->setConfig([], 12);
     }
 

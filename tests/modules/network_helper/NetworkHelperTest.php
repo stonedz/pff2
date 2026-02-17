@@ -7,7 +7,7 @@ class NetworkHelperTestDouble extends \pff\modules\NetworkHelper
     public array $lastCurlOptions = [];
     public array $responseToReturn = [];
 
-    public function doCurl($curl_opts)
+    public function doCurl(array $curl_opts): array
     {
         $this->lastCurlOptions = $curl_opts;
         return $this->responseToReturn;

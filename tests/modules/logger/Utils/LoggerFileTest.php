@@ -33,7 +33,7 @@ class LoggerFileTest extends TestCase
     {
     }
 
-    public function testInitialStateIsOk()
+    public function testInitialStateIsOk(): void
     {
         $this->assertNull($this->object->getFp());
     }

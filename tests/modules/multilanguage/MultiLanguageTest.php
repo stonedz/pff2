@@ -22,7 +22,7 @@ class MultiLanguageTest extends TestCase
         $this->object = new \pff\modules\MultiLanguage();
     }
 
-    public function testProcessUrlWithLanguage()
+    public function testProcessUrlWithLanguage(): void
     {
         $tmpUrl = $this->object->processUrl('it/controller/action/param1');
         $this->assertEquals('controller/action/param1', $tmpUrl);

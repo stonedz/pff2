@@ -28,7 +28,8 @@ class ModuleManagerTest extends TestCase
         ServiceContainer::set()['config'] = $config;
         ServiceContainer::set()['yamlparser'] = new Parser();
         ServiceContainer::set()['hookmanager'] = new HookManager($config);
-        ServiceContainer::set()['app'] = new stdClass();
+        $appMock = $this->createMock(\pff\App::class);
+        ServiceContainer::set()['app'] = $appMock;
 
         $modulesProperty = new ReflectionProperty(ModuleManager::class, '_modules');
         $modulesProperty->setValue(null, []);
