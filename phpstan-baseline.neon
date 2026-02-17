@@ -1,0 +1,571 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method pff\\\\Abs\\\\AController\\:\\:__construct\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Abs/AController.php
+
+		-
+			message: "#^Method pff\\\\Abs\\\\AController\\:\\:index\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Abs/AController.php
+
+		-
+			message: "#^Method pff\\\\Abs\\\\AModule\\:\\:readConfig\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Abs/AModule.php
+
+		-
+			message: "#^Call to an undefined method pff\\\\Abs\\\\AModule\\:\\:getCloudfrontUrl\\(\\)\\.$#"
+			count: 1
+			path: src/Abs/AView.php
+
+		-
+			message: "#^Method pff\\\\Abs\\\\AView\\:\\:renderAction\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Abs/AView.php
+
+		-
+			message: "#^Constant CONTROLLERS not found\\.$#"
+			count: 1
+			path: src/App.php
+
+		-
+			message: "#^Constant EXT_ROOT not found\\.$#"
+			count: 2
+			path: src/App.php
+
+		-
+			message: "#^Constant PAGES not found\\.$#"
+			count: 1
+			path: src/App.php
+
+		-
+			message: "#^Method pff\\\\App\\:\\:applyRouting\\(\\) has parameter \\$urlArray with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/App.php
+
+		-
+			message: "#^Method pff\\\\App\\:\\:stripSlashesDeep\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/App.php
+
+		-
+			message: "#^Method pff\\\\App\\:\\:stripSlashesDeep\\(\\) is unused\\.$#"
+			count: 1
+			path: src/App.php
+
+		-
+			message: "#^Method pff\\\\App\\:\\:stripSlashesDeep\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/App.php
+
+		-
+			message: "#^Call to an undefined method Symfony\\\\Component\\\\Console\\\\Helper\\\\HelperInterface\\:\\:ask\\(\\)\\.$#"
+			count: 1
+			path: src/Commands/BackupDatabase.php
+
+		-
+			message: "#^Parameter \\#2 \\$default of class Symfony\\\\Component\\\\Console\\\\Question\\\\ConfirmationQuestion constructor expects bool, string given\\.$#"
+			count: 1
+			path: src/Commands/BackupDatabase.php
+
+		-
+			message: "#^Variable \\$pffConfig might not be defined\\.$#"
+			count: 9
+			path: src/Commands/BackupDatabase.php
+
+		-
+			message: "#^Call to an undefined method Symfony\\\\Component\\\\Console\\\\Helper\\\\HelperInterface\\:\\:ask\\(\\)\\.$#"
+			count: 1
+			path: src/Commands/ComposerUpdate.php
+
+		-
+			message: "#^Parameter \\#2 \\$default of class Symfony\\\\Component\\\\Console\\\\Question\\\\ConfirmationQuestion constructor expects bool, string given\\.$#"
+			count: 1
+			path: src/Commands/ComposerUpdate.php
+
+		-
+			message: "#^Call to an undefined method Symfony\\\\Component\\\\Console\\\\Helper\\\\HelperInterface\\:\\:ask\\(\\)\\.$#"
+			count: 2
+			path: src/Commands/GenerateFigFiles.php
+
+		-
+			message: "#^Parameter \\#2 \\$default of class Symfony\\\\Component\\\\Console\\\\Question\\\\ConfirmationQuestion constructor expects bool, string given\\.$#"
+			count: 5
+			path: src/Commands/GenerateFigFiles.php
+
+		-
+			message: "#^Parameter \\#4 \\$question_helper of method pff\\\\Commands\\\\GenerateFigFiles\\:\\:create_db_volume_data\\(\\) expects Symfony\\\\Component\\\\Console\\\\Helper\\\\QuestionHelper, Symfony\\\\Component\\\\Console\\\\Helper\\\\HelperInterface given\\.$#"
+			count: 1
+			path: src/Commands/GenerateFigFiles.php
+
+		-
+			message: "#^Variable \\$pffConfig might not be defined\\.$#"
+			count: 2
+			path: src/Commands/GenerateFigFiles.php
+
+		-
+			message: "#^Variable \\$doctrine_executable might not be defined\\.$#"
+			count: 3
+			path: src/Commands/OptimizeProduction.php
+
+		-
+			message: "#^Method pff\\\\Core\\\\HookManager\\:\\:runBeforeView\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Core/HookManager.php
+
+		-
+			message: "#^Property pff\\\\Core\\\\HookManager\\:\\:\\$_config is never read, only written\\.$#"
+			count: 1
+			path: src/Core/HookManager.php
+
+		-
+			message: "#^Constructor of class pff\\\\Core\\\\LayoutPHP has an unused parameter \\$app\\.$#"
+			count: 1
+			path: src/Core/LayoutPHP.php
+
+		-
+			message: "#^Call to method registerPlugin\\(\\) on an unknown class Smarty\\.$#"
+			count: 1
+			path: src/Core/LayoutSmarty.php
+
+		-
+			message: "#^Call to method render\\(\\) on an unknown class \\\\pff\\\\AView\\.$#"
+			count: 1
+			path: src/Core/LayoutSmarty.php
+
+		-
+			message: "#^Method pff\\\\Core\\\\LayoutSmarty\\:\\:smarty_plugin_contentPlaceholder\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Core/LayoutSmarty.php
+
+		-
+			message: "#^Parameter \\$smarty of method pff\\\\Core\\\\LayoutSmarty\\:\\:smarty_plugin_contentPlaceholder\\(\\) has invalid type Smarty\\.$#"
+			count: 1
+			path: src/Core/LayoutSmarty.php
+
+		-
+			message: "#^Property pff\\\\Core\\\\ModuleManager\\:\\:\\$_config is never read, only written\\.$#"
+			count: 1
+			path: src/Core/ModuleManager.php
+
+		-
+			message: "#^Property pff\\\\Core\\\\ModuleManager\\:\\:\\$_yamlParser is never read, only written\\.$#"
+			count: 1
+			path: src/Core/ModuleManager.php
+
+		-
+			message: "#^Method pff\\\\Core\\\\ViewPHP\\:\\:getData\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Core/ViewPHP.php
+
+		-
+			message: "#^PHPDoc tag @var has invalid value \\(\\$purifierConfig \\\\HTMLPurifier_Config\\)\\: Unexpected token \"\\$purifierConfig\", expected type at offset 9$#"
+			count: 1
+			path: src/Core/ViewPHP.php
+
+		-
+			message: "#^Property pff\\\\Core\\\\ViewPHP\\:\\:\\$_data type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Core/ViewPHP.php
+
+		-
+			message: "#^Access to property \\$cache_dir on an unknown class Smarty\\.$#"
+			count: 2
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Access to property \\$compile_dir on an unknown class Smarty\\.$#"
+			count: 2
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Access to property \\$config_dir on an unknown class Smarty\\.$#"
+			count: 2
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Access to property \\$template_dir on an unknown class Smarty\\.$#"
+			count: 2
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Call to method assign\\(\\) on an unknown class Smarty\\.$#"
+			count: 1
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Call to method display\\(\\) on an unknown class Smarty\\.$#"
+			count: 1
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Call to method fetch\\(\\) on an unknown class Smarty\\.$#"
+			count: 1
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Call to method registerPlugin\\(\\) on an unknown class Smarty\\.$#"
+			count: 1
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Constructor of class pff\\\\Core\\\\ViewSmarty has an unused parameter \\$app\\.$#"
+			count: 1
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Instantiated class Smarty not found\\.$#"
+			count: 1
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Instantiated class pff\\\\ViewException not found\\.$#"
+			count: 1
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Method pff\\\\Core\\\\ViewSmarty\\:\\:smarty_plugin_renderAction\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Parameter \\$smarty of method pff\\\\Core\\\\ViewSmarty\\:\\:smarty_plugin_renderAction\\(\\) has invalid type Smarty\\.$#"
+			count: 1
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Property pff\\\\Core\\\\ViewSmarty\\:\\:\\$_smarty has unknown class Smarty as its type\\.$#"
+			count: 1
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Throwing object of an unknown class pff\\\\ViewException\\.$#"
+			count: 1
+			path: src/Core/ViewSmarty.php
+
+		-
+			message: "#^Method pff\\\\Exception\\\\PffException\\:\\:__construct\\(\\) has parameter \\$viewParams with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Exception/PffException.php
+
+		-
+			message: "#^Method pff\\\\Iface\\\\IBeforeViewHook\\:\\:doBeforeView\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Iface/IBeforeViewHook.php
+
+		-
+			message: "#^Function pff_test\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/helpers/test.php
+
+		-
+			message: "#^Property pff\\\\modules\\\\Auth\\:\\:\\$_methodGetUser is unused\\.$#"
+			count: 1
+			path: src/modules/auth/Auth.php
+
+		-
+			message: "#^Unable to resolve the template type T in call to method Doctrine\\\\ORM\\\\EntityManager\\:\\:getRepository\\(\\)$#"
+			count: 1
+			path: src/modules/auth/Auth.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\AutomaticHeaderFooter\\:\\:doBeforeView\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/automatic_header_footer/AutomaticHeaderFooter.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\AutomaticHeaderFooter\\:\\:loadConfig\\(\\) has parameter \\$parsedConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/automatic_header_footer/AutomaticHeaderFooter.php
+
+		-
+			message: "#^PHPDoc type array of property pff\\\\modules\\\\Exception\\\\AutomaticHeaderFooterException\\:\\:\\$backtrace is not covariant with PHPDoc type array\\<int, array\\<string, mixed\\>\\> of overridden property pff\\\\Exception\\\\PffException\\:\\:\\$backtrace\\.$#"
+			count: 1
+			path: src/modules/automatic_header_footer/Exception/AutomaticHeaderFooterException.php
+
+		-
+			message: "#^Property pff\\\\modules\\\\Exception\\\\AutomaticHeaderFooterException\\:\\:\\$backtrace type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/automatic_header_footer/Exception/AutomaticHeaderFooterException.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Cookies\\:\\:getCookieOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/cookies/Cookies.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Cookies\\:\\:loadConfig\\(\\) has parameter \\$parsedConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/cookies/Cookies.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of function setcookie expects string, null given\\.$#"
+			count: 1
+			path: src/modules/cookies/Cookies.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Csrf\\:\\:loadConfig\\(\\) has parameter \\$parsedConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/csrf/Csrf.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\DefaultController\\:\\:loadConfig\\(\\) has parameter \\$parsedConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/default_controller/DefaultController.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Encryption\\:\\:loadConfig\\(\\) has parameter \\$parsedConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/encryption/Encryption.php
+
+		-
+			message: "#^Property pff\\\\modules\\\\Encryption\\:\\:\\$_cypher is unused\\.$#"
+			count: 1
+			path: src/modules/encryption/Encryption.php
+
+		-
+			message: "#^Property pff\\\\modules\\\\Encryption\\:\\:\\$_key is never read, only written\\.$#"
+			count: 1
+			path: src/modules/encryption/Encryption.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function set_exception_handler expects \\(callable\\(Throwable\\)\\: void\\)\\|null, array\\{\\$this\\(pff\\\\modules\\\\ExceptionHandler\\), 'manageExceptions'\\} given\\.$#"
+			count: 1
+			path: src/modules/exception_handler/ExceptionHandler.php
+
+		-
+			message: "#^PHPDoc tag @var has invalid value \\(\\$purifierConfig \\\\HTMLPurifier_Config\\)\\: Unexpected token \"\\$purifierConfig\", expected type at offset 9$#"
+			count: 1
+			path: src/modules/htmlpurifier/HtmlPurifier.php
+
+		-
+			message: "#^PHPDoc type array of property pff\\\\modules\\\\Exception\\\\LoggerException\\:\\:\\$backtrace is not covariant with PHPDoc type array\\<int, array\\<string, mixed\\>\\> of overridden property pff\\\\Exception\\\\PffException\\:\\:\\$backtrace\\.$#"
+			count: 1
+			path: src/modules/logger/Exception/LoggerException.php
+
+		-
+			message: "#^Property pff\\\\modules\\\\Exception\\\\LoggerException\\:\\:\\$backtrace type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/logger/Exception/LoggerException.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Logger\\:\\:getLoggers\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/logger/Logger.php
+
+		-
+			message: "#^PHPDoc tag @throws with type pff\\\\modules\\\\LoggerException is not subtype of Throwable$#"
+			count: 1
+			path: src/modules/logger/Logger.php
+
+		-
+			message: "#^Parameter \\#1 \\$confFile \\(string\\) of method pff\\\\modules\\\\Logger\\:\\:loadConfig\\(\\) should be compatible with parameter \\$parsedConfig \\(array\\<string, mixed\\>\\) of method pff\\\\Iface\\\\IConfigurableModule\\:\\:loadConfig\\(\\)$#"
+			count: 1
+			path: src/modules/logger/Logger.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Mail\\:\\:loadConfig\\(\\) has parameter \\$parsedConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/mail/Mail.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Mail\\:\\:sendMail\\(\\) has parameter \\$bcc with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/mail/Mail.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Mail\\:\\:sendMail\\(\\) has parameter \\$cc with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/mail/Mail.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Mail\\:\\:sendMail\\(\\) has parameter \\$to with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/mail/Mail.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\MobileViews\\:\\:loadConfig\\(\\) has parameter \\$parsedConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/mobile_views/MobileViews.php
+
+		-
+			message: "#^Call to an undefined method pff\\\\Abs\\\\AModule\\:\\:getCookie\\(\\)\\.$#"
+			count: 1
+			path: src/modules/multilanguage/MultiLanguage.php
+
+		-
+			message: "#^Call to an undefined method pff\\\\Abs\\\\AModule\\:\\:setCookie\\(\\)\\.$#"
+			count: 1
+			path: src/modules/multilanguage/MultiLanguage.php
+
+		-
+			message: "#^Caught class pff\\\\ConfigException not found\\.$#"
+			count: 1
+			path: src/modules/multilanguage/MultiLanguage.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\MultiLanguage\\:\\:_loadConfig\\(\\) has parameter \\$parsedConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/multilanguage/MultiLanguage.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\MultiLanguage\\:\\:getCodes\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/multilanguage/MultiLanguage.php
+
+		-
+			message: "#^Property pff\\\\modules\\\\MultiLanguage\\:\\:\\$_accepted_languages type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/multilanguage/MultiLanguage.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\NetworkHelper\\:\\:doCurl\\(\\) has parameter \\$curl_opts with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/network_helper/NetworkHelper.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\NetworkHelper\\:\\:doCurl\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/network_helper/NetworkHelper.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\NetworkHelper\\:\\:doGet\\(\\) has parameter \\$headers with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/network_helper/NetworkHelper.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\NetworkHelper\\:\\:doGet\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/network_helper/NetworkHelper.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\NetworkHelper\\:\\:doPost\\(\\) has parameter \\$headers with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/network_helper/NetworkHelper.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\NetworkHelper\\:\\:doPost\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/network_helper/NetworkHelper.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Paypal\\:\\:callAPIService\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/paypal/Paypal.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Paypal\\:\\:deformatNVP\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/paypal/Paypal.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Paypal\\:\\:loadConfig\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/paypal/Paypal.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Paypal\\:\\:nvpStringInit\\(\\) has parameter \\$session with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/paypal/Paypal.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Search\\:\\:createSearcher\\(\\) has parameter \\$modelnames with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Search.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:__construct\\(\\) has parameter \\$models with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:my_class_type\\(\\) has parameter \\$reflector with generic class ReflectionClass but does not specify its types\\: T$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:my_class_type\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:search\\(\\) has parameter \\$excludeArray with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:search\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:searchDateRange\\(\\) has parameter \\$excludeArray with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:searchDateRange\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:searchNumber\\(\\) has parameter \\$excludeArray with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:searchNumber\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:searchNumberExact\\(\\) has parameter \\$excludeArray with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:searchNumberExact\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:searchText\\(\\) has parameter \\$excludeArray with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:searchText\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:searchTextExact\\(\\) has parameter \\$excludeArray with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Searcher\\:\\:searchTextExact\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Property pff\\\\modules\\\\Searcher\\:\\:\\$models_array type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Variable \\$key might not be defined\\.$#"
+			count: 8
+			path: src/modules/search/Searcher.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\TidyCleaner\\:\\:doBeforeView\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/tidy/TidyCleaner.php
+
+		-
+			message: "#^Method pff\\\\modules\\\\Url\\:\\:clear_string\\(\\) has parameter \\$replace with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/modules/url/Url.php
