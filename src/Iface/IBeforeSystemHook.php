@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Iface;
 
 /**
- * Provides hooks to be executes before the system startup
+ * Provides hooks to be executed before the system startup
  *
  * @author paolo.fagni<at>gmail.com
  */
@@ -11,9 +13,6 @@ interface IBeforeSystemHook extends IHookProvider
 {
     /**
      * Executed before the system startup
-     *
-     * @abstract
-     * @return mixed
      */
-    public function doBeforeSystem();
+    public function doBeforeSystem(): void;
 }

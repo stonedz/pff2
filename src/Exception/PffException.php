@@ -1,7 +1,8 @@
 <?php
 
-namespace pff\Exception;
+declare(strict_types=1);
 
+namespace pff\Exception;
 /**
  * Generic pff exception
  *
@@ -10,22 +11,16 @@ namespace pff\Exception;
 class PffException extends \Exception
 {
     /**
-     * Contains the backtrace for the caller
-     *
-     * @var array
+     * @var array<int, array<string, mixed>>
      */
-    public $backtrace;
+    public array $backtrace;
 
     /**
-     * Array of variables passed to a view.
-     *
-     * Only used with ExceptionHandler module
-     *
-     * @var array
+     * @var array<string, mixed>
      */
-    private $viewParams;
+    private array $viewParams = [];
 
-    public function __construct($message = "", $code = 0, $previous = null, $viewParams = null)
+    public function __construct(string $message = "", int $code = 0, ?\Throwable $previous = null, ?array $viewParams = null)
     {
         parent::__construct($message, $code, $previous);
 
@@ -36,17 +31,17 @@ class PffException extends \Exception
     }
 
     /**
-     * @param array $viewParams
+     * @param array<string, mixed> $viewParams
      */
-    public function setViewParams($viewParams)
+    public function setViewParams(array $viewParams): void
     {
         $this->viewParams = $viewParams;
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
-    public function getViewParams()
+    public function getViewParams(): array
     {
         return $this->viewParams;
     }

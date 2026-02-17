@@ -1,17 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Iface;
 
 /**
- *
  * @author paolo.fagni<at>gmail.com
  */
 interface IConfigurableModule
 {
     /**
-     * @abstract
-     * @param array $parsedConfig
-     * @return mixed
+     * @param array<string, mixed> $parsedConfig
      */
-    public function loadConfig($parsedConfig);
+    public function loadConfig(array $parsedConfig): void;
 }

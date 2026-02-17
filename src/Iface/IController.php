@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User: paolo.fagni@gmail.com
  * Date: 08/11/14

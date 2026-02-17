@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User: paolo.fagni@gmail.com
  * Date: 07/11/14
@@ -11,7 +14,7 @@ use pff\Iface\IOutputs;
 
 class JSONOut implements IOutputs
 {
-    public function outputHeader()
+    public function outputHeader(): void
     {
         header('Content-type: application/json');
     }

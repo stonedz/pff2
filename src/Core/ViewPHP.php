@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Core;
 
 use pff\Abs\AView;
@@ -23,7 +25,7 @@ class ViewPHP extends AView
 
     public function __construct(string $templateName)
     {
-        if (substr($templateName, 0, 1) != '/') {
+        if (!str_starts_with($templateName, '/')) {
             $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $templateName;
         } else {
             $templatePath = $templateName;
@@ -121,7 +123,7 @@ class ViewPHP extends AView
      */
     private function getTemplatePath(): string
     {
-        if (substr($this->_templateFile, 0, 1) != '/') {
+        if (!str_starts_with($this->_templateFile, '/')) {
             $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $this->_templateFile;
             return $templatePath;
         } else {

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User: paolo.fagni@gmail.com
  * Date: 07/11/14
@@ -9,5 +12,5 @@ namespace pff\Iface;
 
 interface IOutputs
 {
-    public function outputHeader();
+    public function outputHeader(): void;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Core;
 
 use pff\Exception\HookException;
@@ -22,28 +24,28 @@ class HookManager
      *
      * @var IBeforeSystemHook[]
      */
-    private $_beforeSystem;
+    private array $_beforeSystem = [];
 
     /**
      * Array of hooks to be executed before the controller
      *
      * @var IBeforeHook[]
      */
-    private $_beforeController;
+    private array $_beforeController = [];
 
     /**
      * Array of hooks to be executed after the controller
      *
      * @var IAfterHook[]
      */
-    private $_afterController;
+    private array $_afterController = [];
 
     /**
      * Array of hooks to be executed before the Views are rendered
      *
      * @var IBeforeViewHook[]
      */
-    private $_beforeView;
+    private array $_beforeView = [];
 
 
     /**
@@ -51,14 +53,11 @@ class HookManager
      *
      * @var IAfterViewHook[]
      */
-    private $_afterView;
+    private array $_afterView = [];
 
-    /**
-     * @var \pff\Config
-     */
-    private $_config;
+    private \pff\Config $_config;
 
-    public function __construct($conf = null)
+    public function __construct(?\pff\Config $conf = null)
     {
         if ($conf) {
             $this->_config = $conf;
@@ -75,7 +74,7 @@ class HookManager
      * @param string|null $loadBefore Hook must be run before specified module name
      * @throws HookException
      */
-    public function registerHook(IHookProvider $prov, $moduleName, $loadBefore = null)
+    public function registerHook(IHookProvider $prov, string $moduleName, ?string $loadBefore = null): void
     {
         $found = false;
 
@@ -100,20 +99,16 @@ class HookManager
         }
 
         if (!$found) {
-            throw new HookException("Cannot add given class as a hook provider: ". get_class($prov));
+            throw new HookException("Cannot add given class as a hook provider: " . $prov::class);
         }
     }
 
     /**
-     * @param array $repository
-     * @param IHookProvider $module
-     * @param string $moduleName
-     * @param string|null $runBeforeModule
-     * @return bool
+     * @param array<string, IHookProvider> $repository
      */
-    private function addHook(&$repository, $module, $moduleName, $runBeforeModule)
+    private function addHook(array &$repository, IHookProvider $module, string $moduleName, ?string $runBeforeModule): bool
     {
-        if ($runBeforeModule === null  || !array_key_exists($runBeforeModule, $repository)) {
+        if ($runBeforeModule === null || !array_key_exists($runBeforeModule, $repository)) {
             $repository[$moduleName] = $module;
             return true;
         } else {
@@ -134,7 +129,7 @@ class HookManager
      *
      * @return void
      */
-    public function runBeforeSystem()
+    public function runBeforeSystem(): void
     {
         if ($this->_beforeSystem !== null) {
             foreach ($this->_beforeSystem as $hookProvider) {
@@ -148,7 +143,7 @@ class HookManager
      *
      * @return void
      */
-    public function runBefore()
+    public function runBefore(): void
     {
         if ($this->_beforeController !== null) {
             foreach ($this->_beforeController as $hookProvider) {
@@ -162,7 +157,7 @@ class HookManager
      *
      * @return void
      */
-    public function runAfter()
+    public function runAfter(): void
     {
         if ($this->_afterController !== null) {
             foreach ($this->_afterController as $hookProvider) {
@@ -176,7 +171,7 @@ class HookManager
      *
      * @return void
      */
-    public function runBeforeView($context = null)
+    public function runBeforeView(?array $context = null): void
     {
         if ($this->_beforeView !== null) {
             foreach ($this->_beforeView as $hookProvider) {
@@ -190,7 +185,7 @@ class HookManager
      *
      * @return void
      */
-    public function runAfterView()
+    public function runAfterView(): void
     {
         if ($this->_afterView !== null) {
             foreach ($this->_afterView as $hookProvider) {
@@ -200,9 +195,9 @@ class HookManager
     }
 
     /**
-     * @return \pff\IAfterHook[]
+     * @return IAfterHook[]
      */
-    public function getAfterController()
+    public function getAfterController(): array
     {
         return $this->_afterController;
     }
@@ -210,7 +205,7 @@ class HookManager
     /**
      * @return IBeforeHook[]
      */
-    public function getBeforeController()
+    public function getBeforeController(): array
     {
         return $this->_beforeController;
     }
@@ -218,7 +213,7 @@ class HookManager
     /**
      * @return IBeforeSystemHook[]
      */
-    public function getBeforeSystem()
+    public function getBeforeSystem(): array
     {
         return $this->_beforeSystem;
     }
@@ -226,7 +221,7 @@ class HookManager
     /**
      * @return IAfterViewHook[]
      */
-    public function getAfterView()
+    public function getAfterView(): array
     {
         return $this->_afterView;
     }
@@ -234,7 +229,7 @@ class HookManager
     /**
      * @return IBeforeViewHook[]
      */
-    public function getBeforeView()
+    public function getBeforeView(): array
     {
         return $this->_beforeView;
     }

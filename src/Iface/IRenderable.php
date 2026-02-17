@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Iface;
 
 interface IRenderable
@@ -8,7 +10,6 @@ interface IRenderable
      * Sets a value to be passed to a View
      *
      * @param string $name
-     * @param mixed $value
      * @return void
      */
     public function set(string $name, mixed $value): void;

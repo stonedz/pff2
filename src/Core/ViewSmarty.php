@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Core;
 
 use pff\Abs\AView;
@@ -11,12 +13,9 @@ use pff\Abs\AView;
  */
 class ViewSmarty extends AView
 {
-    /**
-     * @var \Smarty
-     */
-    protected $_smarty;
+    protected \Smarty $_smarty;
 
-    public function __construct($templateName)
+    public function __construct(string $templateName, ?\pff\App $app = null)
     {
         $this->_smarty = new \Smarty(); // The smarty instance should be accessible before
         $smartyDir = ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS;
@@ -29,10 +28,10 @@ class ViewSmarty extends AView
             throw new \pff\ViewException('Template file ' . $templatePath . ' does not exist');
         }
         parent::__construct($templateName);
-        $this->_smarty->registerPlugin('function', 'renderAction', [$this, 'smarty_plugin_renderAction']);
+        $this->_smarty->registerPlugin('function', 'renderAction', $this->smarty_plugin_renderAction(...));
     }
 
-    public function smarty_plugin_renderAction($params, $smarty)
+    public function smarty_plugin_renderAction(array $params, \Smarty $smarty): void
     {
         if (!isset($params['params'])) {
             $params['params'] = [];

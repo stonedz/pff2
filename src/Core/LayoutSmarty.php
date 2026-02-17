@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Core;
 
 use pff\Abs\AView;
@@ -14,28 +16,26 @@ use pff\Abs\AView;
  */
 class LayoutSmarty extends ViewSmarty
 {
-    public function __construct($tempalteName, \pff\App $app)
+    public function __construct(string $tempalteName, \pff\App $app)
     {
         parent::__construct($tempalteName, $app);
-        $this->_smarty->registerPlugin('function', 'content', [$this, 'smarty_plugin_contentPlaceholder']);
+        $this->_smarty->registerPlugin('function', 'content', $this->smarty_plugin_contentPlaceholder(...));
     }
 
     /**
      * @var AView[]
      */
-    private $_contentView;
+    private array $_contentView = [];
 
     /**
-     * Adds an Aview to the layout queue
-     *
-     * @param AView $view
+     * Adds an AView to the layout queue
      */
-    public function addContent(AView $view)
+    public function addContent(AView $view): void
     {
         $this->_contentView[] = $view;
     }
 
-    public function smarty_plugin_contentPlaceholder($params, $smarty)
+    public function smarty_plugin_contentPlaceholder(array $params, \Smarty $smarty): void
     {
         if (!isset($params['index']) || !is_int($params['index'])) {
             $params['index'] = 0;

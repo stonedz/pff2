@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User: paolo.fagni@gmail.com
  * Date: 07/11/14
@@ -54,7 +57,7 @@ class HTMLOut implements IOutputs
             if (is_array($configHeaders)) {
                 $headers = array_merge($headers, $configHeaders);
             }
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             // Config not available yet (e.g. early error) — use defaults
         }
 

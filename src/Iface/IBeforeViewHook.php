@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Iface;
 
 /**
@@ -11,9 +13,6 @@ interface IBeforeViewHook extends IHookProvider
 {
     /**
      * Executes actions before the Views are rendered
-     *
-     * @abstract
-     * @return mixed
      */
-    public function doBeforeView($context = null);
+    public function doBeforeView(?array $context = null): void;
 }

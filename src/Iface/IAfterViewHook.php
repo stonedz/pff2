@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Iface;
 
 /**
@@ -11,9 +13,6 @@ interface IAfterViewHook extends IHookProvider
 {
     /**
      * Executes actions after the views are rendered
-     *
-     * @abstract
-     * @return mixed
      */
-    public function doAfterView();
+    public function doAfterView(): void;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Iface;
 
 /**
@@ -10,10 +12,7 @@ namespace pff\Iface;
 interface IAfterHook extends IHookProvider
 {
     /**
-     * Executes actios after the controller has finished its work.
-     *
-     * @abstract
-     * @return mixed
+     * Executes actions after the controller has finished its work.
      */
-    public function doAfter();
+    public function doAfter(): void;
 }

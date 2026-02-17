@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Iface;
 
 /**
@@ -11,9 +13,6 @@ interface IBeforeHook extends IHookProvider
 {
     /**
      * Executes actions before the Controller
-     *
-     * @abstract
-     * @return mixed
      */
-    public function doBefore();
+    public function doBefore(): void;
 }

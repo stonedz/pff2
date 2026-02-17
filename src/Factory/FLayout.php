@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Factory;
 
 use pff\Abs\AView;
@@ -25,10 +27,10 @@ class FLayout
      * @param string $templateType Te type of the template
      * @return AView
      */
-    public static function create($templateName, App $app, $templateType = null)
+    public static function create(string $templateName, App $app, ?string $templateType = null): AView
     {
         if ($templateType === null) {
-            $tmp          = explode('.', $templateName);
+            $tmp = explode('.', $templateName);
             $templateType = $tmp[count($tmp) - 1];
         } else {
             $templateType = strtolower($templateType);
@@ -37,7 +39,7 @@ class FLayout
         return self::loadTemplate($templateName, $app, $templateType);
     }
 
-    private static function loadTemplate($templateName, \pff\App $app, $templateType)
+    private static function loadTemplate(string $templateName, \pff\App $app, string $templateType): AView
     {
         $mm = $app->getModuleManager();
 
@@ -45,16 +47,13 @@ class FLayout
             case 'php':
                 $templateName = self::checkMobile($templateName, $mm, 'php');
                 return new LayoutPHP($templateName, $app);
-                break;
             case 'tpl':
             case 'smarty':
                 $templateName = self::checkMobile($templateName, $mm, 'smarty');
                 return new LayoutSmarty($templateName, $app);
-                break;
             default:
                 $templateName = self::checkMobile($templateName, $mm, 'php');
                 return new LayoutPHP($templateName, $app);
-                break;
 
         }
     }
@@ -64,9 +63,9 @@ class FLayout
      * @param ModuleManager $mm
      * @param $type
      * @throws ModuleException
-     * @return array
+     * @return string
      */
-    private static function checkMobile($templateName, ModuleManager $mm, $type)
+    private static function checkMobile(string $templateName, ModuleManager $mm, string $type): string
     {
         if ($mm->isLoaded('mobile_views')) {
 
@@ -78,7 +77,7 @@ class FLayout
                 $tempTemplateName = implode('.', $tmp);
 
                 if ($type == 'php') {
-                    $templatePath = ROOT . DS . 'app' . DS . 'views' . DS .  $tempTemplateName;
+                    $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $tempTemplateName;
                 } else { // smarty
                     $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS . 'templates' . DS . $tempTemplateName;
                 }

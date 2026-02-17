@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Factory;
 
 use pff\Abs\AView;
@@ -25,7 +27,7 @@ class FView
      * @param string $templateType Te type of the template
      * @return AView
      */
-    public static function create($templateName, ?App $app = null, $templateType = null)
+    public static function create(string $templateName, ?App $app = null, ?string $templateType = null): AView
     {
         $standardTemplate = $templateName;
 
@@ -40,22 +42,19 @@ class FView
         return self::loadTemplate($templateName, $templateType);
     }
 
-    private static function loadTemplate($templateName, $templateType)
+    private static function loadTemplate(string $templateName, string $templateType): AView
     {
         switch ($templateType) {
             case 'php':
                 $templateName = self::checkMobile($templateName, 'php');
                 return new ViewPHP($templateName);
-                break;
             case 'tpl':
             case 'smarty':
                 $templateName = self::checkMobile($templateName, 'smarty');
                 return new ViewSmarty($templateName);
-                break;
             default:
                 $templateName = self::checkMobile($templateName, 'php');
                 return new ViewPHP($templateName);
-                break;
 
         }
     }
@@ -65,9 +64,9 @@ class FView
      * @param $type
      * @throws \pff\Exception\ModuleException
      * @internal param ModuleManager $mm
-     * @return array
+     * @return string
      */
-    private static function checkMobile($templateName, $type)
+    private static function checkMobile(string $templateName, string $type): string
     {
         $mm = ServiceContainer::get('modulemanager');
         if ($mm->isLoaded('mobile_views')) {

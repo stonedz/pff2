@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Core;
 
 use pff\Exception\HelperException;
@@ -18,10 +20,10 @@ class HelperManager
      * @return bool
      * @throws HelperException
      */
-    public function load($helperName)
+    public function load(string $helperName): bool
     {
         $helperFilePathUser = ROOT . DS . 'app' . DS . 'helpers' . DS . $helperName . '.php';
-        $helperFilePathPff  = ROOT_LIB . DS . 'src' . DS . 'helpers' . DS . $helperName . '.php';
+        $helperFilePathPff = ROOT_LIB . DS . 'src' . DS . 'helpers' . DS . $helperName . '.php';
 
         $found = false;
 

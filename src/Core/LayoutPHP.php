@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\Core;
 
 use pff\Abs\AView;
@@ -17,14 +19,17 @@ class LayoutPHP extends ViewPHP
     /**
      * @var AView[]
      */
-    private $_contentView;
+    private array $_contentView = [];
+
+    public function __construct(string $templateName, ?\pff\App $app = null)
+    {
+        parent::__construct($templateName);
+    }
 
     /**
-     * Adds an Aview to the layout queue
-     *
-     * @param AView $view
+     * Adds an AView to the layout queue
      */
-    public function addContent(AView $view)
+    public function addContent(AView $view): void
     {
         $this->_contentView[] = $view;
     }
@@ -34,17 +39,18 @@ class LayoutPHP extends ViewPHP
      *
      * Add "<?php $this->content()?>" in your layout template where you want to
      * display the AView object
-     *
-     * @param int $index
      */
-    public function content($index = 0)
+    public function content(int $index = 0): void
     {
         if (isset($this->_contentView[$index])) {
             $this->_contentView[$index]->render();
         }
     }
 
-    public function getContentViews()
+    /**
+     * @return AView[]
+     */
+    public function getContentViews(): array
     {
         return $this->_contentView;
     }
