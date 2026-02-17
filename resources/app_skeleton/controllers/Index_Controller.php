@@ -17,18 +17,18 @@ class Index_Controller extends AController
      *
      * @return mixed
      */
-    public function index()
+    public function index(): void
     {
         echo 'Welcome to pff!';
     }
 
-    public function test()
+    public function test(): void
     {
 
         echo 'Welcome to test pff!';
     }
 
-    public function createDbEntry()
+    public function createDbEntry(): void
     {
         $db = ServiceContainer::get('dm');
         $test = new \pff\models\Test();
@@ -37,14 +37,14 @@ class Index_Controller extends AController
         $db->flush();
     }
 
-    public function getDbEntry()
+    public function getDbEntry(): void
     {
         $db = ServiceContainer::get('dm');
         $test = $db->getRepository(\pff\models\Test::class)->find(1);
         echo $test->getName();
     }
 
-    public function getAllDbEntries()
+    public function getAllDbEntries(): void
     {
         $db = ServiceContainer::get('dm');
         $tests = $db->getRepository(\pff\models\Test::class)->findAll();
@@ -53,7 +53,7 @@ class Index_Controller extends AController
         }
     }
 
-    public function sendTestEmail()
+    public function sendTestEmail(): void
     {
         /** @var \pff\modules\Mail\Mail $mailer */
         $mailer = ModuleManager::loadModule('mail');

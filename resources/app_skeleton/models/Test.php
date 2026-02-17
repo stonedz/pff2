@@ -26,7 +26,7 @@ class Test extends AModel
     {
     }
 
-    public function doBeforeSystem()
+    public function doBeforeSystem(): void
     {
         echo 'Before system hook';
     }
@@ -41,7 +41,7 @@ class Test extends AModel
         return $this->name;
     }
 
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
