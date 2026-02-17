@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -16,9 +18,9 @@ class DefaultController extends AModule implements IConfigurableModule, IBeforeS
     /**
      * @var string
      */
-    private $_defaultController;
+    private string $_defaultController;
 
-    public function __construct($confFile = 'default_controller/module.conf.yaml')
+    public function __construct(string $confFile = 'default_controller/module.conf.yaml')
     {
         $this->loadConfig($this->readConfig($confFile));
     }
@@ -27,27 +29,24 @@ class DefaultController extends AModule implements IConfigurableModule, IBeforeS
      * Parse the configuration file
      *
      * @param array $parsedConfig
-     * @return mixed|void
      */
-    public function loadConfig($parsedConfig)
+    public function loadConfig(array $parsedConfig): void
     {
         $this->_defaultController = $parsedConfig['moduleConf']['defaultController'];
     }
 
     /**
      * Executed before the system startup
-     *
-     * @return mixed
      */
-    public function doBeforeSystem()
+    public function doBeforeSystem(): void
     {
         $tmpUrl = $this->_app->getUrl();
         $tmpUrl = explode('/', $tmpUrl);
         if (file_exists(ROOT . DS . 'app' . DS . 'controllers' . DS . ucfirst($tmpUrl[0]) . '_Controller.php')) {
             return;
-        } elseif (file_exists(ROOT.DS.'app'.DS.'pages'.DS.$tmpUrl[0]) && $tmpUrl[0] != '') {
+        } elseif (file_exists(ROOT . DS . 'app' . DS . 'pages' . DS . $tmpUrl[0]) && $tmpUrl[0] != '') {
             return;
         }
-        $this->_app->setUrl($this->_defaultController.'/'.implode('/', $tmpUrl));
+        $this->_app->setUrl($this->_defaultController . '/' . implode('/', $tmpUrl));
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -20,18 +22,18 @@ class Logger extends AModule implements IConfigurableModule
     /**
      * Private Logger instance (Singleton)
      *
-     * @var Logger
+     * @var Logger|null
      */
-    private static $_instance;
+    private static ?Logger $_instance = null;
 
     /**
      * Array of loggers registered.
      *
      * @var ALogger[]
      */
-    private $_loggers;
+    private array $_loggers = [];
 
-    public function __construct($confFile = 'logger/logger.conf.yaml')
+    public function __construct(string $confFile = 'logger/logger.conf.yaml')
     {
         $this->loadConfig($confFile);
     }
@@ -40,15 +42,14 @@ class Logger extends AModule implements IConfigurableModule
      * Loads the configuration
      *
      * @param string $confFile Path relative to modules/ of the configuration file
-     * @return mixed|void
      * @throws \pff\modules\LoggerException
      */
-    public function loadConfig($confFile)
+    public function loadConfig($confFile): void
     {
         $conf = $this->readConfig($confFile);
         try {
             foreach ($conf['moduleConf']['activeLoggers'] as $logger) {
-                $tmpClass         = new \ReflectionClass('\\pff\\modules\\Utils\\' . (string)$logger['class']);
+                $tmpClass = new \ReflectionClass('\\pff\\modules\\Utils\\' . (string) $logger['class']);
                 $this->_loggers[] = $tmpClass->newInstance();
             }
         } catch (\ReflectionException $e) {
@@ -62,7 +63,7 @@ class Logger extends AModule implements IConfigurableModule
             foreach ($this->_loggers as $logger) {
                 unset($logger);
             }
-            $this->reset();
+            static::reset();
         }
     }
 
@@ -72,10 +73,10 @@ class Logger extends AModule implements IConfigurableModule
      * @param string $confFile
      * @return Logger
      */
-    public static function getInstance($confFile = 'logger/logger.conf.yaml')
+    public static function getInstance(string $confFile = 'logger/logger.conf.yaml'): self
     {
         if (!isset(self::$_instance)) {
-            $className       = self::class;
+            $className = self::class;
             self::$_instance = new $className($confFile);
         }
         return self::$_instance;
@@ -86,7 +87,7 @@ class Logger extends AModule implements IConfigurableModule
      *
      * @return void
      */
-    public static function reset()
+    public static function reset(): void
     {
         self::$_instance = null;
     }
@@ -96,7 +97,7 @@ class Logger extends AModule implements IConfigurableModule
      *
      * @return void
      */
-    public function __clone()
+    public function __clone(): void
     {
         return;
     }
@@ -109,7 +110,7 @@ class Logger extends AModule implements IConfigurableModule
      * @throws \Exception|LoggerException
      * @return void
      */
-    public function log($message, $level = 0)
+    public function log(string $message, int $level = 0): void
     {
         foreach ($this->_loggers as $logger) {
             try {
@@ -120,7 +121,7 @@ class Logger extends AModule implements IConfigurableModule
         }
     }
 
-    public function getLoggers()
+    public function getLoggers(): array
     {
         return $this->_loggers;
     }

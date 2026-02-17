@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -16,14 +18,14 @@ class Cookies extends AModule
      *
      * @var bool
      */
-    private $_useEncryption;
+    private bool $_useEncryption;
 
     /**
      * Returns true if current request is HTTPS (including reverse proxies).
      *
      * @return bool
      */
-    private function isSecureRequest()
+    private function isSecureRequest(): bool
     {
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' && $_SERVER['HTTPS'] !== '') {
             return true;
@@ -43,7 +45,7 @@ class Cookies extends AModule
     /**
      * @return array
      */
-    private function getCookieOptions($expire = null)
+    private function getCookieOptions(?int $expire = null): array
     {
         $config = $this->getConfig();
 
@@ -79,7 +81,7 @@ class Cookies extends AModule
         ];
     }
 
-    public function __construct($confFile = 'cookies/module.conf.yaml')
+    public function __construct(string $confFile = 'cookies/module.conf.yaml')
     {
         $this->loadConfig($this->readConfig($confFile));
     }
@@ -89,7 +91,7 @@ class Cookies extends AModule
      *
      * @param array $parsedConfig
      */
-    private function loadConfig($parsedConfig)
+    private function loadConfig(array $parsedConfig): void
     {
         $this->_useEncryption = $parsedConfig['moduleConf']['useEncryption'];
     }
@@ -102,20 +104,20 @@ class Cookies extends AModule
      * @param int|null $expire how many HOURS the cookie will be valid (set to 0 for session time)
      * @return bool
      */
-    public function setCookie($cookieName, $value = null, $expire = null)
+    public function setCookie(string $cookieName, ?string $value = null, ?int $expire = null): bool
     {
         if ($expire !== null) {
             $expire = time() + (60 * 60 * $expire);
         }
 
-        if (setcookie($cookieName, $this->encodeCookie($value), $this->getCookieOptions($expire))) {
+        if (setcookie($cookieName, $this->encodeCookie($value), ['expires' => $this->getCookieOptions($expire)])) {
             return true;
         } else {
             return false;
         }
     }
 
-    private function encodeCookie($value)
+    private function encodeCookie(?string $value): string
     {
         if ($this->_useEncryption) {
             $encryptionModule = $this->getRequiredModules('encryption');
@@ -128,7 +130,7 @@ class Cookies extends AModule
         }
     }
 
-    private function decodeCookie($value)
+    private function decodeCookie(string $value): string
     {
         if ($this->_useEncryption) {
             $encryptionModule = $this->getRequiredModules('encryption');
@@ -145,10 +147,9 @@ class Cookies extends AModule
      * Check if a cookie is set and returns its content
      *
      * @param string $cookieName
-     * @return bool
-     * @retrurn string
+     * @return string|false
      */
-    public function getCookie($cookieName)
+    public function getCookie(string $cookieName): string|false
     {
         if (isset($_COOKIE[$cookieName])) {
             return $this->decodeCookie($_COOKIE[$cookieName]);
@@ -163,10 +164,10 @@ class Cookies extends AModule
      * @param string $cookieName Name of the cookie to delete
      * @return bool
      */
-    public function deleteCookie($cookieName)
+    public function deleteCookie(string $cookieName): bool
     {
         if (isset($_COOKIE[$cookieName])) {
-            if (setcookie($cookieName, null, $this->getCookieOptions(time() - 6000))) {
+            if (setcookie($cookieName, '', ['expires' => $this->getCookieOptions(time() - 6000)])) {
                 return true;
             } else {
                 return false;

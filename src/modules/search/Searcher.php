@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User: marco.sangiorgi@neropaco.net
  * Date: 07/12/12
@@ -16,11 +19,8 @@ use pff\Abs\AModule;
  */
 class Searcher extends AModule
 {
-    private $models_array;
-
-    public function __construct(array $models)
+    public function __construct(private readonly array $models_array)
     {
-        $this->models_array = $models;
     }
 
     /**
@@ -31,7 +31,7 @@ class Searcher extends AModule
      * @return array //returns an array formed like $return['modelname']['entity1', 'entity2'], ...]
      * in case of daterange search, what must be an array formatted like [dateFrom, dateTo, fieldSeparator] (i.e.: ["03-03-2013", "07-03-2013", "-"])
      */
-    public function search($what, $type, $_em, array $excludeArray = [])
+    public function search(mixed $what, string $type, mixed $_em, array $excludeArray = []): array|false
     {
         if ($what == "") {
             return false;
@@ -84,16 +84,16 @@ class Searcher extends AModule
      * @param $modelname
      * @param $_em
      * @param array $excludeArray
-     * @return bool, array
+     * @return array|false
      * return an array of entity matching $what, false otherwise
      */
-    private function searchText($what, $modelname, $_em, $excludeArray = [])
+    private function searchText(mixed $what, string $modelname, mixed $_em, array $excludeArray = []): array|false
     {
-        $reflector = new \ReflectionClass("\\pff\\models\\".$modelname);
+        $reflector = new \ReflectionClass("\\pff\\models\\" . $modelname);
         $properties = $this->my_class_type($reflector);
         $searchableProperties = [];
-        foreach ($properties as $key=>$value) {
-            if (($value == "string" || $value == "text") &&  !in_array($key, $excludeArray)) {
+        foreach ($properties as $key => $value) {
+            if (($value == "string" || $value == "text") && !in_array($key, $excludeArray)) {
                 array_push($searchableProperties, $key);
             }
         }
@@ -102,7 +102,7 @@ class Searcher extends AModule
         }
         $qb = $_em->createQueryBuilder();
         $qb->select('f')
-            ->from("pff\models\\".$modelname, 'f');
+            ->from("pff\models\\" . $modelname, 'f');
         $or = $qb->expr()->orx();
         foreach ($searchableProperties as $prop) {
             $or->add($qb->expr()->like("f.{$prop}", ":{$key}"));
@@ -121,16 +121,16 @@ class Searcher extends AModule
      * @param $modelname
      * @param $_em
      * @param array $excludeArray
-     * @return bool, array
+     * @return array|false
      * return an array of entity matching $what, false otherwise
      */
-    private function searchNumber($what, $modelname, $_em, $excludeArray = [])
+    private function searchNumber(mixed $what, string $modelname, mixed $_em, array $excludeArray = []): array|false
     {
-        $reflector = new \ReflectionClass("\pff\models\\".$modelname);
+        $reflector = new \ReflectionClass("\pff\models\\" . $modelname);
         $properties = $this->my_class_type($reflector);
         $searchableProperties = [];
-        foreach ($properties as $key=>$value) {
-            if ((($value == "integer") || ($value == "float")) &&  !in_array($key, $excludeArray)) {
+        foreach ($properties as $key => $value) {
+            if ((($value == "integer") || ($value == "float")) && !in_array($key, $excludeArray)) {
                 array_push($searchableProperties, $key);
             }
         }
@@ -139,7 +139,7 @@ class Searcher extends AModule
         }
         $qb = $_em->createQueryBuilder();
         $qb->select('f')
-            ->from("pff\\models\\".$modelname, 'f');
+            ->from("pff\\models\\" . $modelname, 'f');
         $or = $qb->expr()->orx();
         foreach ($searchableProperties as $prop) {
             $or->add($qb->expr()->like("f.{$prop}", ":{$key}"));
@@ -158,16 +158,16 @@ class Searcher extends AModule
      * @param $modelname
      * @param $_em
      * @param array $excludeArray
-     * @return bool, array
+     * @return array|false
      * return an array of entity matching $what, false otherwise
      */
-    private function searchNumberExact($what, $modelname, $_em, $excludeArray = [])
+    private function searchNumberExact(mixed $what, string $modelname, mixed $_em, array $excludeArray = []): array|false
     {
-        $reflector = new \ReflectionClass("\\pff\\models\\".$modelname);
+        $reflector = new \ReflectionClass("\\pff\\models\\" . $modelname);
         $properties = $this->my_class_type($reflector);
         $searchableProperties = [];
-        foreach ($properties as $key=>$value) {
-            if ((($value == "integer") || ($value == "float")) &&  !in_array($key, $excludeArray)) {
+        foreach ($properties as $key => $value) {
+            if ((($value == "integer") || ($value == "float")) && !in_array($key, $excludeArray)) {
                 array_push($searchableProperties, $key);
             }
         }
@@ -176,7 +176,7 @@ class Searcher extends AModule
         }
         $qb = $_em->createQueryBuilder();
         $qb->select('f')
-            ->from("pff\\models\\".$modelname, 'f');
+            ->from("pff\\models\\" . $modelname, 'f');
         $or = $qb->expr()->orx();
         foreach ($searchableProperties as $prop) {
             $or->add($qb->expr()->like("f.{$prop}", ":{$key}"));
@@ -195,16 +195,16 @@ class Searcher extends AModule
      * @param $modelname
      * @param $_em
      * @param array $excludeArray
-     * @return bool, array
+     * @return array|false
      * return an array of entity matching $what, false otherwise
      */
-    private function searchTextExact($what, $modelname, $_em, $excludeArray = [])
+    private function searchTextExact(mixed $what, string $modelname, mixed $_em, array $excludeArray = []): array|false
     {
-        $reflector = new \ReflectionClass("\\pff\\models\\".$modelname);
+        $reflector = new \ReflectionClass("\\pff\\models\\" . $modelname);
         $properties = $this->my_class_type($reflector);
         $searchableProperties = [];
-        foreach ($properties as $key=>$value) {
-            if (($value == "string" || $value == "text") &&  !in_array($key, $excludeArray)) {
+        foreach ($properties as $key => $value) {
+            if (($value == "string" || $value == "text") && !in_array($key, $excludeArray)) {
                 array_push($searchableProperties, $key);
             }
         }
@@ -213,7 +213,7 @@ class Searcher extends AModule
         }
         $qb = $_em->createQueryBuilder();
         $qb->select('f')
-            ->from("pff\\models\\".$modelname, 'f');
+            ->from("pff\\models\\" . $modelname, 'f');
         $or = $qb->expr()->orx();
         foreach ($searchableProperties as $prop) {
             $or->add($qb->expr()->like("f.{$prop}", ":{$key}"));
@@ -232,19 +232,19 @@ class Searcher extends AModule
      * @param $modelname
      * @param $_em
      * @param array $excludeArray
-     * @return bool, array
+     * @return array|false
      * return an array of entity matching $what, false otherwise
      */
-    private function searchDateRange($what, $modelname, $_em, $excludeArray = [])
+    private function searchDateRange(mixed $what, string $modelname, mixed $_em, array $excludeArray = []): array|false
     {
         if (!is_array($what) && count($what) != 3) {
             return false;
         }
-        $reflector = new \ReflectionClass("\\pff\\models\\".$modelname);
+        $reflector = new \ReflectionClass("\\pff\\models\\" . $modelname);
         $properties = $this->my_class_type($reflector);
         $searchableProperties = [];
-        foreach ($properties as $key=>$value) {
-            if (($value == "datetime" || $value == "date") &&  !in_array($key, $excludeArray)) {
+        foreach ($properties as $key => $value) {
+            if (($value == "datetime" || $value == "date") && !in_array($key, $excludeArray)) {
                 array_push($searchableProperties, $key);
             }
         }
@@ -258,7 +258,7 @@ class Searcher extends AModule
 
         $qb = $_em->createQueryBuilder();
         $qb->select('f')
-            ->from("pff\\models\\".$modelname, 'f');
+            ->from("pff\\models\\" . $modelname, 'f');
         $or = $qb->expr()->orx();
         foreach ($searchableProperties as $prop) {
             $or->add($qb->expr()->between("f.{$prop}", ":da", ":a"));
@@ -278,7 +278,7 @@ class Searcher extends AModule
      * @return array
      * returns an array property_name => property_type
      */
-    private function my_class_type($reflector)
+    private function my_class_type(\ReflectionClass $reflector): array
     {
         $annotationReader = new \Doctrine\Common\Annotations\AnnotationReader();
 
@@ -287,7 +287,7 @@ class Searcher extends AModule
         foreach ($reflector->getProperties() as $property) {
             $tmpArray[$property->name] = $annotationReader->getPropertyAnnotations($property);
         }
-        foreach ($tmpArray as $prop=>$p) {
+        foreach ($tmpArray as $prop => $p) {
             foreach ($p as $r) {
                 if (is_a($r, 'Doctrine\ORM\Mapping\Column')) {
                     $typeArray[$prop] = $r->type;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -23,16 +25,18 @@ class NetworkHelper extends AModule
      * @param array|null $headers Optional headers to be passed to the request
      * @return array Request response
      */
-    public function doGet($url, $port = 80, $headers = null)
+    public function doGet(string $url, int $port = 80, ?array $headers = null): array
     {
         $retarr = []; // Return value
 
-        $curl_opts = [CURLOPT_URL => $url,
+        $curl_opts = [
+            CURLOPT_URL => $url,
             CURLOPT_PORT => $port,
             CURLOPT_POST => false,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true, ];
+            CURLOPT_RETURNTRANSFER => true,
+        ];
 
         if ($headers) {
             $curl_opts[CURLOPT_HTTPHEADER] = $headers;
@@ -56,17 +60,19 @@ class NetworkHelper extends AModule
      * @param array|null $headers Optional headers to be passed to the request
      * @return array Request response
      */
-    public function doPost($url, $postbody, $port = 80, $headers = null)
+    public function doPost(string $url, string $postbody, int $port = 80, ?array $headers = null): array
     {
         $retarr = []; // Return value
 
-        $curl_opts = [CURLOPT_URL => $url,
+        $curl_opts = [
+            CURLOPT_URL => $url,
             CURLOPT_PORT => $port,
             CURLOPT_POST => true,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_POSTFIELDS => $postbody,
-            CURLOPT_RETURNTRANSFER => true, ];
+            CURLOPT_RETURNTRANSFER => true,
+        ];
 
         if ($headers) {
             $curl_opts[CURLOPT_HTTPHEADER] = $headers;
@@ -87,7 +93,7 @@ class NetworkHelper extends AModule
      * @param array $curl_opts Curl options array
      * @return array Curl request response
      */
-    public function doCurl($curl_opts)
+    public function doCurl(array $curl_opts): array
     {
         $retarr = []; // Return value
 
@@ -109,13 +115,13 @@ class NetworkHelper extends AModule
 
         // Send the request and get the response
         ob_start();
-        $response  = curl_exec($ch);
+        $response = curl_exec($ch);
         $curl_spew = ob_get_contents();
         ob_end_clean();
 
         // Check for errors
         if (curl_errno($ch)) {
-            $errno  = curl_errno($ch);
+            $errno = curl_errno($ch);
             $errmsg = curl_error($ch);
 
             curl_close($ch);
@@ -127,8 +133,8 @@ class NetworkHelper extends AModule
 
         // Parse out header and body
         $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-        $header      = substr($response, 0, $header_size);
-        $body        = substr($response, $header_size);
+        $header = substr($response, 0, $header_size);
+        $body = substr($response, $header_size);
 
         // Close curl session
         curl_close($ch);

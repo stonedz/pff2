@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -21,7 +23,7 @@ class Search extends AModule
      * @param $modelnames
      * @return Searcher
      */
-    public function createSearcher($modelnames)
+    public function createSearcher(string|array $modelnames): Searcher
     {
         $params = [];
         if (!is_array($modelnames)) {

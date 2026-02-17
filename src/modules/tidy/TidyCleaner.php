@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -14,20 +16,16 @@ class TidyCleaner extends AModule implements IBeforeViewHook, IAfterViewHook
 {
     /**
      * Executes actions before the Views are rendered
-     *
-     * @return mixed
      */
-    public function doBeforeView($context = null)
+    public function doBeforeView(?array $context = null): void
     {
-        ob_start([$this,'preView']);
+        ob_start($this->preView(...));
     }
 
     /**
      * Executes actions after the views are rendered
-     *
-     * @return mixed
      */
-    public function doAfterView()
+    public function doAfterView(): void
     {
         ob_end_flush();
     }
@@ -37,7 +35,7 @@ class TidyCleaner extends AModule implements IBeforeViewHook, IAfterViewHook
      * @param $output
      * @return \tidy
      */
-    public function preView($output)
+    public function preView(string $output): \tidy
     {
         $config = [
             'show-body-only' => false,

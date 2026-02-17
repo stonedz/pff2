@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -17,7 +19,7 @@ class Session extends AModule implements IBeforeSystemHook
      *
      * @return bool
      */
-    private function isSecureRequest()
+    private function isSecureRequest(): bool
     {
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' && $_SERVER['HTTPS'] !== '') {
             return true;
@@ -36,10 +38,8 @@ class Session extends AModule implements IBeforeSystemHook
 
     /**
      * Executed before the system startup
-     *
-     * @return mixed
      */
-    public function doBeforeSystem()
+    public function doBeforeSystem(): void
     {
         if (session_status() == PHP_SESSION_NONE) {
             $config = $this->getConfig();

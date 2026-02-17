@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 /**
@@ -18,13 +20,13 @@ use Symfony\Component\Mime\Part\DataPart;
 
 class Mail extends AModule
 {
-    private $mailer;
+    private readonly Mailer $mailer;
 
-    private $transportDsn;
+    private string $transportDsn;
 
-    private $message;
+    private ?Email $message = null;
 
-    public function __construct($confFile = 'mail/module.conf.yaml')
+    public function __construct(string $confFile = 'mail/module.conf.yaml')
     {
         $this->loadConfig($this->readConfig($confFile));
 
@@ -36,7 +38,7 @@ class Mail extends AModule
      *
      * @param array $parsedConfig
      */
-    private function loadConfig($parsedConfig)
+    private function loadConfig(array $parsedConfig): void
     {
         $moduleConf = isset($parsedConfig['moduleConf']) && is_array($parsedConfig['moduleConf']) ? $parsedConfig['moduleConf'] : [];
 
@@ -71,10 +73,9 @@ class Mail extends AModule
     /**
      * @param array<string, mixed> $conf
      * @param string $key
-     * @param mixed $default
      * @return mixed
      */
-    private function getConfigValue(array $conf, $key, $default = null)
+    private function getConfigValue(array $conf, string $key, mixed $default = null): mixed
     {
         if (array_key_exists($key, $conf)) {
             return $conf[$key];
@@ -90,7 +91,7 @@ class Mail extends AModule
         return $default;
     }
 
-    public function sendMail($to, $from, $fromName, $subject, $body, $addressReply = null, $attachment = null, $attachment_name = 'attachment.pdf', $cc = null, $bcc = null, $attachment_type = 'application/pdf')
+    public function sendMail(string|array $to, string $from, string $fromName, string $subject, string $body, ?string $addressReply = null, mixed $attachment = null, string $attachment_name = 'attachment.pdf', string|array|null $cc = null, string|array|null $bcc = null, string $attachment_type = 'application/pdf'): bool
     {
         $this->message = (new Email())
             ->subject((string) $subject)
@@ -140,7 +141,7 @@ class Mail extends AModule
         try {
             $this->mailer->send($this->message);
             return true;
-        } catch (TransportExceptionInterface $e) {
+        } catch (TransportExceptionInterface) {
             return false;
         }
     }

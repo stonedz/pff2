@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -18,25 +20,25 @@ class AutomaticHeaderFooter extends AModule implements IBeforeViewHook, IAfterHo
     /**
      * @var bool
      */
-    private $_footerController;
+    private bool $_footerController;
 
     /**
      * @var bool
      */
-    private $_headerController;
+    private bool $_headerController;
 
     /**
      * @var bool
      */
-    private $_footerGlobal;
+    private bool $_footerGlobal;
 
     /**
      * @var bool
      */
-    private $_headerGlobal;
+    private bool $_headerGlobal;
 
 
-    public function __construct($confFile = 'automatic_header_footer/module.conf.yaml')
+    public function __construct(string $confFile = 'automatic_header_footer/module.conf.yaml')
     {
         $moduleconfig = $this->readConfig($confFile);
         $this->loadConfig($moduleconfig);
@@ -46,23 +48,20 @@ class AutomaticHeaderFooter extends AModule implements IBeforeViewHook, IAfterHo
      * Initializes the module with defined configuration
      *
      * @param array $parsedConfig A parsed config in the form of an array
-     * @return mixed|void
      */
-    public function loadConfig($parsedConfig)
+    public function loadConfig(array $parsedConfig): void
     {
         $this->_footerController = $parsedConfig['moduleConf']['automatic_controller_footer'];
-        $this->_footerGlobal     = $parsedConfig['moduleConf']['automatic_global_footer'];
+        $this->_footerGlobal = $parsedConfig['moduleConf']['automatic_global_footer'];
         $this->_headerController = $parsedConfig['moduleConf']['automatic_controller_header'];
-        $this->_headerGlobal     = $parsedConfig['moduleConf']['automatic_global_header'];
+        $this->_headerGlobal = $parsedConfig['moduleConf']['automatic_global_header'];
     }
 
     /**
      * Adds the header as the first view to be rendered. The controller based-header has
      * always the precedence on the global header
-     *
-     * @return mixed
      */
-    public function doBeforeView($context = null)
+    public function doBeforeView(?array $context = null): void
     {
         if ($this->_headerController) {
             $viewPath = ROOT . DS . 'app' . DS . 'views' . DS .
@@ -82,10 +81,8 @@ class AutomaticHeaderFooter extends AModule implements IBeforeViewHook, IAfterHo
 
     /**
      * Executes actions after the views are rendered
-     *
-     * @return mixed
      */
-    public function doAfter()
+    public function doAfter(): void
     {
         if ($this->_footerController) {
             $viewPath = ROOT . DS . 'app' . DS . 'views' . DS .

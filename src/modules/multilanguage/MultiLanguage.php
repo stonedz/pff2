@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -16,46 +18,46 @@ class MultiLanguage extends AModule implements IBeforeSystemHook
      *
      * @var string
      */
-    private $_selectedLanguage;
+    private ?string $_selectedLanguage = null;
 
     /**
      * If true saves the preferred language on cookies!
      *
      * @var bool
      */
-    private $_saveOnCookies;
+    private bool $_saveOnCookies;
 
     /**
      * If true saves the preferred language on session!
      *
      * @var bool
      */
-    private $_saveOnSession;
+    private bool $_saveOnSession;
 
     /**
      * The name of the cookie to save
      *
      * @var string
      */
-    private $_cookieName;
+    private string $_cookieName;
 
     /**
      * The key of the session array to save
      *
      * @var string
      */
-    private $_sessionKeyName;
+    private string $_sessionKeyName;
 
     /**
      * Contains the specified default language, this could be overrider by $pffConfig['default_language']
      *
      * @var string
      */
-    private $_defaultLang;
+    private string $_defaultLang;
 
-    private $_accepted_languages;
+    private ?array $_accepted_languages;
 
-    public function __construct($confFile = 'multilanguage/module.conf.yaml')
+    public function __construct(string $confFile = 'multilanguage/module.conf.yaml')
     {
         $this->_accepted_languages = [];
         $moduleconfig = $this->readConfig($confFile);
@@ -65,13 +67,13 @@ class MultiLanguage extends AModule implements IBeforeSystemHook
     /**
      * Loads the configuration file
      */
-    private function _loadConfig($parsedConfig)
+    private function _loadConfig(array $parsedConfig): void
     {
-        $this->_defaultLang     = $parsedConfig['moduleConf']['default_language'];
-        $this->_saveOnCookies   = $parsedConfig['moduleConf']['save_on_cookies'];
-        $this->_cookieName      = $parsedConfig['moduleConf']['cookie_name'];
-        $this->_saveOnSession   = $parsedConfig['moduleConf']['save_on_session'];
-        $this->_sessionKeyName  = $parsedConfig['moduleConf']['session_key_name'];
+        $this->_defaultLang = $parsedConfig['moduleConf']['default_language'];
+        $this->_saveOnCookies = $parsedConfig['moduleConf']['save_on_cookies'];
+        $this->_cookieName = $parsedConfig['moduleConf']['cookie_name'];
+        $this->_saveOnSession = $parsedConfig['moduleConf']['save_on_session'];
+        $this->_sessionKeyName = $parsedConfig['moduleConf']['session_key_name'];
         if (isset($parsedConfig['moduleConf']['accepted_languages'])) {
             foreach ($parsedConfig['moduleConf']['accepted_languages'] as $l) {
                 $this->_accepted_languages[] = $l;
@@ -83,10 +85,8 @@ class MultiLanguage extends AModule implements IBeforeSystemHook
 
     /**
      * Executed before the system startup
-     *
-     * @return mixed
      */
-    public function doBeforeSystem()
+    public function doBeforeSystem(): void
     {
         $url = $this->_app->getUrl();
         $url = $this->processUrl($url);
@@ -102,7 +102,7 @@ class MultiLanguage extends AModule implements IBeforeSystemHook
      * @param $url
      * @return string
      */
-    public function processUrl($url)
+    public function processUrl(string $url): string
     {
         $splittedUrl = explode('/', $url);
         $langCodes = $this->getCodes();
@@ -120,8 +120,8 @@ class MultiLanguage extends AModule implements IBeforeSystemHook
             $this->saveLanguage();
 
             $processedUrl = implode('/', $splittedUrl);
-        } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && isset($langCodes[substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2)])) {
-            $this->_selectedLanguage = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+        } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && isset($langCodes[substr((string) $_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2)])) {
+            $this->_selectedLanguage = substr((string) $_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
             if ($this->_accepted_languages === null) {
                 $this->_selectedLanguage = $this->_defaultLang;
             } elseif (is_array($this->_accepted_languages)) {
@@ -144,7 +144,7 @@ class MultiLanguage extends AModule implements IBeforeSystemHook
     /**
      * Saves the choosen language preference
      */
-    private function saveLanguage()
+    private function saveLanguage(): void
     {
         if ($this->_saveOnCookies) {
             $this->getRequiredModules('cookies')->setCookie($this->_cookieName, $this->_selectedLanguage, 30 * 24);
@@ -158,16 +158,17 @@ class MultiLanguage extends AModule implements IBeforeSystemHook
     /**
      * Chooses a default language. First check for cookies, then user configuration, then module configuration
      */
-    public function chooseLanguage()
+    public function chooseLanguage(): void
     {
-        if ($this->_saveOnCookies &&
+        if (
+            $this->_saveOnCookies &&
             $tmpLng = $this->getRequiredModules('cookies')->getCookie($this->_cookieName)
         ) {
             $this->_selectedLanguage = $tmpLng;
         } elseif (isset($this->_app)) {
             try {
                 $this->_selectedLanguage = $this->_app->getConfig()->getConfigData('default_language');
-            } catch (\pff\ConfigException $e) {
+            } catch (\pff\ConfigException) {
                 $this->_selectedLanguage = $this->_defaultLang;
             }
         } else {
@@ -180,7 +181,7 @@ class MultiLanguage extends AModule implements IBeforeSystemHook
      *
      * @return array
      */
-    private function getCodes()
+    private function getCodes(): array
     {
         $languageCodes = [
             "aa" => "Afar",
@@ -374,7 +375,7 @@ class MultiLanguage extends AModule implements IBeforeSystemHook
     /**
      * @return string
      */
-    public function getSelectedLanguage()
+    public function getSelectedLanguage(): string
     {
         return $this->_selectedLanguage;
     }

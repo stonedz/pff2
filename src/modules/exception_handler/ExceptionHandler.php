@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -16,18 +18,16 @@ class ExceptionHandler extends AModule implements IBeforeSystemHook
 {
     /**
      * Executed before the system startup
-     *
-     * @return mixed
      */
-    public function doBeforeSystem()
+    public function doBeforeSystem(): void
     {
-        set_exception_handler([$this, 'manageExceptions']);
+        set_exception_handler($this->manageExceptions(...));
     }
 
     /**
      * @param \Exception $exception
      */
-    public function manageExceptions(\Throwable $exception)
+    public function manageExceptions(\Throwable $exception): void
     {
         $code = (int) $exception->getCode();
         $httpCode = ($code >= 400 && $code <= 599) ? $code : 500;

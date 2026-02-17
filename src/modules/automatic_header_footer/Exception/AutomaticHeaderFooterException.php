@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules\Exception;
 
 use pff\Exception\PffException;
@@ -16,9 +18,9 @@ class AutomaticHeaderFooterException extends PffException
      *
      * @var array
      */
-    public $backtrace;
+    public array $backtrace;
 
-    public function __construct($message = "", $code = 0, $previous = null)
+    public function __construct(string $message = "", int $code = 0, ?\Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
 

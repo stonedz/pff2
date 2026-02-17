@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules\Utils;
 
 use pff\modules\Abs\ALogger;
@@ -18,21 +20,21 @@ class LoggerFile extends ALogger
      *
      * @var string
      */
-    private $LOG_DIR;
+    private string $LOG_DIR = '';
 
     /**
      * File resource
      *
-     * @var resource
+     * @var resource|null
      */
-    private $_fp;
+    private mixed $_fp = null;
 
 
     /**
      * @param bool $debugActive True to activate debugmode
      * @throws LoggerException
      */
-    public function __construct($debugActive = false)
+    public function __construct(bool $debugActive = false)
     {
         parent::__construct($debugActive);
 
@@ -55,12 +57,12 @@ class LoggerFile extends ALogger
      * @throws LoggerException
      * @return null|resource
      */
-    public function getLogFile()
+    public function getLogFile(): mixed
     {
         if ($this->_fp === null) {
-            $this->LOG_DIR = ROOT .DS. 'app' . DS .  'logs';
-            $filename      = $this->LOG_DIR . DS . date("Y-m-d");
-            $this->_fp     = fopen($filename, 'a');
+            $this->LOG_DIR = ROOT . DS . 'app' . DS . 'logs';
+            $filename = $this->LOG_DIR . DS . date("Y-m-d");
+            $this->_fp = fopen($filename, 'a');
             if ($this->_fp === false) {
                 throw new LoggerException('Cannot open log file: ' . $filename);
             }
@@ -75,10 +77,9 @@ class LoggerFile extends ALogger
      *
      * @param string $message Message to log
      * @param int $level Log level
-     * @return bool
      * @throws LoggerFileException
      */
-    public function logMessage($message, $level = 0)
+    public function logMessage(string $message, int $level = 0): void
     {
         $this->getLogFile();
         if (!flock($this->_fp, LOCK_EX)) {
@@ -87,7 +88,7 @@ class LoggerFile extends ALogger
         $text = '[' . date("H:i:s") . ']' . $this->_levelNames[$level] . " " . $message . "\n"; // Log message
         if (fwrite($this->_fp, $text)) {
             flock($this->_fp, LOCK_UN);
-            return true;
+            return;
         } else {
             flock($this->_fp, LOCK_UN);
             throw new LoggerFileException('Can\'t write to logfile!');
@@ -99,7 +100,7 @@ class LoggerFile extends ALogger
      *
      * @return resource
      */
-    public function getFp()
+    public function getFp(): mixed
     {
         return $this->_fp;
     }

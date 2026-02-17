@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules\Abs;
 
 /**
@@ -15,5 +17,5 @@ abstract class APasswordChecker
      * @param string $salt If present, the salt used to encrypt
      * @return bool
      */
-    abstract public function checkPass($pass, $encryptedPass, $salt = '');
+    abstract public function checkPass(string $pass, string $encryptedPass, string $salt = ''): bool;
 }

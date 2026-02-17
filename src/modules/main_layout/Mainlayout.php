@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -16,10 +18,8 @@ class Mainlayout extends AModule implements IBeforeHook
 {
     /**
      * Executes actions before the Controller
-     *
-     * @return mixed
      */
-    public function doBefore()
+    public function doBefore(): void
     {
         if (count($this->_controller->getViews()) == 0) {
             $l = FLayout::create('main_layout.php', $this->_app);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -23,7 +25,7 @@ class HtmlPurifier extends AModule
      * @param string $output
      * @return string
      */
-    public function purify($output)
+    public function purify(string $output): string
     {
         /** @var $purifierConfig \HTMLPurifier_Config */
         $purifierConfig = \HTMLPurifier_Config::createDefault();
@@ -31,7 +33,7 @@ class HtmlPurifier extends AModule
         $purifierConfig->set('Attr.EnableID', true);
         $purifierConfig->set('HTML.TidyLevel', 'medium');
         $purifier = new \HTMLPurifier($purifierConfig);
-        $output   = $purifier->purify($output);
+        $output = $purifier->purify($output);
 
         return $output;
     }

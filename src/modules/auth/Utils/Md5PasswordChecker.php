@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules\Utils;
 
 use pff\modules\Abs\APasswordChecker;
@@ -10,7 +12,7 @@ use pff\modules\Abs\APasswordChecker;
  */
 class Md5PasswordChecker extends APasswordChecker
 {
-    public function checkPass($pass, $encryptedPass, $salt = '')
+    public function checkPass(string $pass, string $encryptedPass, string $salt = ''): bool
     {
         trigger_error(
             'Md5PasswordChecker is deprecated and will be removed in pff2 5.0. '

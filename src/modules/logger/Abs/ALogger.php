@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules\Abs;
 
 /**
@@ -10,8 +12,8 @@ namespace pff\modules\Abs;
 abstract class ALogger
 {
     // Log levels
-    public const LVL_NORM  = 0;
-    public const LVL_ERR   = 1;
+    public const LVL_NORM = 0;
+    public const LVL_ERR = 1;
     public const LVL_FATAL = 2;
 
     /**
@@ -19,21 +21,15 @@ abstract class ALogger
      *
      * @var string[]
      */
-    protected $_levelNames;
+    protected array $_levelNames = [];
 
-    /**
-     * Debug mode
-     *
-     * @var bool
-     */
-    protected $_debugActive;
-
-    public function __construct($debugActive = false)
-    {
-        $this->_debugActive = $debugActive;
-
-        $this->_levelNames[self::LVL_NORM]  = 'NORMAL';
-        $this->_levelNames[self::LVL_ERR]   = 'ERROR';
+    public function __construct(/**
+       * Debug mode
+       */
+        protected bool $_debugActive = false
+    ) {
+        $this->_levelNames[self::LVL_NORM] = 'NORMAL';
+        $this->_levelNames[self::LVL_ERR] = 'ERROR';
         $this->_levelNames[self::LVL_FATAL] = 'FATAL';
     }
 
@@ -43,5 +39,5 @@ abstract class ALogger
      * @param string $message Message to log
      * @param int $level Level to log the message
      */
-    abstract public function logMessage($message, $level = 0);
+    abstract public function logMessage(string $message, int $level = 0): void;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules\Utils;
 
 use pff\modules\Abs\APasswordChecker;
@@ -9,7 +11,7 @@ use pff\modules\Abs\APasswordChecker;
  */
 class PasswordHashPasswordChecker extends APasswordChecker
 {
-    public function checkPass($pass, $encryptedPass, $salt = '')
+    public function checkPass(string $pass, string $encryptedPass, string $salt = ''): bool
     {
         return password_verify($pass, $encryptedPass);
     }

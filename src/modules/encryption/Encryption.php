@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -18,16 +20,16 @@ class Encryption extends AModule
      *
      * @var string
      */
-    private $_cypher;
+    private readonly string $_cypher;
 
     /**
      * md5 of the key used to encrypt/decrypt data
      *
      * @var string
      */
-    private $_key;
+    private string $_key;
 
-    public function __construct($confFile = 'encryption/module.conf.yaml')
+    public function __construct(string $confFile = 'encryption/module.conf.yaml')
     {
         $this->loadConfig($this->readConfig($confFile));
     }
@@ -37,7 +39,7 @@ class Encryption extends AModule
      *
      * @param array $parsedConfig
      */
-    private function loadConfig($parsedConfig)
+    private function loadConfig(array $parsedConfig): void
     {
         $key = (string) ($parsedConfig['moduleConf']['key'] ?? '');
 
@@ -59,7 +61,7 @@ class Encryption extends AModule
      * @param boolean $encode - set to TRUE to return a base64-encoded
      * @return string (raw binary)
      */
-    public static function encrypt($message, $key = false, $encode = true)
+    public static function encrypt(string $message, string $key = '', bool $encode = true): string
     {
         $nonceSize = openssl_cipher_iv_length(self::METHOD);
         $nonce = openssl_random_pseudo_bytes($nonceSize);
@@ -88,7 +90,7 @@ class Encryption extends AModule
      * @param boolean $encoded - are we expecting an encoded string?
      * @return string
      */
-    public static function decrypt($message, $key = false, $encoded = true)
+    public static function decrypt(string $message, string $key = '', bool $encoded = true): string|false
     {
         if ($encoded) {
             $message = base64_decode($message, true);

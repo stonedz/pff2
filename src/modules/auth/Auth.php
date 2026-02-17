@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -21,35 +23,35 @@ class Auth extends AModule implements IConfigurableModule
      *
      * @var string
      */
-    private $_modelName;
+    private string $_modelName;
 
     /**
      * Name of the attribute used as username
      *
      * @var string
      */
-    private $_usernameAttribute;
+    private string $_usernameAttribute;
 
     /**
      * The method to get the username
      *
      * @var string
      */
-    private $_methodGetUser;
+    private readonly string $_methodGetUser;
 
     /**
      * The method to get the password
      *
      * @var string
      */
-    private $_methodGetPassword;
+    private string $_methodGetPassword;
 
     /**
      * The password encryption method
      *
      * @var string
      */
-    private $_encryptionMethod;
+    private string $_encryptionMethod;
 
     /**
      * Name of the session variable that will be set to 1 if
@@ -57,37 +59,37 @@ class Auth extends AModule implements IConfigurableModule
      *
      * @var string
      */
-    private $_sessionVarName;
+    private string $_sessionVarName;
 
     /**
      * @var APasswordChecker
      */
-    private $_encryptionStrategy;
+    private APasswordChecker $_encryptionStrategy;
 
     /**
      * If true use password salts
      *
      * @var bool
      */
-    private $_useSalt;
+    private bool $_useSalt;
 
     /**
      * Method to get the salt
      *
      * @var string
      */
-    private $_methodGetSalt;
+    private string $_methodGetSalt;
 
 
     /**
      * @param string $confFile Path to configuration file
      */
-    public function __construct($confFile = 'auth/module.conf.yaml')
+    public function __construct(string $confFile = 'auth/module.conf.yaml')
     {
         $this->loadConfig($this->readConfig($confFile));
     }
 
-    public function loadConfig($parsedConfig)
+    public function loadConfig(array $parsedConfig): void
     {
         $this->_modelName = $parsedConfig['moduleConf']['userModelClass'];
         $this->_usernameAttribute = $parsedConfig['moduleConf']['usernameAttribute'];
@@ -127,7 +129,7 @@ class Auth extends AModule implements IConfigurableModule
      *
      * @return bool
      */
-    public function checkAuth()
+    public function checkAuth(): bool
     {
         if (
             isset($_SESSION[$this->_sessionVarName]) &&
@@ -147,7 +149,7 @@ class Auth extends AModule implements IConfigurableModule
      * @param \Doctrine\ORM\EntityManager $entityManager
      * @return bool
      */
-    public function login($username, $password, $entityManager)
+    public function login(string $username, string $password, \Doctrine\ORM\EntityManager $entityManager): bool
     {
         $tmp = $entityManager
             ->getRepository('pff\models\\' . $this->_modelName)
@@ -169,7 +171,7 @@ class Auth extends AModule implements IConfigurableModule
      *
      * @return bool
      */
-    public function logout()
+    public function logout(): bool
     {
         if (isset($_SESSION[$this->_sessionVarName])) {
             unset($_SESSION[$this->_sessionVarName]);
@@ -177,17 +179,17 @@ class Auth extends AModule implements IConfigurableModule
         return true;
     }
 
-    private function _logUser()
+    private function _logUser(): void
     {
         $_SESSION[$this->_sessionVarName] = 1;
     }
 
-    public function getModelName()
+    public function getModelName(): string
     {
         return $this->_modelName;
     }
 
-    public function setModelName($modelName)
+    public function setModelName(string $modelName): void
     {
         $this->_modelName = $modelName;
     }
@@ -195,7 +197,7 @@ class Auth extends AModule implements IConfigurableModule
     /**
      * @return string
      */
-    public function getUsernameAttribute()
+    public function getUsernameAttribute(): string
     {
         return $this->_usernameAttribute;
     }
@@ -203,7 +205,7 @@ class Auth extends AModule implements IConfigurableModule
     /**
      * @param string $usernameAttribute
      */
-    public function setUsernameAttribute($usernameAttribute)
+    public function setUsernameAttribute(string $usernameAttribute): void
     {
         $this->_usernameAttribute = $usernameAttribute;
     }

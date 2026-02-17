@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff\modules;
 
 use pff\Abs\AModule;
@@ -73,7 +75,7 @@ class Csrf extends AModule implements IBeforeHook, IConfigurableModule
     {
         try {
             $this->loadConfig($this->readConfig($confFile));
-        } catch (\pff\Exception\ModuleException $e) {
+        } catch (\pff\Exception\ModuleException) {
             // No config file found — use defaults
         }
     }
@@ -81,7 +83,7 @@ class Csrf extends AModule implements IBeforeHook, IConfigurableModule
     /**
      * @param array $parsedConfig
      */
-    public function loadConfig($parsedConfig): void
+    public function loadConfig(array $parsedConfig): void
     {
         if (isset($parsedConfig['moduleConf'])) {
             $conf = $parsedConfig['moduleConf'];
@@ -110,7 +112,7 @@ class Csrf extends AModule implements IBeforeHook, IConfigurableModule
         // Check excluded routes
         $currentUrl = $_GET['url'] ?? '';
         foreach ($this->_excludedRoutes as $route) {
-            if ($currentUrl === $route || str_starts_with($currentUrl, $route . '/')) {
+            if ($currentUrl === $route || str_starts_with((string) $currentUrl, $route . '/')) {
                 return;
             }
         }
