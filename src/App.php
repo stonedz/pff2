@@ -389,6 +389,66 @@ class App
         return $this->_staticRoutes;
     }
 
+    public function loadRouteCache(): bool
+    {
+        if (!function_exists('apcu_fetch')) {
+            return false;
+        }
+
+        $success = false;
+        $cachedRoutes = apcu_fetch($this->getRouteCacheKey(), $success);
+        if ($success !== true || !is_array($cachedRoutes)) {
+            return false;
+        }
+
+        if (!isset($cachedRoutes['routes'], $cachedRoutes['static_routes'])) {
+            return false;
+        }
+
+        if (!is_array($cachedRoutes['routes']) || !is_array($cachedRoutes['static_routes'])) {
+            return false;
+        }
+
+        $this->_routes = $cachedRoutes['routes'];
+        $this->_staticRoutes = $cachedRoutes['static_routes'];
+
+        return true;
+    }
+
+    public function storeRouteCache(): bool
+    {
+        if (!function_exists('apcu_store')) {
+            return false;
+        }
+
+        return apcu_store($this->getRouteCacheKey(), [
+            'routes' => $this->_routes,
+            'static_routes' => $this->_staticRoutes,
+        ]);
+    }
+
+    public function clearRouteCache(): bool
+    {
+        if (!function_exists('apcu_delete')) {
+            return false;
+        }
+
+        return apcu_delete($this->getRouteCacheKey());
+    }
+
+    private function getRouteCacheKey(): string
+    {
+        $appName = (string) $this->_config->getConfigData('app_name');
+        if ($appName === '') {
+            $appName = 'pff';
+        }
+
+        $configFile = ROOT . DS . 'app' . DS . 'config' . DS . 'config.user.php';
+        $configHash = is_file($configFile) ? sha1_file($configFile) : 'no-config';
+
+        return $appName . ':routes:' . $configHash;
+    }
+
     public function getConfig(): Config
     {
         return $this->_config;
