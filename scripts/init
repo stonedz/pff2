@@ -39,6 +39,11 @@ PKGS=""
 # START
 #######################################
 fail=false
+PFF_ROOT="vendor/stonedz/pff2"
+if [ ! -d "$PFF_ROOT" ]
+then
+    PFF_ROOT="."
+fi
 
 # CHECK FOR DEPENDECIES PACKAGES
 echo -ne "${CYAN}Checking required packages..."
@@ -59,7 +64,7 @@ echo -ne "\n${CYAN}Initializing app..."
 tmp=`pwd`
 if [ ! -d "app" ]
 then
-    cp -r vendor/stonedz/pff2/resources/app_skeleton app/
+    cp -r "$PFF_ROOT/resources/app_skeleton" app/
     git init . &> /dev/null
     echo -e "${GREEN}[OK]"
 else
@@ -86,7 +91,7 @@ tmp=`pwd`
 if [ ! -d "app/proxies" ]
 then
     mkdir app/proxies
-    chmod 777 app/proxies
+    chmod 775 app/proxies
     echo -e "${GREEN}[OK]"
 else
     echo -e "${GREEN}[OK]${NC} (app/proxies folder already present)"
@@ -115,29 +120,35 @@ cd ${tmp}
 
 #Creating .htaccess
 #echo -ne "\n${CYAN}Generating htaccess file"
-cp vendor/stonedz/pff2/public/.htaccess .
+cp "$PFF_ROOT/public/.htaccess" .
 #echo -e "${GREEN}[OK]"
 
 #Creating cli-config for doctrine
 echo -ne "\n${CYAN}Copying cli-config for doctrine"
-cp vendor/stonedz/pff2/scripts/cli-config.php .
+cp "$PFF_ROOT/scripts/cli-config.php" .
 echo -e "${GREEN}[OK]"
 
 #Copying .gitignore file
 echo -ne "\n${CYAN}Copying site skel"
-cp vendor/stonedz/pff2/resources/site_skeleton/.gitignore .
-cp vendor/stonedz/pff2/resources/site_skeleton/index.php .
-cp vendor/stonedz/pff2/resources/site_skeleton/docker-compose.yml .
-cd vendor/stonedz/pff2/resources/site_skeleton
-mkdir tmp
-cp -r deployement/nginx/dev-nginx.conf ../../../../..
-cd ../../../../..
+cp "$PFF_ROOT/resources/site_skeleton/.gitignore" .
+cp "$PFF_ROOT/resources/site_skeleton/index.php" .
+mkdir -p development
+cp "$PFF_ROOT/development/compose.yaml" development/compose.yaml
+cp "$PFF_ROOT/development/nginx.conf" development/nginx.conf
+cp "$PFF_ROOT/development/PHP.Dockerfile" development/PHP.Dockerfile
 echo -e "${GREEN}[OK]"
 
 #Copying build files
 echo -ne "\n${CYAN}Copying ld related files"
-cp vendor/stonedz/pff2/phpdox.xml.dist .
-cp vendor/stonedz/pff2/build.xml .
+if [ -f "$PFF_ROOT/phpdox.xml.dist" ]
+then
+    cp "$PFF_ROOT/phpdox.xml.dist" .
+fi
+
+if [ -f "$PFF_ROOT/build.xml" ]
+then
+    cp "$PFF_ROOT/build.xml" .
+fi
 
 if [ ! -d "build" ]
 then

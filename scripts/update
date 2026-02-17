@@ -39,6 +39,11 @@ PKGS=""
 # START
 #######################################
 fail=false
+PFF_ROOT="vendor/stonedz/pff2"
+if [ ! -d "$PFF_ROOT" ]
+then
+    PFF_ROOT="."
+fi
 
 
 # GENERATE tmp FOLDER
@@ -47,10 +52,10 @@ tmp=`pwd`
 if [ ! -d "tmp" ]
 then
     mkdir tmp
-    chmod -R 777 tmp
+    chmod -R 775 tmp
     echo -e "${GREEN}[OK]"
 else
-    chmod -R 777 tmp
+    chmod -R 775 tmp
     echo -e "${GREEN}[OK]${NC} (tmp/ folder already present)"
 fi
 cd $tmp
@@ -61,24 +66,48 @@ tmp=`pwd`
 if [ ! -d "app/proxies" ]
 then
     mkdir app/proxies
-    chmod 777 app/proxies
+    chmod 775 app/proxies
     echo -e "${GREEN}[OK]"
 else
-    chmod 777 app/proxies
+    chmod 775 app/proxies
     echo -e "${GREEN}[OK]${NC} (app/proxies folder already present)"
 fi
 cd $tmp
 
 #Creating cli-config for doctrine
 echo -ne "\n${CYAN}Updating cli-config for doctrine"
-rm cli-config.php
-cp vendor/stonedz/pff2/cli-config.php .
-echo -e "${GREEN}[OK]"
+if [ -f "$PFF_ROOT/cli-config.php" ]
+then
+    cp "$PFF_ROOT/cli-config.php" ./cli-config.php
+    echo -e "${GREEN}[OK]"
+else
+    echo -e "${GREEN}[OK]${NC} (skipped: cli-config.php not found)"
+fi
 
 
 echo -ne "\n${CYAN}Updating index.php"
-rm index.php
-cp vendor/stonedz/pff2/resources/site_skeleton/index.php .
+if [ -f "$PFF_ROOT/resources/site_skeleton/index.php" ]
+then
+    cp "$PFF_ROOT/resources/site_skeleton/index.php" ./index.php
+    echo -e "${GREEN}[OK]"
+else
+    echo -e "${GREEN}[OK]${NC} (skipped: site_skeleton/index.php not found)"
+fi
+
+echo -ne "\n${CYAN}Updating development docker files"
+mkdir -p development
+if [ -f "$PFF_ROOT/development/compose.yaml" ]
+then
+    cp "$PFF_ROOT/development/compose.yaml" development/compose.yaml
+fi
+if [ -f "$PFF_ROOT/development/nginx.conf" ]
+then
+    cp "$PFF_ROOT/development/nginx.conf" development/nginx.conf
+fi
+if [ -f "$PFF_ROOT/development/PHP.Dockerfile" ]
+then
+    cp "$PFF_ROOT/development/PHP.Dockerfile" development/PHP.Dockerfile
+fi
 echo -e "${GREEN}[OK]"
 
 
