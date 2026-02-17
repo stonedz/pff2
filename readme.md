@@ -6,58 +6,86 @@
 [![Latest Stable Version](https://poser.pugx.org/stonedz/pff2/v/stable.svg)](https://packagist.org/packages/stonedz/pff2)
 [![License](https://poser.pugx.org/stonedz/pff2/license.svg)](https://packagist.org/packages/stonedz/pff2)
 
-## Composer Installation
+Pff2 is a lightweight MVC framework for PHP 8.1+.
 
-To setup a new project:
+## Quick start (Composer)
 
-   - Create e new directory
-   - Install composer in the directory (or do a global composer install). See [here for the instructions](https://getcomposer.org/doc/00-intro.md).
-    - Create a composer.json file with the following content:
+1. Create a new project directory and add `stonedz/pff2` to `composer.json`.
+2. Install dependencies:
 
-```json
-{
-    "name": "company/project-name",
-    "description": "",
-    "minimum-stability": "beta",
-    "license": "proprietary",
-    "authors": [
-        {
-            "name": "",
-            "email": ""
-        }
-    ],
-    "require": {
-        "stonedz/pff2": "~2",
-        "stonedz/pff2-installers": "v2.0.7",
-        "stonedz/pff2-doctrine": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "pff\\models\\": "app/models",
-            "pff\\controllers\\": "app/controllers",
-            "pff\\services\\": "app/services"
-        }
-    }
-}
-
+```bash
+composer install
 ```
 
- - Run <code>php composer.phar install</code>
- - Run <code>vendor/bin/init</code> (and follow on screen instructions)
+3. Scaffold app files:
 
-## Docker integration
-
-Install docker and docker-compose on your system, then
-
-```
-  $ docker-compose up
+```bash
+vendor/bin/init
 ```
 
-The first time the containers are generated a new Mariadb admin password will be
-created and shown on the console, use that to connect your app to the DB. you
-can also use the same username and password in phpmyadmin to manage your db.
+4. Your project entry point is generated from `resources/site_skeleton/index.php`.
 
-You can modify the file docker-compose.yml to change ports and settings for the
-containers.
+Generated development files include:
 
-**Please see the [Wiki](https://github.com/stonedz/pff2/wiki) for more informations.**
+- `development/compose.yaml`
+- `development/nginx.conf`
+- `development/PHP.Dockerfile`
+
+## Quick start (Docker)
+
+The canonical development compose file is:
+
+`development/compose.yaml`
+
+Run:
+
+```bash
+docker compose -f development/compose.yaml up --build
+```
+
+Default service endpoints from this setup:
+
+- Web: `http://localhost:8081`
+- Mailcatcher UI: `http://localhost:1080`
+- MariaDB: `localhost:33061`
+
+## Installation notes
+
+- Composer install no longer auto-creates app symlinks; run `vendor/bin/init` explicitly.
+- `vendor/bin/update` refreshes framework-controlled generated files (for existing projects), including Docker dev files in `development/`.
+- Generated writable folders now default to `775` permissions (instead of `777`).
+- `vendor/bin/init` and `vendor/bin/update` skip optional copies when source files are not present, avoiding noisy `cp: cannot stat` errors.
+
+## Security defaults
+
+Pff2 now uses safer defaults in the app skeleton:
+
+- Exception details are configurable via `show_exception_details` and should be disabled in production.
+- Session/cookie hardening options are available in `app/config/config.user.php`:
+  - `security_cookie_httponly`
+  - `security_cookie_samesite`
+  - `security_cookie_secure`
+  - `security_session_strict_mode`
+- Auth module default hashing is `password_hash` / `password_verify` (legacy `md5`/`sha256` remain deprecated compatibility paths).
+
+## Upgrade notes
+
+- Mail module has migrated from SwiftMailer to Symfony Mailer.
+  - `swiftmailer/swiftmailer` is removed from dependencies.
+  - Existing `mail/module.conf.yaml` keys (`Type`, `Host`, `Port`, `Username`, `Password`, `Encryption`) continue to work.
+  - `sendMail(...)` API remains available and returns `true` on success, `false` on transport failure.
+- If your app still uses auth `passwordType: md5` or `sha256`, plan migration to `password_hash`.
+
+## Notes on templates
+
+PHP views are the recommended template path for new apps. Smarty templates are considered legacy/best-effort support.
+
+## Documentation
+
+- [Installation guide](docs/install.md)
+- [Smoke app guide](docs/smoke-app.md)
+- [Security baseline](docs/security.md)
+- [Architecture overview](docs/architecture.md)
+- [Upgrade guide](docs/upgrade-4.x.md)
+
+**Additional details:** [Wiki](https://github.com/stonedz/pff2/wiki)
