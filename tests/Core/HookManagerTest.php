@@ -1,93 +1,83 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use pff\Config;
+use pff\Core\HookManager;
+use pff\Exception\HookException;
+use pff\Iface\IAfterHook;
+use pff\Iface\IBeforeHook;
+use pff\Iface\IBeforeSystemHook;
+use pff\Iface\IHookProvider;
 
-/**
- *
- * @author paolo.fagni<at>gmail.com
- */
+#[\PHPUnit\Framework\Attributes\Group('HookManager')]
 class HookManagerTest extends TestCase
 {
-    /**
-     * @var \pff\Core\HookManager
-     */
-    protected $object;
+    private HookManager $object;
 
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     *
-     */
+    #[\PHPUnit\Framework\Attributes\Before]
     protected function setUp(): void
     {
-        $conf         = new \pff\Config('config.user.php', 'tests/assets');
-        $this->object = new \pff\Core\HookManager($conf);
+        $conf = new Config('config.user.php', 'tests/assets');
+        $this->object = new HookManager($conf);
     }
 
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     *
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-    }
-
+    #[\PHPUnit\Framework\Attributes\Test]
     public function testInitialStateIsValid()
     {
         $this->assertEmpty($this->object->getBeforeController());
         $this->assertEmpty($this->object->getAfterController());
     }
 
+    #[\PHPUnit\Framework\Attributes\Test]
     public function testRegisterABeforeProvider()
     {
-        $stub = $this->createMock('\\pff\\Iface\\IBeforeHook');
-        $stub->expects($this->any())
-             ->method('doBefore')
-             ->will($this->returnValue('done'));
+        $beforeHookMock = $this->createMock(IBeforeHook::class);
+        $beforeHookMock->method('doBefore')->willReturn('done');
 
-        $this->object->registerHook($stub, 'name');
+        $this->object->registerHook($beforeHookMock, 'name');
 
-        $listOfHooks = $this->object->getBeforeController();
-        $this->assertNotEmpty($listOfHooks);
+        $beforeControllerHooks = $this->object->getBeforeController();
+
+        $this->assertNotEmpty($beforeControllerHooks);
         $this->assertEmpty($this->object->getAfterController());
         $this->assertEmpty($this->object->getBeforeSystem());
-        $this->assertEquals('done', $listOfHooks['name']->doBefore());
+        $this->assertEquals('done', $beforeControllerHooks['name']->doBefore());
     }
 
+    #[\PHPUnit\Framework\Attributes\Test]
     public function testRegisterAnAfterProvider()
     {
-        $stub = $this->createMock('\\pff\\Iface\\IAfterHook');
-        $stub->expects($this->any())
-            ->method('doAfter')
-            ->will($this->returnValue('done'));
+        $afterHookMock = $this->createMock(IAfterHook::class);
+        $afterHookMock->method('doAfter')->willReturn('done');
 
-        $this->object->registerHook($stub, 'name');
+        $this->object->registerHook($afterHookMock, 'name');
 
-        $listOfHooks = $this->object->getAfterController();
-        $this->assertNotEmpty($listOfHooks);
-        $this->assertEquals('done', $listOfHooks['name']->doAfter());
+        $afterControllerHooks = $this->object->getAfterController();
+
+        $this->assertNotEmpty($afterControllerHooks);
+        $this->assertEquals('done', $afterControllerHooks['name']->doAfter());
     }
 
+    #[\PHPUnit\Framework\Attributes\Test]
     public function testRegisterABeforeSystemProvider()
     {
-        $stub = $this->createMock('\\pff\\Iface\\IBeforeSystemHook');
-        $stub->expects($this->any())
-            ->method('doBeforeSystem')
-            ->will($this->returnValue('done'));
+        $beforeSystemHookMock = $this->createMock(IBeforeSystemHook::class);
+        $beforeSystemHookMock->method('doBeforeSystem')->willReturn('done');
 
-        $this->object->registerHook($stub, 'name');
+        $this->object->registerHook($beforeSystemHookMock, 'name');
 
-        $listOfHooks = $this->object->getBeforeSystem();
-        $this->assertNotEmpty($listOfHooks);
-        $this->assertEquals('done', $listOfHooks['name']->doBeforeSystem());
+        $beforeSystemHooks = $this->object->getBeforeSystem();
+
+        $this->assertNotEmpty($beforeSystemHooks);
+        $this->assertEquals('done', $beforeSystemHooks['name']->doBeforeSystem());
     }
 
+    #[\PHPUnit\Framework\Attributes\Test]
     public function testFailsToRegisterAnEmptyProvider()
     {
-        $this->expectException('\\pff\\Exception\\HookException');
-        $stub = $this->createMock('\\pff\\Iface\\IHookProvider');
-        $this->object->registerHook($stub, 'name');
+        $this->expectException(HookException::class);
+
+        $emptyHookProviderMock = $this->createMock(IHookProvider::class);
+        $this->object->registerHook($emptyHookProviderMock, 'name');
     }
 }

@@ -1,28 +1,28 @@
 #!/usr/bin/env php
 <?php
-/**
- * User: paolo.fagni@gmail.com
- * Date: 11/11/14
- * Time: 11.45
- */
-if(!file_exists('vendor/autoload.php') && file_exists('composer.phar')){
-  exec('php composer.phar dumpautoload');
+if (!file_exists('vendor/autoload.php') && file_exists('composer.phar')) {
+    exec('php composer.phar dumpautoload');
 }
 
 include 'vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
 
-function loadModuleCommands(Application $application) {
-    $moduleDirs = array('app/modules/','modules/');
+function loadModuleCommands(Application $application)
+{
+    $moduleDirs = array('app/modules/', 'modules/');
 
-    foreach($moduleDirs as $moduleDirApp) {
-        $modulesApp = array_diff(scandir($moduleDirApp), array('..','.','.gitignore'));
-        foreach($modulesApp as $module) {
-            if (file_exists($moduleDirApp.$module.'/commands')) {
-                $commands = array_diff(scandir($moduleDirApp.$module.'/commands'), array('..','.','.gitignore'));
-                foreach($commands as $command) {
-                    $command_name = '\\pff\\Commands\\'.substr($command, 0, -4);
+    foreach ($moduleDirs as $moduleDirApp) {
+        $res = scandir($moduleDirApp);
+        if (!$res) {
+            $res = array();
+        }
+        $modulesApp = array_diff($res, array('..', '.', '.gitignore'));
+        foreach ($modulesApp as $module) {
+            if (file_exists($moduleDirApp . $module . '/commands')) {
+                $commands = array_diff(scandir($moduleDirApp . $module . '/commands'), array('..', '.', '.gitignore'));
+                foreach ($commands as $command) {
+                    $command_name = '\\pff\\Commands\\' . substr($command, 0, -4);
                     $application->add(new $command_name);
                 }
             }
@@ -30,10 +30,11 @@ function loadModuleCommands(Application $application) {
     }
 }
 
-function loadCommands(Application $application) {
-    $pffCommands = array_diff(scandir('vendor/stonedz/pff2/src/Commands'), array('..','.','.gitignore','CommandUtils.php'));
-    foreach($pffCommands as $command) {
-        $command_name = '\\pff\\Commands\\'.substr($command, 0, -4);
+function loadCommands(Application $application)
+{
+    $pffCommands = array_diff(scandir('vendor/stonedz/pff2/src/Commands'), array('..', '.', '.gitignore', 'CommandUtils.php'));
+    foreach ($pffCommands as $command) {
+        $command_name = '\\pff\\Commands\\' . substr($command, 0, -4);
         $application->add(new $command_name);
     }
 }

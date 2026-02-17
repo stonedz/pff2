@@ -3,7 +3,7 @@ RewriteEngine On
 
 RewriteCond %{REQUEST_URI} !/app/public/
 
-RewriteRule ^(.*)$ index.php?url=$1 [QSA,PT,L]
+RewriteRule ^(.*)$ index.php?url=$1 "[QSA,PT,L,BNP,B= ?]"
 
 </IfModule>
 

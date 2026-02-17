@@ -2,7 +2,9 @@
     "name": "stonedz/pff2",
     "type": "pff2-core",
     "description": "A simple yet robust PHP MVC framework",
-    "keywords": ["framework"],
+    "keywords": [
+        "framework"
+    ],
     "homepage": "https://github.com/stonedz/pff2",
     "license": "MIT",
     "authors": [
@@ -17,15 +19,22 @@
         "mobiledetect/mobiledetectlib": "3.*",
         "pimple/pimple": "~3.5",
         "php": ">=8.1",
-        "swiftmailer/swiftmailer": "5.4.12",
-        "symfony/console": "~5.3",
+        "symfony/mailer": "~7",
+        "symfony/console": "~7",
         "symfony/yaml": "~5.3"
     },
     "require-dev": {
-        "codeception/codeception": "*",
-        "phpunit/phpunit": "~11"
+        "codeception/codeception": "^5.3",
+        "phpunit/phpunit": "^11.5",
+        "stonedz/pff2-doctrine": "4.0.x-dev",
+        "rector/rector": "^1.2",
+        "phpstan/phpstan": "^1.12"
     },
-    "bin": ["scripts/init", "scripts/pff"],
+    "bin": [
+        "scripts/init",
+        "scripts/pff",
+        "scripts/update"
+    ],
     "autoload": {
         "psr-4": {
             "pff\\": "src",
@@ -34,6 +43,7 @@
                 "src/modules/auth",
                 "src/modules/config_var",
                 "src/modules/cookies",
+                "src/modules/csrf",
                 "src/modules/default_controller",
                 "src/modules/encryption",
                 "src/modules/exception_handler",
@@ -49,8 +59,25 @@
                 "src/modules/session",
                 "src/modules/tidy",
                 "src/modules/url"
-
             ]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "pff\\": "app",
+            "pff\\models\\": "app/models",
+            "pff\\services\\": "app/services",
+            "pff\\controllers\\": "app/controllers"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@php -r \"echo 'pff2 installed. Run vendor/bin/init to scaffold app files.'.PHP_EOL;\""
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "stonedz/pff2-installers": true
         }
     }
 }

@@ -6,6 +6,7 @@ use pff\Abs\AModule;
 use pff\Iface\IConfigurableModule;
 use pff\modules\Abs\APasswordChecker;
 use pff\modules\Utils\Md5PasswordChecker;
+use pff\modules\Utils\PasswordHashPasswordChecker;
 use pff\modules\Utils\Sha256PasswordChecker;
 
 /**
@@ -88,27 +89,35 @@ class Auth extends AModule implements IConfigurableModule
 
     public function loadConfig($parsedConfig)
     {
-        $this->_modelName         = $parsedConfig['moduleConf']['userModelClass'];
+        $this->_modelName = $parsedConfig['moduleConf']['userModelClass'];
         $this->_usernameAttribute = $parsedConfig['moduleConf']['usernameAttribute'];
         $this->_methodGetPassword = $parsedConfig['moduleConf']['userGetPassword'];
-        $this->_encryptionMethod  = $parsedConfig['moduleConf']['passwordType'];
-        $this->_sessionVarName    = $parsedConfig['moduleConf']['sessionVarName'];
-        $this->_useSalt           = $parsedConfig['moduleConf']['useSalt'];
-        $this->_methodGetSalt     = $parsedConfig['moduleConf']['userGetSalt'];
+        $this->_encryptionMethod = $parsedConfig['moduleConf']['passwordType'];
+        $this->_sessionVarName = $parsedConfig['moduleConf']['sessionVarName'];
+        $this->_useSalt = $parsedConfig['moduleConf']['useSalt'];
+        $this->_methodGetSalt = $parsedConfig['moduleConf']['userGetSalt'];
 
         switch ($this->_encryptionMethod) {
+            case 'password_hash':
+            case 'PASSWORD_HASH':
+            case 'password':
+            case 'PASSWORD':
+                $this->_encryptionStrategy = new PasswordHashPasswordChecker();
+                break;
             case 'md5':
             case 'MD5':
+                @trigger_error('Auth module: md5 passwordType is deprecated and should be replaced with password_hash.', E_USER_DEPRECATED);
                 $this->_encryptionStrategy = new Md5PasswordChecker();
                 break;
             case 'sha2':
             case 'SHA2':
             case 'sha256':
             case 'SHA256':
+                @trigger_error('Auth module: sha256 passwordType is deprecated and should be replaced with password_hash.', E_USER_DEPRECATED);
                 $this->_encryptionStrategy = new Sha256PasswordChecker();
                 break;
-            default: // If no encrytion is selected choose md5
-                $this->_encryptionStrategy = new Md5PasswordChecker();
+            default:
+                $this->_encryptionStrategy = new PasswordHashPasswordChecker();
                 break;
         }
     }
@@ -120,7 +129,8 @@ class Auth extends AModule implements IConfigurableModule
      */
     public function checkAuth()
     {
-        if (isset($_SESSION[$this->_sessionVarName]) &&
+        if (
+            isset($_SESSION[$this->_sessionVarName]) &&
             $_SESSION[$this->_sessionVarName] == 1
         ) {
             return true;
@@ -143,7 +153,7 @@ class Auth extends AModule implements IConfigurableModule
             ->getRepository('pff\models\\' . $this->_modelName)
             ->findOneBy([$this->_usernameAttribute => $username]);
         if ($tmp) {
-            if ($this->_encryptionStrategy->checkPass($password, call_user_func([$tmp, $this->_methodGetPassword]), ($this->_useSalt) ? (call_user_func([$tmp,$this->_methodGetSalt])) : '')) {
+            if ($this->_encryptionStrategy->checkPass($password, call_user_func([$tmp, $this->_methodGetPassword]), ($this->_useSalt) ? (call_user_func([$tmp, $this->_methodGetSalt])) : '')) {
                 $this->_logUser();
                 return true;
             } else {

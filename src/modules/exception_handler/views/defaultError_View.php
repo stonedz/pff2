@@ -7,13 +7,16 @@
  */
 ?>
 <html>
+
 <head>
     <title>Ooops!</title>
 </head>
 
 <body>
-<div><h2><?php echo 'Error!'; ?></h2></div>
-<div><?=$message?></div>
+    <div>
+        <h2><?php echo 'Error!'; ?></h2>
+    </div>
+    <div><?= $this->e($this->get('message', '')) ?></div>
 </body>
-</html>
 
+</html>

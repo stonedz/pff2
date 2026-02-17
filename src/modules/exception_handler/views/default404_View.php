@@ -7,12 +7,16 @@
  */
 ?>
 <html>
+
 <head>
     <title>404 - Not Found</title>
 </head>
 
 <body>
-<div><h2><?php echo 'Page not found';?></h2></div>
-<div><?=$message?></div>
+    <div>
+        <h2><?php echo 'Page not found'; ?></h2>
+    </div>
+    <div><?= $this->e($this->get('message', '')) ?></div>
 </body>
+
 </html>

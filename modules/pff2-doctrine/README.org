@@ -1,0 +1,30 @@
+#+TITLE: Readme
+#+author: Paolo Fagni
+#+email: paolo.fagni@gmail.com
+
+* Doctrine pff2 module
+This module enables [[https://www.doctrine-project.org/][Doctrine: PHP Open Source Project]] integration with [[https://github.com/stonedz/pff2][GitHub - stonedz/pff2: New version of the pff MVC PHP framework]]
+
+* Installation
+Add this line in your =composer.json= =require= :
+#+begin_src json
+	"require": {
+		"stonedz/pff2-doctrine": "~1",
+	},
+#+end_src
+
+* Configuration
+After the installation the configuration will be copied in =app/config/modules/pff2-doctrine/= folder:
+#+begin_src yaml
+moduleConf:
+  # Set to true to use redis as a cache
+  redis: false
+  redis_port: 6379
+  redis_host: redis
+  # Leave empty if not used
+  redis_password:
+#+end_src
+- =redis=: set to =true= to enable Redis a cache for Doctrine
+- =redis_port=
+- =redis_host=
+- =redis_password=: set to empty id your redis server does not require auth.

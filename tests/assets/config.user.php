@@ -45,30 +45,12 @@ $pffConfig['orm'] = true;
 /*
  * Db connection data.
  */
-$pffConfig['databaseConfig'] = array(
-    'dbname' => '',
-    'user' => '',
-    'password' => '',
-    'host' => '',
-    'driver' => 'pdo_mysql',
-    'driverOptions' => array(
-        1002 => 'SET NAMES utf8'
-    )
-);
+$pffConfig['databaseConfig'] = ['dbname' => '', 'user' => '', 'password' => '', 'host' => '', 'driver' => 'pdo_mysql', 'driverOptions' => [1002 => 'SET NAMES utf8']];
 
 /*
  * Db connection data if DEVELOPMENT_ENVIRONMENT is true
  */
-$pffConfig['databaseConfigDev'] = array(
-    'dbname' => '',
-    'user' => '',
-    'password' => '',
-    'host' => '',
-    'driver' => 'pdo_mysql',
-    'driverOptions' => array(
-        1002 => 'SET NAMES utf8'
-    )
-);
+$pffConfig['databaseConfigDev'] = ['dbname' => '', 'user' => '', 'password' => '', 'host' => '', 'driver' => 'pdo_mysql', 'driverOptions' => [1002 => 'SET NAMES utf8']];
 
 ///////////////////////////////////////
 // Modules
@@ -77,8 +59,4 @@ $pffConfig['databaseConfigDev'] = array(
 /*
  * Modules to be loaded
  */
-$pffConfig['modules'] = array(
-    'logger',
-    'main_layout'
-
-);
+$pffConfig['modules'] = ['logger', 'main_layout'];

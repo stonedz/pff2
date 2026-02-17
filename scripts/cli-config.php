@@ -21,7 +21,7 @@ $config->setProxyNamespace('pff\proxies');
 $config->setAutoGenerateProxyClasses((APPLICATION_ENV == "development"));
 
 // Driver (4)
-$driverImpl = $config->newDefaultAnnotationDriver(array('app/models'));
+$driverImpl = $config->newDefaultAnnotationDriver(['app/models']);
 $config->setMetadataDriverImpl($driverImpl);
 
 // Caching Configuration (5)
@@ -46,10 +46,7 @@ if (true === $pffConfig['development_environment']) {
 
 $em = \Doctrine\ORM\EntityManager::create($connectionOptions, $config);
 
-$helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
-    'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()),
-    'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em)
-));
+$helperSet = new \Symfony\Component\Console\Helper\HelperSet(['db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()), 'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em)]);
 
 $platform = $em->getConnection()->getDatabasePlatform();
 $platform->registerDoctrineTypeMapping('enum', 'string');

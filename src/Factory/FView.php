@@ -25,13 +25,13 @@ class FView
      * @param string $templateType Te type of the template
      * @return AView
      */
-    public static function create($templateName, App $app = null, $templateType = null)
+    public static function create($templateName, ?App $app = null, $templateType = null)
     {
         $standardTemplate = $templateName;
 
 
         if ($templateType === null) {
-            $tmp          = explode('.', $templateName);
+            $tmp = explode('.', $templateName);
             $templateType = $tmp[count($tmp) - 1];
         } else {
             $templateType = strtolower($templateType);
@@ -80,7 +80,7 @@ class FView
                 $tempTemplateName = implode('.', $tmp);
 
                 if ($type == 'php') {
-                    $templatePath = ROOT . DS . 'app' . DS . 'views' . DS .  $tempTemplateName;
+                    $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $tempTemplateName;
                 } else { // smarty
                     $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS . 'templates' . DS . $tempTemplateName;
                 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * User: stonedz
  * Date: 2/5/15
@@ -21,12 +22,19 @@ class OptimizeProduction extends Command
             ->setDescription('Generates doctrine proxies, clears doctrine caches and dump optimized composer autoload.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output):int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        //check if doctrine executable extists
+        if (!file_exists('cli-config.php')) {
+            $output->writeln('<error>ERROR</error>');
+        } else {
+            $doctrine_executable = 'php cli-config.php';
+        }
+
         $output->writeln('Optimizing environment for production...');
 
         $output->write('Clear doctrine metadata cache...');
-        exec('vendor/bin/doctrine orm:clear-cache:metadata', $res, $ret);
+        exec($doctrine_executable . ' orm:clear-cache:metadata', $res, $ret);
         if ($ret == 0) {
             $output->writeln('<info>DONE</info>');
         } else {
@@ -34,7 +42,7 @@ class OptimizeProduction extends Command
         }
 
         $output->write('Clear doctrine query cache...');
-        exec('vendor/bin/doctrine orm:clear-cache:query', $res, $ret);
+        exec($doctrine_executable . ' orm:clear-cache:query', $res, $ret);
         if ($ret == 0) {
             $output->writeln('<info>DONE</info>');
         } else {
@@ -43,7 +51,7 @@ class OptimizeProduction extends Command
 
         $output->write('Clear and generate doctrine proxies...');
         exec('rm -rf app/proxies/*', $res, $ret);
-        exec('vendor/bin/doctrine orm:generate-proxies', $res, $ret);
+        exec($doctrine_executable . ' orm:generate-proxies', $res, $ret);
         if ($ret == 0) {
             $output->writeln('<info>DONE</info>');
         } else {

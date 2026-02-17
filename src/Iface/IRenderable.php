@@ -7,21 +7,23 @@ interface IRenderable
     /**
      * Sets a value to be passed to a View
      *
-     * @return mixed
+     * @param string $name
+     * @param mixed $value
+     * @return void
      */
-    public function set($name, $value);
+    public function set(string $name, mixed $value): void;
 
     /**
-     * Renderes the view
+     * Renders the view
      *
-     * @return mixed
+     * @return void
      */
-    public function render();
+    public function render(): void;
 
     /**
      * Returns the rendered HTML without output to browser
      *
-     * @return mixed
+     * @return string
      */
-    public function renderHtml();
+    public function renderHtml(): string;
 }

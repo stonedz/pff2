@@ -1,0 +1,6 @@
+name: Csrf
+version: "1.0"
+desc: CSRF protection module - generates and validates anti-CSRF tokens
+class: Csrf
+requires:
+  - session

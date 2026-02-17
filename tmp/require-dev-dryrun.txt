@@ -1,0 +1,15 @@
+./composer.json has been updated
+Running composer update codeception/codeception phpunit/phpunit rector/rector stonedz/pff2-doctrine phpstan/phpstan --with-all-dependencies
+Loading composer repositories with package information
+Updating dependencies
+Your requirements could not be resolved to an installable set of packages.
+
+  Problem 1
+    - Root composer.json requires stonedz/pff2-doctrine dev-master -> satisfiable by stonedz/pff2-doctrine[dev-master].
+    - doctrine/orm v2.5.1 requires symfony/console ~2.5 -> found symfony/console[v2.5.0, ..., v2.8.52] but it conflicts with your root composer.json require (~7).
+    - doctrine/orm[v2.5.2, ..., v2.5.11] require symfony/console ~2.5|~3.0 -> found symfony/console[v2.5.0, ..., v2.8.52, v3.0.0, ..., v3.4.47] but it conflicts with your root composer.json require (~7).
+    - doctrine/orm[v2.5.12, ..., v2.5.14] require symfony/console ~2.5|~3.0|~4.0 -> found symfony/console[v2.5.0, ..., v2.8.52, v3.0.0, ..., v3.4.47, v4.0.0, ..., v4.4.49] but it conflicts with your root composer.json require (~7).
+    - stonedz/pff2-doctrine dev-master requires doctrine/orm 2.5.* -> satisfiable by doctrine/orm[v2.5.1, ..., v2.5.14].
+
+
+Installation failed, reverting ./composer.json and ./composer.lock to their original content.

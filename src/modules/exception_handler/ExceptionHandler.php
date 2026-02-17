@@ -29,28 +29,35 @@ class ExceptionHandler extends AModule implements IBeforeSystemHook
      */
     public function manageExceptions(\Throwable $exception)
     {
-        $code = (int)$exception->getCode();
-        header(' ', true, $code);
+        $code = (int) $exception->getCode();
+        $httpCode = ($code >= 400 && $code <= 599) ? $code : 500;
+        http_response_code($httpCode);
 
-        if (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS . 'templates' . DS .$code . '_View.tpl')) {
-            $viewPath = $code . '_View.tpl';
-        } elseif (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . $code . '_View.php')) {
-            $viewPath = $code . '_View.php';
-        } elseif (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS . 'templates' . DS .'defaultError_View.tpl')) {
+        $isDevelopment = ($this->getConfig()->getConfigData('development_environment') === true);
+        $showExceptionDetails = $this->getConfig()->getConfigData('show_exception_details');
+        if (!is_bool($showExceptionDetails)) {
+            $showExceptionDetails = $isDevelopment;
+        }
+
+        if (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS . 'templates' . DS . $httpCode . '_View.tpl')) {
+            $viewPath = $httpCode . '_View.tpl';
+        } elseif (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . $httpCode . '_View.php')) {
+            $viewPath = $httpCode . '_View.php';
+        } elseif (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS . 'templates' . DS . 'defaultError_View.tpl')) {
             $viewPath = 'defaultError_View.tpl';
         } elseif (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . 'defaultError_View.php')) {
             $viewPath = 'defaultError_View.php';
-        } elseif (file_exists(ROOT_LIB . DS . 'src' . DS . 'modules' . DS . 'exception_handler' . DS . 'views' . DS . 'default' . $code . '_View.php')) {
-            $viewPath = ROOT_LIB . DS . 'src' . DS . 'modules' . DS . 'exception_handler' . DS . 'views' . DS . 'default' . $code . '_View.php';
+        } elseif (file_exists(ROOT_LIB . DS . 'src' . DS . 'modules' . DS . 'exception_handler' . DS . 'views' . DS . 'default' . $httpCode . '_View.php')) {
+            $viewPath = ROOT_LIB . DS . 'src' . DS . 'modules' . DS . 'exception_handler' . DS . 'views' . DS . 'default' . $httpCode . '_View.php';
         } else {
             $viewPath = ROOT_LIB . DS . 'src' . DS . 'modules' . DS . 'exception_handler' . DS . 'views' . DS . 'defaultError_View.php';
         }
         $view = FView::create($viewPath, $this->getApp());
-        $view->set('message', $exception->getMessage());
-        $view->set('code', $exception->getCode());
-        $view->set('trace', $exception->getTrace());
+        $view->set('message', $showExceptionDetails ? $exception->getMessage() : 'An unexpected error occurred.');
+        $view->set('code', $httpCode);
+        $view->set('trace', $showExceptionDetails ? $exception->getTrace() : []);
 
-        if (is_a($exception, '\pff\Exception\PffException')) {
+        if ($showExceptionDetails && is_a($exception, '\pff\Exception\PffException')) {
             /** @var PffException $exception */
             $exceptionParams = $exception->getViewParams();
             if ($exceptionParams !== null && is_array($exceptionParams)) {

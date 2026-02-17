@@ -1,5 +1,4 @@
 #!/bin/bash
-
 green='\e[0;32m'
 GREEN='\e[1;32m'
 red='\e[0;31m'
@@ -10,30 +9,112 @@ cyan='\e[0;36m'
 CYAN='\e[1;36m'
 NC='\e[0m' # No Color
 
-echo -e "${GREEN}========== \n${BLUE} pf${RED}f ${BLUE}update \n${GREEN}=========="
+function help() {
+    echo -e "${NC}-f    Force the update";
+}
 
+echo -e "${GREEN}========== \n${BLUE} pf${RED}f${GREEN}2 ${BLUE}update \n${GREEN}=========="
 
-echo -e "${CYAN}Checking for updated modules configuration..."
-cd ..
-
-for module in `ls lib/app_skeleton/config/modules/`; do
-    if [ ! -d 'app/config/modules/'${module} ]; then
-        echo -ne "${CYAN}New module configuration for "${module}"..."
-        cp -r 'lib/app_skeleton/config/modules/'${module} 'app/config/modules/'
-        echo -e "${GREEN}[COPIED]"
-    else
-        diff 'lib/app_skeleton/config/modules/'${module}'/module.conf.yaml' \
-            'app/config/modules/'${module}'/module.conf.yaml' &> /dev/null
-
-        if [ $? -ne 0 ] ; then
-           echo -e ${red}"- "${module}" configuration in app/config/modules/${module} differs, check it!"
-        fi
-
-    fi
+# Gets the parameters
+while getopts ":f" opt; do
+    case $opt in
+        f)
+            force=true
+            echo -e "${red}Force update!"
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            echo -e "\n"
+            help
+            exit
+            ;;
+    esac
 done
 
-#Runs the init
-cd scripts
-./init -f
 
-echo -e ${NC}
+# command line dependecies"
+#CMDS="curl"
+PKGS=""
+#######################################
+# START
+#######################################
+fail=false
+PFF_ROOT="vendor/stonedz/pff2"
+if [ ! -d "$PFF_ROOT" ]
+then
+    PFF_ROOT="."
+fi
+
+
+# GENERATE tmp FOLDER
+echo -ne "\n${CYAN}Checking tmp directory..."
+tmp=`pwd`
+if [ ! -d "tmp" ]
+then
+    mkdir tmp
+    chmod -R 775 tmp
+    echo -e "${GREEN}[OK]"
+else
+    chmod -R 775 tmp
+    echo -e "${GREEN}[OK]${NC} (tmp/ folder already present)"
+fi
+cd $tmp
+
+# GENERATE proxy FOLDER
+echo -ne "\n${CYAN}Checking proxy directory..."
+tmp=`pwd`
+if [ ! -d "app/proxies" ]
+then
+    mkdir app/proxies
+    chmod 775 app/proxies
+    echo -e "${GREEN}[OK]"
+else
+    chmod 775 app/proxies
+    echo -e "${GREEN}[OK]${NC} (app/proxies folder already present)"
+fi
+cd $tmp
+
+#Creating cli-config for doctrine
+echo -ne "\n${CYAN}Updating cli-config for doctrine"
+if [ -f "$PFF_ROOT/cli-config.php" ]
+then
+    cp "$PFF_ROOT/cli-config.php" ./cli-config.php
+    echo -e "${GREEN}[OK]"
+else
+    echo -e "${GREEN}[OK]${NC} (skipped: cli-config.php not found)"
+fi
+
+
+echo -ne "\n${CYAN}Updating index.php"
+if [ -f "$PFF_ROOT/resources/site_skeleton/index.php" ]
+then
+    cp "$PFF_ROOT/resources/site_skeleton/index.php" ./index.php
+    echo -e "${GREEN}[OK]"
+else
+    echo -e "${GREEN}[OK]${NC} (skipped: site_skeleton/index.php not found)"
+fi
+
+echo -ne "\n${CYAN}Updating development docker files"
+mkdir -p development
+if [ -f "$PFF_ROOT/development/compose.yaml" ]
+then
+    cp "$PFF_ROOT/development/compose.yaml" development/compose.yaml
+fi
+if [ -f "$PFF_ROOT/development/nginx.conf" ]
+then
+    cp "$PFF_ROOT/development/nginx.conf" development/nginx.conf
+fi
+if [ -f "$PFF_ROOT/development/PHP.Dockerfile" ]
+then
+    cp "$PFF_ROOT/development/PHP.Dockerfile" development/PHP.Dockerfile
+fi
+echo -e "${GREEN}[OK]"
+
+
+# Final message
+if [ "$fail" == "false" ]
+then
+    echo -e "\n${NC}Everything should be in place :D Have fun!"
+else
+    echo -e "\n${red}Something went wrong!${NC}"
+fi

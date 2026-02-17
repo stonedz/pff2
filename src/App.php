@@ -74,13 +74,13 @@ class App
         if ($config) {
             $this->_config = $config;
         } else {
-            $this->_config        = ServiceContainer::get('config');
+            $this->_config = ServiceContainer::get('config');
         }
 
         if ($hookmanager) {
             $this->_hookManager = $hookmanager;
         } else {
-            $this->_hookManager   = ServiceContainer::get('hookmanager');
+            $this->_hookManager = ServiceContainer::get('hookmanager');
         }
 
         if ($modulemanager) {
@@ -101,9 +101,9 @@ class App
      */
     public function setErrorReporting()
     {
-        if (true ===  $this->_config->getConfigData('development_environment')) {
+        if (true === $this->_config->getConfigData('development_environment')) {
             if ($this->_config->getConfigData('show_all_errors') === true) {
-                error_reporting(E_ALL && ~E_DEPRECATED && ~E_NOTICE && ~E_STRICT);
+                error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
                 ini_set('display_errors', 'On');
             } else {
                 error_reporting(E_ALL);
@@ -123,6 +123,7 @@ class App
      * @param $value array|string
      * @return array|string
      * @codeCoverageIgnore
+     * @deprecated No longer needed since PHP 5.4. Will be removed in pff2 5.0.
      */
     private function stripSlashesDeep($value)
     {
@@ -134,6 +135,7 @@ class App
      * Check register globals and remove them
      *
      * @codeCoverageIgnore
+     * @deprecated No longer needed since PHP 5.4. Will be removed in pff2 5.0.
      */
     public function unregisterGlobals()
     {
@@ -147,6 +149,78 @@ class App
                 }
             }
         }
+    }
+
+    // -------------------------------------------------------------------------
+    //  Safe input accessors
+    // -------------------------------------------------------------------------
+
+    /**
+     * Gets a value from the $_GET superglobal with optional sanitization.
+     *
+     * @param string $key Parameter name
+     * @param mixed $default Default value when key is absent
+     * @param int $filter A PHP filter constant (e.g. FILTER_SANITIZE_SPECIAL_CHARS). Pass FILTER_DEFAULT to skip.
+     * @return mixed
+     */
+    public function getQuery(string $key, mixed $default = null, int $filter = FILTER_DEFAULT): mixed
+    {
+        if (!isset($_GET[$key])) {
+            return $default;
+        }
+        $value = filter_input(INPUT_GET, $key, $filter);
+        return ($value === false || $value === null) ? $default : $value;
+    }
+
+    /**
+     * Gets a value from the $_POST superglobal with optional sanitization.
+     *
+     * @param string $key Parameter name
+     * @param mixed $default Default value when key is absent
+     * @param int $filter A PHP filter constant (e.g. FILTER_SANITIZE_SPECIAL_CHARS). Pass FILTER_DEFAULT to skip.
+     * @return mixed
+     */
+    public function getPost(string $key, mixed $default = null, int $filter = FILTER_DEFAULT): mixed
+    {
+        if (!isset($_POST[$key])) {
+            return $default;
+        }
+        $value = filter_input(INPUT_POST, $key, $filter);
+        return ($value === false || $value === null) ? $default : $value;
+    }
+
+    /**
+     * Gets a value from the $_SERVER superglobal with optional sanitization.
+     *
+     * @param string $key Server variable name (e.g. 'REQUEST_METHOD')
+     * @param mixed $default Default value when key is absent
+     * @param int $filter A PHP filter constant. Pass FILTER_DEFAULT to skip.
+     * @return mixed
+     */
+    public function getServer(string $key, mixed $default = null, int $filter = FILTER_DEFAULT): mixed
+    {
+        if (!isset($_SERVER[$key])) {
+            return $default;
+        }
+        $value = filter_input(INPUT_SERVER, $key, $filter);
+        return ($value === false || $value === null) ? $default : $value;
+    }
+
+    /**
+     * Gets a value from the $_COOKIE superglobal with optional sanitization.
+     *
+     * @param string $key Cookie name
+     * @param mixed $default Default value when key is absent
+     * @param int $filter A PHP filter constant. Pass FILTER_DEFAULT to skip.
+     * @return mixed
+     */
+    public function getCookie(string $key, mixed $default = null, int $filter = FILTER_DEFAULT): mixed
+    {
+        if (!isset($_COOKIE[$key])) {
+            return $default;
+        }
+        $value = filter_input(INPUT_COOKIE, $key, $filter);
+        return ($value === false || $value === null) ? $default : $value;
     }
 
     /**
@@ -209,7 +283,7 @@ class App
     public function applyRouting(&$request, &$action = null, &$urlArray = null)
     {
         if (isset($this->_routes[strtolower($request)])) {
-            $route          = $this->_routes[strtolower($request)];
+            $route = $this->_routes[strtolower($request)];
             $explodedTarget = explode('/', $route);
 
             if (isset($explodedTarget[1])) { // we have an action for this route!
@@ -263,7 +337,7 @@ class App
         } elseif (file_exists(ROOT . DS . 'app' . DS . 'controllers' . DS . ucfirst($tmpController) . '_Controller.php')) {
             $action = isset($urlArray[0]) ? array_shift($urlArray) : 'index';
             $controllerClassName = '\\pff\\controllers\\' . ucfirst($tmpController) . '_Controller';
-            $controller          = new $controllerClassName($tmpController, $this, $action, array_merge($urlArray, $myGet));
+            $controller = new $controllerClassName($tmpController, $this, $action, array_merge($urlArray, $myGet));
         } else {
             throw new RoutingException('Cannot find a valid controller.', 404);
         }
@@ -273,7 +347,7 @@ class App
             $this->_moduleManager->setController($controller); // We have a controller, let the modules know about it
             ob_start();
             $this->_hookManager->runBefore(); // Runs before controller hooks
-            if ((int)method_exists($controller, $this->_action)) {
+            if ((int) method_exists($controller, $this->_action)) {
                 call_user_func_array([$controller, "beforeAction"], $urlArray);
                 call_user_func([$controller, "beforeFilter"]);
                 call_user_func_array([$controller, $this->_action], $urlArray);

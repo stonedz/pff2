@@ -1,6 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use pff\Config;
+use pff\Exception\ConfigException;
 
 /**
  * Test for Config
@@ -8,67 +10,56 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTest extends TestCase
 {
-    /**
-     * @var \pff\Config
-     */
-    protected $object;
+    private Config $config;
 
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp(): void
+    #[\PHPUnit\Framework\Attributes\Before]
+    public function setUp(): void
     {
-        $this->object = new \pff\Config('config.user.php', 'tests/assets');
+        $this->config = new Config('config.user.php', 'tests/assets');
     }
 
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     *
-     * @return void
-     */
-    protected function tearDown(): void
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function configurationIsNotEmptyAtStartup(): void
     {
+        $this->assertNotEmpty($this->config->getConfig());
     }
 
-    public function testConfigurationIsNotEmptyAtStartup()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function getConfigFailsWithInvalid(): void
     {
-        $this->assertNotEmpty($this->object->getConfig());
+        $this->assertFalse($this->config->getConfigData('NoIDoNotExistxxxxx'));
     }
 
-    public function testGetConfigFailsWithInvalid()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function getAconfigurationValue(): void
     {
-        $this->expectException('\\pff\\Exception\\ConfigException');
-        $this->object->getConfigData('NoIDoNotExistxxxxx');
+        $this->assertIsBool($this->config->getConfigData('development_environment'));
     }
 
-    public function testGetAconfigurationValue()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function setAConfigurationValue(): void
     {
-        $this->assertIsBool($this->object->getConfigData('development_environment'));
+        $this->config->setConfig('aTestValue', 12);
+        $this->assertEquals($this->config->getConfigData('aTestValue'), 12);
     }
 
-    public function testSetAConfigurationValue()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function setAConfigurationFailsWithoutAString(): void
     {
-        $this->object->setConfig('aTestValue', 12);
-        $this->assertEquals($this->object->getConfigData('aTestValue'), 12);
+        $this->expectException(ConfigException::class);
+        $this->config->setConfig([], 12);
     }
 
-    public function testSetAConfigurationFailsWithoutAString()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function getConfigReturnsArrayWithNoParamaters(): void
     {
-        $this->expectException('\\pff\\Exception\\ConfigException');
-        $this->object->setConfig(array(), 12);
+        $this->assertIsArray($this->config->getConfigData());
     }
 
-    public function testGetConfigReturnsArrayWithNoParamaters()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function loadConfigFailsWithInexistantFile(): void
     {
-        //$this->assertTrue(is_array($this->object->getConfig()));
-        $this->assertIsArray($this->object->getConfigData());
-    }
-
-    public function testLoadConfigFailsWithInexistantFile()
-    {
-        $this->expectException('\\pff\\Exception\\ConfigException');
-        $this->object->loadConfig('nonono', 'config');
+        $this->expectException(ConfigException::class);
+        $this->config->loadConfig('nonono', 'config');
     }
 }

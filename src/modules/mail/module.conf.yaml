@@ -1,2 +1,14 @@
 moduleConf:
-  # If set uses smtp
+  # Transport type: smtp | sendmail | mail
+  Type: smtp
+
+  # SMTP host and port when Type=smtp
+  Host: localhost
+  Port: 25
+
+  # Optional SMTP credentials
+  Username:
+  Password:
+
+  # Optional encryption: tls | ssl | (empty)
+  Encryption:
