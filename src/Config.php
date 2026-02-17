@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace pff;
 
 use pff\Exception\ConfigException;
@@ -15,11 +17,11 @@ use pff\Exception\ConfigException;
 class Config
 {
     /**
-     * @var array Contains app configuarations
+     * @var array<string, mixed> Contains app configurations
      */
-    private $_config;
+    private array $_config;
 
-    public function __construct($configFile = 'config.user.php', $configPath = 'app/config')
+    public function __construct(string $configFile = 'config.user.php', string $configPath = 'app/config')
     {
         $this->_config = [];
         $this->loadConfig($configFile, $configPath); // Load main config file
@@ -33,7 +35,7 @@ class Config
      * @throws ConfigException
      * @return void
      */
-    public function loadConfig($configFile = 'config.user.php', $configPath = 'app/config')
+    public function loadConfig(string $configFile = 'config.user.php', string $configPath = 'app/config'): void
     {
         $completePath = ROOT . DS . $configPath . DS . $configFile;
 
@@ -57,7 +59,7 @@ class Config
      * @param null|string $data Wanted config param
      * @return array|mixed
      */
-    public function getConfigData($data = null)
+    public function getConfigData(?string $data = null): mixed
     {
         if ($data !== null && isset($this->_config[$data])) {
             return $this->_config[$data];
@@ -78,7 +80,7 @@ class Config
      * @deprecated Use getConfigData instead
      * @see getConfigData
      */
-    public function getConfig($data = null)
+    public function getConfig(?string $data = null): mixed
     {
         return $this->getConfigData($data);
     }
@@ -87,10 +89,9 @@ class Config
      * Sets a configuration,if the configuration already exists it OVERWRITES the old one.
      *
      * @param string $data
-     * @param mixed $value
      * @throws ConfigException
      */
-    public function setConfig($data, $value)
+    public function setConfig(string $data, mixed $value): void
     {
         if (is_string($data)) {
             $this->_config[$data] = $value;
