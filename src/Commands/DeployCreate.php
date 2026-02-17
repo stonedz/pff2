@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User: stonedz
  * Date: 2/13/15
@@ -20,7 +23,7 @@ use Symfony\Component\Yaml\Dumper;
 
 class DeployCreate extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('deploy:create')
@@ -38,7 +41,7 @@ class DeployCreate extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output):int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var QuestionHelper $questionHelper */
         $questionHelper = $this->getHelper('question');
@@ -104,23 +107,23 @@ class DeployCreate extends Command
 
         $yamlDumper = new Dumper();
         $toDump = [
-            'username'               => $username,
-            'host'                   => $host,
-            'remote_dir'             => $path,
-            'always_run_optimize'    => $optimize,
-            'remote_group'           => $remote_group,
-            'use_sudo'               => $use_sudo,
-            'exclude'                => $excludes,
-            'use_pem'                => $use_pem,
-            'pem_path'               => $pem_path,
+            'username' => $username,
+            'host' => $host,
+            'remote_dir' => $path,
+            'always_run_optimize' => $optimize,
+            'remote_group' => $remote_group,
+            'use_sudo' => $use_sudo,
+            'exclude' => $excludes,
+            'use_pem' => $use_pem,
+            'pem_path' => $pem_path,
         ];
 
         $yaml = $yamlDumper->dump($toDump, 2);
 
         $profile_name = $input->getArgument('profile-name');
         CommandUtils::checkDeployement();
-        while (file_exists('deployement/publish_'.$profile_name.'.yml')) {
-            $question = new ConfirmationQuestion('<question>deployement/publish_'.$profile_name.'.yml already exists, overwrite it?', false);
+        while (file_exists('deployement/publish_' . $profile_name . '.yml')) {
+            $question = new ConfirmationQuestion('<question>deployement/publish_' . $profile_name . '.yml already exists, overwrite it?', false);
             $answer = $questionHelper->ask($input, $output, $question);
             if (!$answer) {
                 $question = new Question('<question>New porfile name:</question> ');
@@ -129,8 +132,8 @@ class DeployCreate extends Command
                 break;
             }
         }
-        if (file_put_contents('deployement/publish_'.$profile_name.'.yml', $yaml)) {
-            $output->writeln('<info>Publish profile created at deployement/publish_'.$profile_name.'.yml</info>');
+        if (file_put_contents('deployement/publish_' . $profile_name . '.yml', $yaml)) {
+            $output->writeln('<info>Publish profile created at deployement/publish_' . $profile_name . '.yml</info>');
         } else {
             $output->writeln('<error>Error while writing output file!</error>');
         }

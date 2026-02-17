@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * User: stonedz
  * Date: 2/5/15
@@ -15,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class OptimizeProduction extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('deploy:optimize')
@@ -59,10 +61,10 @@ class OptimizeProduction extends Command
         }
 
         $output->writeln('Generate optimized autoload php...');
-        $command   = $this->getApplication()->find('composer:dumpautoload');
+        $command = $this->getApplication()->find('composer:dumpautoload');
         $arguments = ['command' => 'composer:dumpautoload'];
-        $inputa    = new ArrayInput($arguments);
-        $ret       = $command->run($inputa, $output);
+        $inputa = new ArrayInput($arguments);
+        $ret = $command->run($inputa, $output);
         return 0;
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User: stonedz
  * Date: 2/2/15
@@ -15,7 +18,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class BackupDatabase extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         require('app/config/config.user.php');
         $this
@@ -28,16 +31,16 @@ class BackupDatabase extends Command
                 'Backup directory',
                 'backups/sql'
             )
-              ->addOption(
-                  'port',
-                  'p',
-                  InputOption::VALUE_REQUIRED,
-                  'Mysql db port',
-                  '0'
-              );
+            ->addOption(
+                'port',
+                'p',
+                InputOption::VALUE_REQUIRED,
+                'Mysql db port',
+                '0'
+            );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output):int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $questionHelper = $this->getHelper('question');
 
@@ -75,13 +78,13 @@ class BackupDatabase extends Command
                 $dbPort = 3306;
             }
         }
-        $backup_prefix = $dbName.'-BKP-';
-        $backup_name = $backup_prefix.date("dmY-Hi").'.sql';
+        $backup_prefix = $dbName . '-BKP-';
+        $backup_name = $backup_prefix . date("dmY-Hi") . '.sql';
 
         $backup_dir = $input->getOption('backup-dir');
         $output->writeln('Checking for backup dir...');
         if (!file_exists($backup_dir)) {
-            $question = new ConfirmationQuestion('<question>Backup dir '.$backup_dir.' does not exists, create?</question>', 'n');
+            $question = new ConfirmationQuestion('<question>Backup dir ' . $backup_dir . ' does not exists, create?</question>', 'n');
             if ($questionHelper->ask($input, $output, $question)) {
                 if (mkdir($backup_dir, 0755, true)) {
                     $output->writeln('<info>DONE</info>');
@@ -95,7 +98,7 @@ class BackupDatabase extends Command
             }
         }
 
-        if (substr($backup_dir, -1) != '/') {
+        if (!str_ends_with((string) $backup_dir, '/')) {
             $backup_dir .= '/';
         }
 
@@ -105,7 +108,7 @@ class BackupDatabase extends Command
         exec($command, $res, $ret);
         if (0 == $ret) {
             $output->writeln('<info>DONE</info>');
-            $output->writeln('<info>Backup written in '.$backup_dir.''.$backup_name.'</info>');
+            $output->writeln('<info>Backup written in ' . $backup_dir . '' . $backup_name . '</info>');
         } else {
             $output->writeln('<error>ERROR</error>');
             foreach ($res as $line) {
@@ -123,10 +126,10 @@ class BackupDatabase extends Command
      * @param string $backup_dir Backup directory
      * @param string $backup_prefix Prefix used to name backups files.
      */
-    private function cleanOldBkp(InputInterface $input, OutputInterface $output, $backup_dir, $backup_prefix)
+    private function cleanOldBkp(InputInterface $input, OutputInterface $output, string $backup_dir, string $backup_prefix): void
     {
         $output->write('Cleaning old backups...');
-        $command = "find ".$backup_dir." -mtime +15 -name '".$backup_prefix."*' -exec rm {} \\;";
+        $command = "find " . $backup_dir . " -mtime +15 -name '" . $backup_prefix . "*' -exec rm {} \\;";
         exec($command);
         $output->writeln('<info>DONE</info>');
     }

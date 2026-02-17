@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User: stonedz
  * Date: 2/5/15
@@ -15,19 +18,19 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class ComposerUpdate extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('composer:update')
             ->setDescription('Updates composer packages');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output):int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $command   = $this->getApplication()->find('composer:install');
+        $command = $this->getApplication()->find('composer:install');
         $arguments = ['command' => 'composer:install'];
-        $inputa    = new ArrayInput($arguments);
-        $ret       = $command->run($inputa, $output);
+        $inputa = new ArrayInput($arguments);
+        $ret = $command->run($inputa, $output);
 
 
         $output->writeln('Upgrading composer packages...');
@@ -41,16 +44,16 @@ class ComposerUpdate extends Command
             if (!$questionHelper->ask($input, $output, $question)) {
                 return 1;
             } else {
-                $command   = $this->getApplication()->find('composer:install');
+                $command = $this->getApplication()->find('composer:install');
                 $arguments = ['command' => 'composer:install'];
-                $inputa    = new ArrayInput($arguments);
-                $ret       = $command->run($inputa, $output);
+                $inputa = new ArrayInput($arguments);
+                $ret = $command->run($inputa, $output);
 
                 if ($ret == 0) {
-                    $command   = $this->getApplication()->find('composer:update');
+                    $command = $this->getApplication()->find('composer:update');
                     $arguments = ['command' => 'composer:update'];
-                    $inputa    = new ArrayInput($arguments);
-                    $ret       = $command->run($inputa, $output);
+                    $inputa = new ArrayInput($arguments);
+                    $ret = $command->run($inputa, $output);
                 }
             }
         }

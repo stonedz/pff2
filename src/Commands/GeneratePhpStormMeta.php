@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User: paolo.fagni@gmail.com
  * Date: 11/11/14
@@ -16,14 +19,14 @@ use Symfony\Component\Yaml\Parser;
 
 class GeneratePhpStormMeta extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('phpstorm:generatemeta')
             ->setDescription('generate .phpstorm.meta.php file');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output):int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->write('Generating .phpstorm.meta.php file...');
         $fileContent =
@@ -56,7 +59,7 @@ class GeneratePhpStormMeta extends Command
         $result = array_merge(array_merge($ret, $ret1), $ret2);
 
         foreach ($result as $moduleDir => $moduleClass) {
-            $fileContent .= "\n'".$moduleDir."' instanceof ".$moduleClass.",";
+            $fileContent .= "\n'" . $moduleDir . "' instanceof " . $moduleClass . ",";
         }
 
         $fileContent .= '
@@ -72,16 +75,15 @@ class GeneratePhpStormMeta extends Command
     }
 
     /**
-     * @param $modulePath
-     * @return array
+     * @return array<string, string>
      */
-    private function getModules($modulePath, Parser $parser)
+    private function getModules(string $modulePath, Parser $parser): array
     {
-        $modules = array_diff(scandir($modulePath), ['..','.','.gitignore']);
+        $modules = array_diff(scandir($modulePath), ['..', '.', '.gitignore']);
         $className = [];
         foreach ($modules as $moduleDir) {
-            $moduleConf = $parser->parse(file_get_contents($modulePath.'/'.$moduleDir.'/module.yaml'));
-            $className[$moduleDir] = '\pff\modules\\'.$moduleConf['class'];
+            $moduleConf = $parser->parse(file_get_contents($modulePath . '/' . $moduleDir . '/module.yaml'));
+            $className[$moduleDir] = '\pff\modules\\' . $moduleConf['class'];
         }
         return $className;
     }

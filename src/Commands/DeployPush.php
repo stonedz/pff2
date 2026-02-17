@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User: stonedz
  * Date: 2/13/15
@@ -19,7 +22,7 @@ use Symfony\Component\Yaml\Parser;
 
 class DeployPush extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('deploy:publish')
@@ -43,13 +46,13 @@ class DeployPush extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output):int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var QuestionHelper $questionHelper */
         $questionHelper = $this->getHelper('question');
 
         $profile_name = $input->getArgument('profile-name');
-        if (!$profile_name || !file_exists('deployement/publish_'.$profile_name.'.yml')) {
+        if (!$profile_name || !file_exists('deployement/publish_' . $profile_name . '.yml')) {
             $output->writeln('<question>Specified profile does not exist or no profile specified</question>');
 
             $table = new Table($output);
@@ -69,7 +72,7 @@ class DeployPush extends Command
 
                 if ($user_choice === null) {
                     return 1;
-                } elseif (is_numeric($user_choice) && count($profiles_available)>$user_choice) {
+                } elseif (is_numeric($user_choice) && count($profiles_available) > $user_choice) {
                     $profile_name = $profiles_available[$user_choice];
                     $ok = true;
                 } elseif (in_array($user_choice, $profiles_available)) {
@@ -91,18 +94,18 @@ class DeployPush extends Command
      * @param OutputInterface $output
      * @param string $profile_name
      */
-    protected function publish(InputInterface $input, OutputInterface $output, $profile_name):int
+    protected function publish(InputInterface $input, OutputInterface $output, string $profile_name): int
     {
-        $output->writeln('<info>Publishing to '.$profile_name.'...</info>');
+        $output->writeln('<info>Publishing to ' . $profile_name . '...</info>');
         $parser = new Parser();
-        $profile_config = $parser->parse(file_get_contents('deployement/publish_'.$profile_name.'.yml'));
+        $profile_config = $parser->parse(file_get_contents('deployement/publish_' . $profile_name . '.yml'));
 
         if (!CommandUtils::checkCommand('rsync')) {
             $output->writeln('<error>rsync not installed, please install it. Exiting now...</error>');
             return 1;
         }
         if ($profile_config['use_pem']) {
-            $command = 'rsync -rltDvze "ssh -i '.$profile_config['pem_path'].'" ';
+            $command = 'rsync -rltDvze "ssh -i ' . $profile_config['pem_path'] . '" ';
         } else {
             $command = 'rsync -rltDvz ';
         }
@@ -114,34 +117,34 @@ class DeployPush extends Command
             }
         }
 
-        if (substr($profile_config['remote_dir'], -1, 1) != '/') {
+        if (!str_ends_with((string) $profile_config['remote_dir'], '/')) {
             $profile_config['remote_dir'] .= '/';
         }
 
-        $command .= '. '.$profile_config['username'].'@'.$profile_config['host'].':'.$profile_config['remote_dir'];
+        $command .= '. ' . $profile_config['username'] . '@' . $profile_config['host'] . ':' . $profile_config['remote_dir'];
 
 
         $chmod = [
-            'chown -R '.$profile_config['username'].':'.$profile_config['remote_group'].' '.$profile_config['remote_dir'],
-            'chmod -R 750 '.$profile_config['remote_dir'],
-            'chmod -R 770 '.$profile_config['remote_dir'].'app/logs',
-            'chmod -R 770 '.$profile_config['remote_dir'].'app/proxies',
-            'chmod -R 770 '.$profile_config['remote_dir'].'app/public',
-            'chmod -R 770 '.$profile_config['remote_dir'].'app/tmp',
-            'chmod -R 770 '.$profile_config['remote_dir'].'tmp',
+            'chown -R ' . $profile_config['username'] . ':' . $profile_config['remote_group'] . ' ' . $profile_config['remote_dir'],
+            'chmod -R 750 ' . $profile_config['remote_dir'],
+            'chmod -R 770 ' . $profile_config['remote_dir'] . 'app/logs',
+            'chmod -R 770 ' . $profile_config['remote_dir'] . 'app/proxies',
+            'chmod -R 770 ' . $profile_config['remote_dir'] . 'app/public',
+            'chmod -R 770 ' . $profile_config['remote_dir'] . 'app/tmp',
+            'chmod -R 770 ' . $profile_config['remote_dir'] . 'tmp',
         ];
 
         $permissions_commands = 'ssh '
-            .($profile_config['use_pem'] ? '-i '.$profile_config['pem_path'] : '')
-            .' '
-            .$profile_config['username']
-            .'@'
-            .$profile_config['host']
-            .' '
-            .($profile_config['use_sudo'] ? 'sudo' : '')
-            .' \'';
+            . ($profile_config['use_pem'] ? '-i ' . $profile_config['pem_path'] : '')
+            . ' '
+            . $profile_config['username']
+            . '@'
+            . $profile_config['host']
+            . ' '
+            . ($profile_config['use_sudo'] ? 'sudo' : '')
+            . ' \'';
         foreach ($chmod as $c) {
-            $permissions_commands .= $c. ' && ';
+            $permissions_commands .= $c . ' && ';
         }
         $permissions_commands = substr($permissions_commands, 0, -3);
         $permissions_commands .= '\'';
@@ -161,13 +164,13 @@ class DeployPush extends Command
         if ($run_optimize) {
             $output->writeln('Run optimizations...');
             $command = 'ssh '
-                .($profile_config['use_pem'] ? '-i '.$profile_config['pem_path'] : '')
-                .' '
-                .$profile_config['username']
-                .'@'
-                .$profile_config['host']
-                .' '
-                .'\'cd '.$profile_config['remote_dir'].' && vendor/bin/pff deploy:optimize\'';
+                . ($profile_config['use_pem'] ? '-i ' . $profile_config['pem_path'] : '')
+                . ' '
+                . $profile_config['username']
+                . '@'
+                . $profile_config['host']
+                . ' '
+                . '\'cd ' . $profile_config['remote_dir'] . ' && vendor/bin/pff deploy:optimize\'';
 
             if ($dump_commands) {
                 $output->writeln($command);
@@ -185,10 +188,13 @@ class DeployPush extends Command
             passthru($permissions_commands);
         }
         $output->writeln('<info>PERMISSIONS DONE</info>');
-         return 0;
+        return 0;
     }
 
-    protected function getDeployementProfiles()
+    /**
+     * @return string[]
+     */
+    protected function getDeployementProfiles(): array
     {
         $profiles = glob('deployement/publish_*.yml');
         $res = [];

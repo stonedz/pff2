@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User: stonedz
  * Date: 2/5/15
@@ -14,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ComposerInstall extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('composer:install')
@@ -27,7 +30,7 @@ class ComposerInstall extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output):int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $only_chekc = $input->getOption('only-check');
 

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User: stonedz
  * Date: 2/5/15
@@ -15,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ComposerDumpAutoload extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('composer:dumpautoload')
@@ -28,12 +31,12 @@ class ComposerDumpAutoload extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) :int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $command   = $this->getApplication()->find('composer:install');
+        $command = $this->getApplication()->find('composer:install');
         $arguments = ['command' => 'composer:install', '-c' => true];
-        $inputa    = new ArrayInput($arguments);
-        $ret       = $command->run($inputa, $output);
+        $inputa = new ArrayInput($arguments);
+        $ret = $command->run($inputa, $output);
 
         if ($ret == 0) {
             $no_optimize = $input->getOption('no-optimize');

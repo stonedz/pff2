@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User: stonedz
  * Date: 1/29/15
@@ -20,38 +23,27 @@ use Guzzle\Stream\Stream;
 
 class GenerateFigFiles extends Command
 {
-    /**
-     * Name of the fig file used for dev
-     *
-     * @var string
-     */
-    private $fig_dev = 'fig.yml';
+    private string $fig_dev = 'fig.yml';
 
     /**
      * Name of the fig file used for production
-     *
-     * @var string
      */
-    private $fig_prod = 'fig_prod.yml';
+    private string $fig_prod = 'fig_prod.yml';
 
     /**
      * Host for the db for dev
-     *
-     * @var string
      */
-    private $db_host_dev;
+    private string $db_host_dev;
 
     /**
      * Host for the db for prod
-     *
-     * @var string
      */
-    private $db_host_prod;
+    private string $db_host_prod;
 
-    protected function configure()
+    protected function configure(): void
     {
         require('app/config/config.user.php');
-        $this->db_host_dev  = $pffConfig['databaseConfigDev']['host'];
+        $this->db_host_dev = $pffConfig['databaseConfigDev']['host'];
         $this->db_host_prod = $pffConfig['databaseConfig']['host'];
 
         $this
@@ -126,7 +118,7 @@ class GenerateFigFiles extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output):int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $questionHelper = $this->getHelper('question');
 
@@ -142,9 +134,9 @@ class GenerateFigFiles extends Command
 
         CommandUtils::checkDeployement();
 
-        $web_port        = $input->getOption('web-port-dev');
-        $db_port         = $input->getOption('db-port-dev');
-        $db_host         = $input->getOption('db-host-dev');
+        $web_port = $input->getOption('web-port-dev');
+        $db_port = $input->getOption('db-port-dev');
+        $db_host = $input->getOption('db-host-dev');
         $phpmyadmin_port = $input->getOption('phpmyadmin-port-dev');
 
         $this->askForFile('dev-php.ini', $input, $output, $questionHelper);
@@ -162,12 +154,12 @@ class GenerateFigFiles extends Command
 
             $output->write('Generating fig.yml for developement...');
             $toBeWritten =
-"web:
+                "web:
   image: neropaco/docker-lamp-dev
   ports:
     - \"$web_port:80\"
   links:
-    - db:".$db_host."
+    - db:" . $db_host . "
   volumes:
     - .:/srv/http
     - ./deployement/php/dev-php.ini:/etc/php5/fpm/php.ini
@@ -191,7 +183,7 @@ phpmyadmin:
                 $output->writeln('<error>ERROR</error>');
             }
         } else {
-            $output->writeln('<comment>'.$this->fig_dev.' file already exists. Delete it or move it to recreate the file</comment>');
+            $output->writeln('<comment>' . $this->fig_dev . ' file already exists. Delete it or move it to recreate the file</comment>');
         }
 
         if ($input->getOption('create-production') != 1) {
@@ -204,17 +196,17 @@ phpmyadmin:
         if (!file_exists($this->fig_prod)) {
             $output->write('Generating fig_prod.yml for production...');
 
-            $db_host      = $input->getOption('db-host');
-            $web_port     = $input->getOption('web-port');
-            $db_port      = $input->getOption('db-port');
-            $virtualhost  = $input->getOption('virtualhost');
-            $app_name     = $input->getArgument('app-name');
+            $db_host = $input->getOption('db-host');
+            $web_port = $input->getOption('web-port');
+            $db_port = $input->getOption('db-port');
+            $virtualhost = $input->getOption('virtualhost');
+            $app_name = $input->getArgument('app-name');
 
             $toBeWritten =
-"web:
+                "web:
   image: stonedz/docker-lamp:latest
   links:
-    - db:".$db_host."
+    - db:" . $db_host . "
   volumes:
     - .:/srv/http
     - ./deployement/php/prod-php.ini:/etc/php5/fpm/php.ini
@@ -227,7 +219,7 @@ phpmyadmin:
 db:
   image: tutum/mariadb:10.1
   volumes_from:
-    - ".$app_name."_db_data
+    - " . $app_name . "_db_data
   ports:
     - \"$db_port:3306\"";
 
@@ -237,18 +229,20 @@ db:
                 $output->writeln('<error>ERROR</error>');
             }
 
-            $question = new ConfirmationQuestion('<question>The database in production will use a separate volume data container to maintain data, it is called '.$app_name.'_db_data, do you want me to try to locate it and create it? </question>', 'n');
+            $question = new ConfirmationQuestion('<question>The database in production will use a separate volume data container to maintain data, it is called ' . $app_name . '_db_data, do you want me to try to locate it and create it? </question>', 'n');
             if ($questionHelper->ask($input, $output, $question)) {
-                $this->create_db_volume_data($input, $output, $app_name.'_db_data', $questionHelper);
+                $this->create_db_volume_data($input, $output, $app_name . '_db_data', $questionHelper);
             } else {
                 return 0;
             }
         } else {
-            $output->writeln('<comment>'.$this->fig_prod.' file already exists. Delete it or move it to recreate the file</comment>');
+            $output->writeln('<comment>' . $this->fig_prod . ' file already exists. Delete it or move it to recreate the file</comment>');
         }
+
+        return 0;
     }
 
-    protected function create_db_volume_data(InputInterface $input, OutputInterface $output, $container_name, QuestionHelper $question_helper)
+    protected function create_db_volume_data(InputInterface $input, OutputInterface $output, string $container_name, QuestionHelper $question_helper): void
     {
         if (CommandUtils::checkCommand('docker')) {
             $command = 'docker';
@@ -261,24 +255,24 @@ db:
 
         $question = new ConfirmationQuestion('<question>Do you want to use sudo? </question>', 'n');
         if ($question_helper->ask($input, $output, $question)) {
-            $command = 'sudo '. $command;
+            $command = 'sudo ' . $command;
         }
 
-        $comman_create = $command.' run -v /var/lib/mysql --name '.$container_name.' busybox true';
+        $comman_create = $command . ' run -v /var/lib/mysql --name ' . $container_name . ' busybox true';
 
         exec($comman_create, $res, $ret);
         if (0 == $ret) {
             $output->writeln('<info>Db data volume container created.</info>');
         } else {
             $output->writeln('<error>Cannot create db data volume container using the following command: </error>');
-            $output->writeln('<error>'.$comman_create.'</error>');
+            $output->writeln('<error>' . $comman_create . '</error>');
         }
     }
 
-    protected function getPHPIniFiles($fileName)
+    protected function getPHPIniFiles(string $fileName): void
     {
-        $original = 'https://github.com/stonedz/dev-config/raw/master/'.$fileName;
-        $dest = 'deployement/php/'.$fileName;
+        $original = 'https://github.com/stonedz/dev-config/raw/master/' . $fileName;
+        $dest = 'deployement/php/' . $fileName;
         copy($original, $dest);
         chmod($dest, 775);
     }
@@ -290,13 +284,13 @@ db:
      * @param $questionHelper
      * @return bool
      */
-    protected function askForFile($fileName, InputInterface $input, OutputInterface $output, $questionHelper)
+    protected function askForFile(string $fileName, InputInterface $input, OutputInterface $output, mixed $questionHelper): bool
     {
-        $output->write('Checking for '.$fileName.'...');
-        if (!file_exists('deployement/php/'.$fileName)) {
+        $output->write('Checking for ' . $fileName . '...');
+        if (!file_exists('deployement/php/' . $fileName)) {
             $this->getPHPIniFiles($fileName);
         } else {
-            $question = new ConfirmationQuestion('<question>'.$fileName.' file already present, overwrite?</question>', 'n');
+            $question = new ConfirmationQuestion('<question>' . $fileName . ' file already present, overwrite?</question>', 'n');
             if ($questionHelper->ask($input, $output, $question)) {
                 $this->getPHPIniFiles($fileName);
             }
@@ -306,27 +300,21 @@ db:
         return true;
     }
 
-    protected function getNginxFiles($fileName)
+    protected function getNginxFiles(string $fileName): void
     {
-        $original = 'https://github.com/stonedz/dev-config/raw/master/'.$fileName;
-        $dest = 'deployement/nginx/'.$fileName;
+        $original = 'https://github.com/stonedz/dev-config/raw/master/' . $fileName;
+        $dest = 'deployement/nginx/' . $fileName;
         copy($original, $dest);
         chmod($dest, 775);
     }
-    /**
-     * @param string $fileName
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @param $questionHelper
-     * @return bool
-     */
-    protected function askForFileNginx($fileName, InputInterface $input, OutputInterface $output, $questionHelper)
+
+    protected function askForFileNginx(string $fileName, InputInterface $input, OutputInterface $output, mixed $questionHelper): bool
     {
-        $output->write('Checking for '.$fileName.'...');
-        if (!file_exists('deployement/nginx/'.$fileName)) {
+        $output->write('Checking for ' . $fileName . '...');
+        if (!file_exists('deployement/nginx/' . $fileName)) {
             $this->getNginxFiles($fileName);
         } else {
-            $question = new ConfirmationQuestion('<question>'.$fileName.' file already present, overwrite?</question>', 'n');
+            $question = new ConfirmationQuestion('<question>' . $fileName . ' file already present, overwrite?</question>', 'n');
             if ($questionHelper->ask($input, $output, $question)) {
                 $this->getNginxFiles($fileName);
             }

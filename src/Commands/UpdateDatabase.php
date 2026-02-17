@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User: stonedz
  * Date: 2/2/15
@@ -15,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class UpdateDatabase extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('db:updateDb')
@@ -34,20 +37,20 @@ class UpdateDatabase extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output):int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$input->getOption('no-backup')) {
             $mysql_port = $input->getOption('port');
 
-            $command   = $this->getApplication()->find('db:backupDb');
+            $command = $this->getApplication()->find('db:backupDb');
             $arguments = ['command' => 'db:backupDb', '--port' => $mysql_port];
-            $inputa    = new ArrayInput($arguments);
-            $ret       = $command->run($inputa, $output);
+            $inputa = new ArrayInput($arguments);
+            $ret = $command->run($inputa, $output);
         }
 
         exec('vendor/bin/doctrine orm:schema-tool:update --force', $res);
         foreach ($res as $r) {
-            echo $r,"\n";
+            echo $r, "\n";
         }
         return 0;
     }
