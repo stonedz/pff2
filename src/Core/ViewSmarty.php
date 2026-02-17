@@ -18,12 +18,12 @@ class ViewSmarty extends AView
 
     public function __construct($templateName)
     {
-        $this->_smarty               = new \Smarty(); // The smarty instance should be accessible before
-        $smartyDir                   = ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS;
-        $this->_smarty->template_dir = $smartyDir. 'templates' . DS;
-        $this->_smarty->compile_dir  = $smartyDir . 'compiled_templates' . DS;
-        $this->_smarty->config_dir   = $smartyDir . 'configs' . DS;
-        $this->_smarty->cache_dir    = $smartyDir . 'cache' . DS;
+        $this->_smarty = new \Smarty(); // The smarty instance should be accessible before
+        $smartyDir = ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS;
+        $this->_smarty->template_dir = $smartyDir . 'templates' . DS;
+        $this->_smarty->compile_dir = $smartyDir . 'compiled_templates' . DS;
+        $this->_smarty->config_dir = $smartyDir . 'configs' . DS;
+        $this->_smarty->cache_dir = $smartyDir . 'cache' . DS;
         $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . 'smarty' . DS . 'templates' . DS . $templateName;
         if (!file_exists($templatePath)) {
             throw new \pff\ViewException('Template file ' . $templatePath . ' does not exist');
@@ -44,17 +44,17 @@ class ViewSmarty extends AView
         $this->renderAction($params['controller'], ($params['action']), $params['params']);
     }
 
-    public function set($name, $value)
+    public function set(string $name, mixed $value): void
     {
         $this->_smarty->assign($name, $value);
     }
 
-    public function render()
+    public function render(): void
     {
         $this->_smarty->display($this->_templateFile);
     }
 
-    public function renderHtml()
+    public function renderHtml(): string
     {
         return $this->_smarty->fetch($this->_templateFile, null, null, null, false);
     }

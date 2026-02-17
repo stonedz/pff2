@@ -16,7 +16,7 @@
     <div>
         <h2><?php echo 'Error!'; ?></h2>
     </div>
-    <div><?= htmlspecialchars((string) $message, ENT_QUOTES, 'UTF-8') ?></div>
+    <div><?= $this->e($this->get('message', '')) ?></div>
 </body>
 
 </html>

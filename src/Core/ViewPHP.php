@@ -9,6 +9,9 @@ use pff\Exception\ViewException;
 /**
  * View that uses plain php files as template.
  *
+ * Templates access data via $this->get('key') instead of bare variables.
+ * Use $this->e('key') for auto-escaped HTML output.
+ *
  * @author paolo.fagni<at>gmail.com
  */
 class ViewPHP extends AView
@@ -16,9 +19,9 @@ class ViewPHP extends AView
     /**
      * @var array Contains the data to be used in the template file
      */
-    private $_data;
+    private array $_data = [];
 
-    public function __construct($templateName)
+    public function __construct(string $templateName)
     {
         if (substr($templateName, 0, 1) != '/') {
             $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $templateName;
@@ -31,31 +34,60 @@ class ViewPHP extends AView
         parent::__construct($templateName);
     }
 
-    public function set($name, $value)
+    public function set(string $name, mixed $value): void
     {
         $this->_data[$name] = $value;
     }
 
-    public function render()
+    /**
+     * Gets a template variable by name.
+     *
+     * Use this in templates instead of bare variables: $this->get('name')
+     *
+     * @param string $name Variable name
+     * @param mixed $default Default value if variable is not set
+     * @return mixed
+     */
+    public function get(string $name, mixed $default = null): mixed
+    {
+        return $this->_data[$name] ?? $default;
+    }
+
+    /**
+     * Checks if a template variable is set.
+     *
+     * @param string $name Variable name
+     * @return bool
+     */
+    public function has(string $name): bool
+    {
+        return array_key_exists($name, $this->_data);
+    }
+
+    /**
+     * Returns all template data.
+     *
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->_data;
+    }
+
+    public function render(): void
     {
         $templatePath = $this->getTemplatePath();
         if (!file_exists($templatePath)) {
             throw new ViewException('Template file ' . $templatePath . ' does not exist');
-        }
-        if (is_array($this->_data)) {
-            extract($this->_data); // Extract set data to scope vars
         }
         include($templatePath);
     }
 
-    public function renderHtml()
+    public function renderHtml(): string
     {
         $templatePath = $this->getTemplatePath();
         if (!file_exists($templatePath)) {
             throw new ViewException('Template file ' . $templatePath . ' does not exist');
-        }
-        if (is_array($this->_data)) {
-            extract($this->_data); // Extract set data to scope vars
         }
 
         include($templatePath);
@@ -70,7 +102,7 @@ class ViewPHP extends AView
      * @param string $output HTML output string
      * @return string
      */
-    public function preView($output)
+    public function preView(string $output): string
     {
         /** @var $purifierConfig \HTMLPurifier_Config */
         $purifierConfig = \HTMLPurifier_Config::createDefault();
@@ -79,7 +111,7 @@ class ViewPHP extends AView
 
         /** @var \HTMLPurifier_Config $purifierConfig */
         $purifier = new \HTMLPurifier($purifierConfig);
-        $output   = $purifier->purify($output);
+        $output = $purifier->purify($output);
 
         return $output;
     }
@@ -87,7 +119,7 @@ class ViewPHP extends AView
     /**
      * @return string
      */
-    private function getTemplatePath()
+    private function getTemplatePath(): string
     {
         if (substr($this->_templateFile, 0, 1) != '/') {
             $templatePath = ROOT . DS . 'app' . DS . 'views' . DS . $this->_templateFile;

@@ -23,7 +23,7 @@ class ViewPHPTest extends TestCase
         };
 
         $this->templatePath = ROOT . DS . 'tmp' . DS . 'viewphp-test-template.php';
-        file_put_contents($this->templatePath, 'Hello <?= $name ?>');
+        file_put_contents($this->templatePath, 'Hello <?= $this->get("name") ?>');
     }
 
     #[\PHPUnit\Framework\Attributes\After]

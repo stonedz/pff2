@@ -123,6 +123,7 @@ class App
      * @param $value array|string
      * @return array|string
      * @codeCoverageIgnore
+     * @deprecated No longer needed since PHP 5.4. Will be removed in pff2 5.0.
      */
     private function stripSlashesDeep($value)
     {
@@ -134,6 +135,7 @@ class App
      * Check register globals and remove them
      *
      * @codeCoverageIgnore
+     * @deprecated No longer needed since PHP 5.4. Will be removed in pff2 5.0.
      */
     public function unregisterGlobals()
     {
@@ -147,6 +149,78 @@ class App
                 }
             }
         }
+    }
+
+    // -------------------------------------------------------------------------
+    //  Safe input accessors
+    // -------------------------------------------------------------------------
+
+    /**
+     * Gets a value from the $_GET superglobal with optional sanitization.
+     *
+     * @param string $key Parameter name
+     * @param mixed $default Default value when key is absent
+     * @param int $filter A PHP filter constant (e.g. FILTER_SANITIZE_SPECIAL_CHARS). Pass FILTER_DEFAULT to skip.
+     * @return mixed
+     */
+    public function getQuery(string $key, mixed $default = null, int $filter = FILTER_DEFAULT): mixed
+    {
+        if (!isset($_GET[$key])) {
+            return $default;
+        }
+        $value = filter_input(INPUT_GET, $key, $filter);
+        return ($value === false || $value === null) ? $default : $value;
+    }
+
+    /**
+     * Gets a value from the $_POST superglobal with optional sanitization.
+     *
+     * @param string $key Parameter name
+     * @param mixed $default Default value when key is absent
+     * @param int $filter A PHP filter constant (e.g. FILTER_SANITIZE_SPECIAL_CHARS). Pass FILTER_DEFAULT to skip.
+     * @return mixed
+     */
+    public function getPost(string $key, mixed $default = null, int $filter = FILTER_DEFAULT): mixed
+    {
+        if (!isset($_POST[$key])) {
+            return $default;
+        }
+        $value = filter_input(INPUT_POST, $key, $filter);
+        return ($value === false || $value === null) ? $default : $value;
+    }
+
+    /**
+     * Gets a value from the $_SERVER superglobal with optional sanitization.
+     *
+     * @param string $key Server variable name (e.g. 'REQUEST_METHOD')
+     * @param mixed $default Default value when key is absent
+     * @param int $filter A PHP filter constant. Pass FILTER_DEFAULT to skip.
+     * @return mixed
+     */
+    public function getServer(string $key, mixed $default = null, int $filter = FILTER_DEFAULT): mixed
+    {
+        if (!isset($_SERVER[$key])) {
+            return $default;
+        }
+        $value = filter_input(INPUT_SERVER, $key, $filter);
+        return ($value === false || $value === null) ? $default : $value;
+    }
+
+    /**
+     * Gets a value from the $_COOKIE superglobal with optional sanitization.
+     *
+     * @param string $key Cookie name
+     * @param mixed $default Default value when key is absent
+     * @param int $filter A PHP filter constant. Pass FILTER_DEFAULT to skip.
+     * @return mixed
+     */
+    public function getCookie(string $key, mixed $default = null, int $filter = FILTER_DEFAULT): mixed
+    {
+        if (!isset($_COOKIE[$key])) {
+            return $default;
+        }
+        $value = filter_input(INPUT_COOKIE, $key, $filter);
+        return ($value === false || $value === null) ? $default : $value;
     }
 
     /**

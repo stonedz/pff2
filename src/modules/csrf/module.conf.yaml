@@ -1,0 +1,19 @@
+moduleConf:
+  # Enable automatic CSRF validation on POST/PUT/PATCH/DELETE requests.
+  autoValidate: true
+
+  # Token lifetime in seconds (default: 1 hour).
+  tokenLifetime: 3600
+
+  # Name of the hidden form field carrying the token.
+  fieldName: _csrf_token
+
+  # Name of the HTTP header carrying the token (for AJAX requests).
+  headerName: X-CSRF-Token
+
+  # Routes excluded from automatic CSRF validation (e.g. webhook endpoints).
+  # Example:
+  #   excludedRoutes:
+  #     - api/webhook
+  #     - api/callback
+  excludedRoutes: []

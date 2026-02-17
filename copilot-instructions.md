@@ -68,12 +68,20 @@
   - Create a view: `$view = \pff\Factory\FView::create('foo/index.php', $this->_app);`
   - Set template variables: `$view->set('varName', $value);`
   - Add to render queue: `$this->addView($view);`
+- **Template variable access** (since 4.1):
+  - Access variables via `$this->get('varName')` or `$this->get('varName', 'default')`.
+  - Check existence with `$this->has('varName')`.
+  - **Never use bare `$variable` in templates** — `extract()` has been removed for security.
+- **Output escaping** (since 4.1):
+  - Always escape dynamic output: `<?= $this->e($this->get('user_name')) ?>`.
+  - Available contexts: `html` (default), `attr`, `js`, `url`.
+  - Example: `<input value="<?= $this->e($this->get('query'), 'attr') ?>">`.
 - Layouts:
   - Layouts are special views that aggregate one or more content views.
   - In controller code, create a layout (`FLayout::create`), add content views via `$layout->addContent($view)`, then `$this->addView($layout)`.
   - In layout templates, insert child views using `$this->content($index)` in PHP or `{content index=0}` in Smarty.
 - Within templates it is possible to render another controller/action via `$this->renderAction('controller', 'action', [param0, param1])` or the equivalent Smarty tag.
-- Static assets live under `app/public/` and subfolders (`css`, `img`, `js`, `files`). `AView` exposes absolute paths like `pff_path_public`, `pff_path_css`, etc.
+- Static assets live under `app/public/` and subfolders (`css`, `img`, `js`, `files`). `AView` exposes absolute paths via `$this->get('pff_path_public')`, `$this->get('pff_path_css')`, etc.
 
 ## Modules
 - Modules extend `pff\Abs\AModule` ([src/Abs/AModule.php](src/Abs/AModule.php)).
@@ -98,6 +106,28 @@
 
 ## Error handling and environment
 - `pff\App::setErrorReporting()` configures PHP error reporting based on `development_environment` and `show_all_errors` in config.
+
+## Security
+
+### CSRF protection
+- Enable the `csrf` module in `$pffConfig['modules']` (requires `session`).
+- In forms, output a hidden token field: `<?= \pff\Core\ModuleManager::loadModule('csrf')->tokenField('action_name') ?>`.
+- With `autoValidate: true` (default), POST/PUT/PATCH/DELETE requests are validated automatically.
+- For AJAX, send the token via the `X-CSRF-Token` header.
+- Excluded routes can be configured in `module.conf.yaml`.
+
+### Security headers
+- `HTMLOut` sends `X-Content-Type-Options`, `X-Frame-Options`, and `Referrer-Policy` by default.
+- Configure via `$pffConfig['security_headers']` array. Set to `null` to suppress.
+- Per-controller: `$this->_output->setHeader('X-Frame-Options', 'SAMEORIGIN')`.
+
+### Input filtering
+- Use `$this->_app->getQuery()`, `$this->_app->getPost()`, `$this->_app->getServer()`, `$this->_app->getCookie()` instead of direct superglobal access.
+- All methods accept an optional PHP filter constant (e.g. `FILTER_VALIDATE_EMAIL`).
+
+### Output escaping
+- Always use `$this->e($value)` in templates for user-controlled output.
+- Contexts: `html` (default), `attr`, `js`, `url`.
 - In production, errors are logged to `tmp/logs/error.log`.
 - Some module-based error handling is provided (`exception_handler` module).
 

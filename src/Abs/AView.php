@@ -47,7 +47,7 @@ abstract class AView implements IRenderable
      * @var string Path to the files folder
      */
     protected $_filesFolder;
-    
+
     /**
      * @var string Path to the composer's vendor folder
      */
@@ -56,13 +56,13 @@ abstract class AView implements IRenderable
 
     public function __construct($templateName)
     {
-        $this->_app          = ServiceContainer::get('app');
+        $this->_app = ServiceContainer::get('app');
         $this->_templateFile = $templateName;
         $this->_publicFolder = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS;
-        $this->_cssFolder    = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS . 'css' . DS;
-        $this->_imgFolder    = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS . 'img' . DS;
-        $this->_jsFolder     = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS . 'js' . DS;
-        $this->_filesFolder  = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS . 'files' . DS;
+        $this->_cssFolder = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS . 'css' . DS;
+        $this->_imgFolder = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS . 'img' . DS;
+        $this->_jsFolder = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS . 'js' . DS;
+        $this->_filesFolder = $this->_app->getExternalPath() . 'app' . DS . 'public' . DS . 'files' . DS;
         $this->_vendorFolder = $this->_app->getExternalPath() . 'app' . DS . 'vendor' . DS;
 
         $this->updatePaths();
@@ -91,8 +91,8 @@ abstract class AView implements IRenderable
      */
     public function renderAction($controller, $action = 'index', $params = [])
     {
-        $controllerClass = '\\pff\\controllers\\'.ucfirst($controller) . '_Controller';
-        $tmpController   = new $controllerClass($controller, $this->_app, $action, $params);
+        $controllerClass = '\\pff\\controllers\\' . ucfirst($controller) . '_Controller';
+        $tmpController = new $controllerClass($controller, $this->_app, $action, $params);
         $tmpController->$action();
         $tmpController->setIsRenderAction(true);
     }
@@ -185,6 +185,42 @@ abstract class AView implements IRenderable
     public function setFilesFolder($filesFolder)
     {
         $this->_filesFolder = $filesFolder;
+    }
+
+    /**
+     * Escape a value for safe output in the given context.
+     *
+     * Contexts: 'html' (default), 'attr', 'js', 'url'.
+     *
+     * Usage in PHP templates:
+     *   <?= $this->e($this->get('name')) ?>
+     *
+     * @param mixed $value The value to escape
+     * @param string $context The escaping context
+     * @return string
+     */
+    public function e(mixed $value, string $context = 'html'): string
+    {
+        $value = (string) $value;
+
+        return match ($context) {
+            'html', 'attr' => htmlspecialchars($value, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8'),
+            'js' => json_encode($value, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_THROW_ON_ERROR),
+            'url' => rawurlencode($value),
+            default => htmlspecialchars($value, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8'),
+        };
+    }
+
+    /**
+     * Alias for e() — escape a value for safe output.
+     *
+     * @param mixed $value The value to escape
+     * @param string $context The escaping context
+     * @return string
+     */
+    public function escape(mixed $value, string $context = 'html'): string
+    {
+        return $this->e($value, $context);
     }
 
     public function addContent(AView $v)

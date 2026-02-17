@@ -52,6 +52,18 @@ $pffConfig['security_cookie_samesite'] = 'Lax';
 $pffConfig['security_cookie_secure'] = null;
 $pffConfig['security_session_strict_mode'] = true;
 
+/*
+ * Security headers sent with every HTML response.
+ * Set a header to null to suppress it. Override per-controller via $this->getOutput()->setHeader().
+ * See docs/security.md for details.
+ */
+$pffConfig['security_headers'] = [
+    'X-Content-Type-Options' => 'nosniff',
+    'X-Frame-Options' => 'DENY',
+    'Referrer-Policy' => 'strict-origin-when-cross-origin',
+    // 'Content-Security-Policy' => "default-src 'self'",
+];
+
 ///////////////////////////////////////
 // Database
 ///////////////////////////////////////

@@ -38,16 +38,16 @@ class LayoutPHPTest extends TestCase
         $layout = new LayoutPHP($this->layoutTemplatePath);
 
         $childView = new class ($this->layoutTemplatePath) extends \pff\Abs\AView {
-            public function set($name, $value)
+            public function set(string $name, mixed $value): void
             {
             }
 
-            public function render()
+            public function render(): void
             {
                 echo 'CHILD_RENDERED';
             }
 
-            public function renderHtml()
+            public function renderHtml(): string
             {
                 return 'CHILD_RENDERED';
             }
