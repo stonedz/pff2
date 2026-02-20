@@ -285,6 +285,60 @@ class App
         return false;
     }
 
+        /**
+     * Returns the APCu cache key for routes, based on the config file hash.
+     */
+    private function routeCacheKey(): string
+    {
+        $appName = (string) ($this->_config->getConfigData('app_name') ?? 'pff2');
+        $configFile = ROOT . DS . 'app' . DS . 'config' . DS . 'config.user.php';
+        $hash = file_exists($configFile) ? sha1_file($configFile) : 'nohash';
+        return $appName . ':routes:' . $hash;
+    }
+
+    /**
+     * Tries to load routes from APCu cache.
+     * Returns true on cache hit (routes restored), false on miss.
+     */
+    public function loadRouteCache(): bool
+    {
+        if (!function_exists('apcu_fetch')) {
+            return false;
+        }
+        $data = apcu_fetch($this->routeCacheKey(), $success);
+        if ($success && is_array($data)) {
+            $this->_routes = $data['routes'] ?? [];
+            $this->_staticRoutes = $data['staticRoutes'] ?? [];
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Persists the current routes into APCu cache.
+     */
+    public function storeRouteCache(): void
+    {
+        if (!function_exists('apcu_store')) {
+            return;
+        }
+        apcu_store($this->routeCacheKey(), [
+            'routes'       => $this->_routes,
+            'staticRoutes' => $this->_staticRoutes,
+        ]);
+    }
+
+    /**
+     * Clears the route cache from APCu.
+     */
+    public function clearRouteCache(): void
+    {
+        if (!function_exists('apcu_delete')) {
+            return;
+        }
+        apcu_delete($this->routeCacheKey());
+    }
+
     /**
      * Runs the application
      */

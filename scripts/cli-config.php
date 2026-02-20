@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author paolo.fagni<at>gmail.com
  */
@@ -15,8 +16,10 @@ if (php_sapi_name() != "cli") {
 require 'vendor/autoload.php';
 require 'app/config/config.user.php';
 
+
 $paths = ['app/models'];
 
+/** @var array $pffConfig */
 if ($pffConfig['development_environment'] === true) {
     $dbParams = $pffConfig['databaseConfigCli'];
 } else {
@@ -45,6 +48,3 @@ ConsoleRunner::run(
     new SingleManagerProvider($db),
     $commands
 );
-
-
-// configuration (2)
