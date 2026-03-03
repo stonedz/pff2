@@ -17,9 +17,10 @@
         "mobiledetect/mobiledetectlib": "4.8.*",
         "pimple/pimple": "~3.5",
         "php": ">=8.1",
-        "swiftmailer/swiftmailer": "5.4.12",
-        "symfony/console": "~7",
-        "symfony/yaml": "~5.3"
+        "symfony/console": "~7.4",
+        "symfony/yaml": "~7.4",
+        "symfony/mailer": "^7.4",
+        "symfony/mime": "^7.4"
     },
     "require-dev": {
         "codeception/codeception": "*",

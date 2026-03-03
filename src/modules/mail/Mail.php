@@ -9,83 +9,178 @@ namespace pff\modules;
  */
 
 use pff\Abs\AModule;
-
-require_once(ROOT . DS . 'vendor/swiftmailer/swiftmailer/lib/swift_init.php');
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Transport\TransportInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 class Mail extends AModule
 {
-    private $mailer;
+    private MailerInterface $mailer;
 
-    private $transport;
+    private TransportInterface $transport;
 
-    private $message;
+    private Email $message;
 
-    public function __construct($confFile = 'mail/module.conf.yaml')
+    public function __construct($confFile = 'mail/module.conf.yaml', ?MailerInterface $mailer = null)
     {
         $this->loadConfig($this->readConfig($confFile));
 
-        $this->mailer = new \Swift_Mailer($this->transport);
+        $this->mailer = $mailer ?? new Mailer($this->transport);
     }
 
     /**
      * Parse the configuration file
      *
-     * @param array $parsedConfig
+     * @param array|null $parsedConfig
      */
     private function loadConfig($parsedConfig)
     {
-        if (isset($parsedConfig['moduleConf']['Type']) && $parsedConfig['moduleConf']['Type'] == "smtp") {
-            $this->transport = \Swift_SmtpTransport::newInstance();
-
-            if (isset($parsedConfig['moduleConf']['Host']) && $parsedConfig['moduleConf']['Host'] != "") {
-                $this->transport->setHost($parsedConfig['moduleConf']['Host']);
-            }
-
-            if (isset($parsedConfig['moduleConf']['Port']) && $parsedConfig['moduleConf']['Port'] != "") {
-                $this->transport->setPort($parsedConfig['moduleConf']['Port']);
-            }
-
-            if (isset($parsedConfig['moduleConf']['Username']) && $parsedConfig['moduleConf']['Username'] != "") {
-                $this->transport->setUsername($parsedConfig['moduleConf']['Username']);
-            }
-
-            if (isset($parsedConfig['moduleConf']['Password']) && $parsedConfig['moduleConf']['Password'] != "") {
-                $this->transport->setPassword($parsedConfig['moduleConf']['Password']);
-            }
-
-            if (isset($parsedConfig['moduleConf']['Encryption']) && $parsedConfig['moduleConf']['Encryption'] != "") {
-                $this->transport->setEncryption($parsedConfig['moduleConf']['Encryption']);
-            }
-        } elseif (isset($parsedConfig['moduleConf']['Type']) && $parsedConfig['moduleConf']['Type'] == "sendmail") {
-            $this->transport = \Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
-        } else {
-            $this->transport = \Swift_MailTransport::newInstance();
+        $moduleConf = [];
+        if (is_array($parsedConfig) && isset($parsedConfig['moduleConf']) && is_array($parsedConfig['moduleConf'])) {
+            $moduleConf = $parsedConfig['moduleConf'];
         }
+
+        $this->transport = Transport::fromDsn($this->buildDsnFromConfig($moduleConf));
     }
 
     public function sendMail($to, $from, $fromName, $subject, $body, $addressReply = null, $attachment = null, $attachment_name = 'attachment.pdf', $cc = null, $bcc = null, $attachment_type = 'application/pdf')
     {
-        $this->message = new \Swift_Message();
-        $this->message->setTo($to);
-        $this->message->setFrom([$from => $fromName]);
-        $this->message->setSubject($subject);
-        $this->message->setBody($body);
-        $this->message->setCharset("UTF-8");
-        $this->message->setContentType("text/html");
+        $toAddresses = $this->normalizeAddresses($to);
+
+        $this->message = new Email();
+        $this->message->to(...$toAddresses);
+        $this->message->from(new Address((string)$from, (string)$fromName));
+        $this->message->subject((string)$subject);
+        $this->message->html((string)$body, 'utf-8');
+
         if (null !== $addressReply) {
-            $this->message->setReplyTo($addressReply);
+            $replyToAddresses = $this->normalizeAddresses($addressReply);
+            if (count($replyToAddresses) > 0) {
+                $this->message->replyTo(...$replyToAddresses);
+            }
         }
         if (null !== $attachment) {
-            $attachment = \Swift_Attachment::newInstance($attachment, $attachment_name, $attachment_type);
-            $this->message->attach($attachment);
+            $this->message->attach($attachment, (string)$attachment_name, (string)$attachment_type);
         }
         if (null !== $cc) {
-            $this->message->setCc($cc);
+            $ccAddresses = $this->normalizeAddresses($cc);
+            if (count($ccAddresses) > 0) {
+                $this->message->cc(...$ccAddresses);
+            }
         }
         if (null !== $bcc) {
-            $this->message->setBcc($bcc);
+            $bccAddresses = $this->normalizeAddresses($bcc);
+            if (count($bccAddresses) > 0) {
+                $this->message->bcc(...$bccAddresses);
+            }
         }
-        return $this->mailer->send($this->message);
+
+        try {
+            $this->mailer->send($this->message);
+        } catch (TransportExceptionInterface $e) {
+            return 0;
+        }
+
+        return count($toAddresses);
+    }
+
+    /**
+     * @param array<string, mixed> $moduleConf
+     */
+    private function buildDsnFromConfig(array $moduleConf): string
+    {
+        $type = strtolower(trim((string)($moduleConf['Type'] ?? '')));
+
+        if ($type === 'smtp') {
+            $host = (string)($moduleConf['Host'] ?? 'localhost');
+            if ($host === '') {
+                $host = 'localhost';
+            }
+
+            $port = 25;
+            if (isset($moduleConf['Port']) && $moduleConf['Port'] !== '') {
+                $port = (int)$moduleConf['Port'];
+            }
+
+            $username = (string)($moduleConf['Username'] ?? '');
+            $password = (string)($moduleConf['Password'] ?? '');
+            $encryption = strtolower(trim((string)($moduleConf['Encryption'] ?? '')));
+
+            $scheme = ($encryption === 'ssl') ? 'smtps' : 'smtp';
+            $auth = '';
+            if ($username !== '') {
+                $auth = rawurlencode($username);
+                if ($password !== '') {
+                    $auth .= ':' . rawurlencode($password);
+                }
+                $auth .= '@';
+            }
+
+            $dsn = $scheme . '://' . $auth . $host . ':' . $port;
+
+            if ($encryption === 'tls') {
+                $dsn .= '?encryption=tls';
+            }
+
+            return $dsn;
+        }
+
+        if ($type === 'sendmail') {
+            return 'sendmail://default?command=' . rawurlencode('/usr/sbin/sendmail -bs');
+        }
+
+        return 'native://default';
+    }
+
+    /**
+     * @param mixed $addresses
+     * @return Address[]
+     */
+    private function normalizeAddresses($addresses): array
+    {
+        if ($addresses instanceof Address) {
+            return [$addresses];
+        }
+
+        if (is_string($addresses)) {
+            $trimmedAddress = trim($addresses);
+            return $trimmedAddress !== '' ? [new Address($trimmedAddress)] : [];
+        }
+
+        if (!is_array($addresses)) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($addresses as $key => $value) {
+            if (is_int($key)) {
+                if ($value instanceof Address) {
+                    $normalized[] = $value;
+                } elseif (is_string($value) && trim($value) !== '') {
+                    $normalized[] = new Address(trim($value));
+                }
+                continue;
+            }
+
+            $email = trim((string)$key);
+            if ($email === '') {
+                continue;
+            }
+
+            if ($value instanceof Address) {
+                $normalized[] = $value;
+            } elseif ($value === null || $value === '') {
+                $normalized[] = new Address($email);
+            } else {
+                $normalized[] = new Address($email, (string)$value);
+            }
+        }
+
+        return $normalized;
     }
 
 }

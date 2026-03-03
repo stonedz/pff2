@@ -55,10 +55,10 @@ class Index_Controller extends AController
 
     public function sendTestEmail()
     {
-        /** @var \pff\modules\Mail\Mail $mailer */
+        /** @var \pff\modules\Mail $mailer */
         $mailer = ModuleManager::loadModule('mail');
-        $mailer->sendMail('to@pff2.org', 'test@pff2.org', 'Test', 'Test', 'Test');
+        $x = $mailer->sendMail('to@pff2.org', 'test@pff2.org', 'Test', 'Test', 'Test');
 
-        echo 'Email sent';
+        echo 'Email sent'. $x;
     }
 }
