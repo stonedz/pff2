@@ -13,6 +13,33 @@ function help() {
     echo -e "${NC}-f    Force the update";
 }
 
+force=false
+
+function copy_file() {
+    local src="$1"
+    local dest="$2"
+    local label="$3"
+
+    if [ -e "$dest" ] || [ -L "$dest" ]; then
+        if [ "$force" == "true" ]; then
+            cp -f "$src" "$dest"
+            echo -e "${GREEN}[OK]${NC} (${label} overwritten)"
+        else
+            echo -e "${GREEN}[OK]${NC} (${label} already present, skipped)"
+        fi
+    else
+        cp "$src" "$dest"
+        echo -e "${GREEN}[OK]"
+    fi
+}
+
+function ensure_dir() {
+    local dir="$1"
+    if [ ! -d "$dir" ]; then
+        mkdir -p "$dir"
+    fi
+}
+
 echo -e "${GREEN}========== \n${BLUE} pf${RED}f${GREEN}2 ${BLUE}init \n${GREEN}=========="
 
 # Gets the parameters
@@ -115,29 +142,25 @@ cd ${tmp}
 
 #Creating .htaccess
 #echo -ne "\n${CYAN}Generating htaccess file"
-cp vendor/stonedz/pff2/public/.htaccess .
+copy_file vendor/stonedz/pff2/public/.htaccess ./.htaccess ".htaccess"
 #echo -e "${GREEN}[OK]"
 
 #Creating cli-config for doctrine
 echo -ne "\n${CYAN}Copying cli-config for doctrine"
-cp vendor/stonedz/pff2/scripts/cli-config.php .
-echo -e "${GREEN}[OK]"
+copy_file vendor/stonedz/pff2/cli-config.php ./cli-config.php "cli-config.php"
 
 #Copying .gitignore file
 echo -ne "\n${CYAN}Copying site skel"
-cp vendor/stonedz/pff2/resources/site_skeleton/.gitignore .
-cp vendor/stonedz/pff2/resources/site_skeleton/index.php .
-cp vendor/stonedz/pff2/resources/site_skeleton/docker-compose.yml .
-cd vendor/stonedz/pff2/resources/site_skeleton
-mkdir tmp
-cp -r deployement/nginx/dev-nginx.conf ../../../../..
-cd ../../../../..
-echo -e "${GREEN}[OK]"
+copy_file vendor/stonedz/pff2/resources/site_skeleton/.gitignore ./.gitignore ".gitignore"
+copy_file vendor/stonedz/pff2/resources/site_skeleton/index.php ./index.php "index.php"
+copy_file vendor/stonedz/pff2/resources/site_skeleton/docker-compose.yml ./docker-compose.yml "docker-compose.yml"
+ensure_dir ./deployement/nginx
+copy_file vendor/stonedz/pff2/resources/site_skeleton/deployement/nginx/dev-nginx.conf ./deployement/nginx/dev-nginx.conf "deployement/nginx/dev-nginx.conf"
 
 #Copying build files
 echo -ne "\n${CYAN}Copying ld related files"
-cp vendor/stonedz/pff2/phpdox.xml.dist .
-cp vendor/stonedz/pff2/build.xml .
+copy_file vendor/stonedz/pff2/phpdox.xml.dist ./phpdox.xml.dist "phpdox.xml.dist"
+copy_file vendor/stonedz/pff2/build.xml ./build.xml "build.xml"
 
 if [ ! -d "build" ]
 then

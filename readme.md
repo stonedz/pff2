@@ -1,35 +1,27 @@
-**Pff2 MVC PHP framework**
-==============================
+# Pff2 MVC PHP framework
 
-[![Build Status](https://app.travis-ci.com/stonedz/pff2.svg?branch=master)](https://travis-ci.org/stonedz/pff2)
-[![Coverage Status](https://img.shields.io/coveralls/stonedz/pff2.svg)](https://coveralls.io/r/stonedz/pff2?branch=master)
+![PHP Composer](https://github.com/stonedz/pff2/actions/workflows/php.yml/badge.svg?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/stonedz/pff2/v/stable.svg)](https://packagist.org/packages/stonedz/pff2)
 [![License](https://poser.pugx.org/stonedz/pff2/license.svg)](https://packagist.org/packages/stonedz/pff2)
 
-## Composer Installation
+Pff2 is a simple PHP MVC framework (core in `src/`) and includes an application/site skeleton under `resources/`.
 
-To setup a new project:
+## Requirements
 
-   - Create e new directory
-   - Install composer in the directory (or do a global composer install). See [here for the instructions](https://getcomposer.org/doc/00-intro.md).
-    - Create a composer.json file with the following content:
+- PHP >= 8.1
+- Composer (v2 recommended)
+
+## Create a new project (consumer app)
+
+1. Create a new directory and add a `composer.json` similar to:
 
 ```json
 {
     "name": "company/project-name",
     "description": "",
-    "minimum-stability": "beta",
     "license": "proprietary",
-    "authors": [
-        {
-            "name": "",
-            "email": ""
-        }
-    ],
     "require": {
-        "stonedz/pff2": "~2",
-        "stonedz/pff2-installers": "v2.0.7",
-        "stonedz/pff2-doctrine": "*"
+        "stonedz/pff2": "^2"
     },
     "autoload": {
         "psr-4": {
@@ -39,25 +31,98 @@ To setup a new project:
         }
     }
 }
-
 ```
 
- - Run <code>php composer.phar install</code>
- - Run <code>vendor/bin/init</code> (and follow on screen instructions)
+2. Install dependencies:
 
-## Docker integration
-
-Install docker and docker-compose on your system, then
-
-```
-  $ docker-compose up
+```bash
+composer install
 ```
 
-The first time the containers are generated a new Mariadb admin password will be
-created and shown on the console, use that to connect your app to the DB. you
-can also use the same username and password in phpmyadmin to manage your db.
+3. Scaffold the app skeleton:
 
-You can modify the file docker-compose.yml to change ports and settings for the
-containers.
+```bash
+./vendor/bin/init
+```
 
-**Please see the [Wiki](https://github.com/stonedz/pff2/wiki) for more informations.**
+This will create/copy (among other things): `app/`, `tmp/`, `app/proxies/`, `.htaccess`, `index.php`, `cli-config.php`, and a `docker-compose.yml` from the shipped skeleton.
+
+### Scaffolding / overwrites
+
+- `./vendor/bin/init` and `./vendor/bin/update` both support `-f` to overwrite files they scaffold/copy.
+- Without `-f`, existing files are kept and will be skipped.
+
+### CLI
+
+The framework ships a Symfony Console CLI:
+
+```bash
+./vendor/bin/pff list
+```
+
+It includes built-in commands (see `src/Commands`) and can also load commands from modules that expose a `commands/` directory.
+
+### Optional: Doctrine integration
+
+Doctrine is provided as a separate module package: `stonedz/pff2-doctrine` (see `modules/pff2-doctrine/`).
+
+If you add it to your project, it requires the Composer plugin `stonedz/pff2-installers` (because the module package declares it as a dependency and must be allowed by Composer).
+
+In your app `composer.json`, you’ll typically need something like:
+
+```json
+{
+    "require": {
+        "stonedz/pff2-doctrine": "^4",
+        "stonedz/pff2-installers": "*"
+    },
+    "config": {
+        "allow-plugins": {
+            "stonedz/pff2-installers": true
+        }
+    }
+}
+```
+
+## Routing (overview)
+
+- Default MVC routing maps `/foo/bar` to controller `Foo_Controller` and action `bar` (see `pff\App::run()` in `src/App.php`).
+- You can define custom MVC routes via `addRoute($request, $destinationController)`.
+- You can map static routes to files under `app/pages/` via `addStaticRoute($request, $destinationPage)`.
+
+## Working on this repository (framework development)
+
+This repo includes a `post-install-cmd` that creates symlinks:
+
+- `app` → `resources/app_skeleton`
+- `index.php` → `resources/site_skeleton/index.php`
+
+Because `index.php` is already present in this repository, running Composer scripts can fail on a fresh clone.
+
+Recommended install for contributors:
+
+```bash
+composer install --no-interaction --no-progress --no-scripts
+```
+
+Run tests:
+
+```bash
+./vendor/bin/phpunit
+```
+
+### Docker (repo development)
+
+The repo includes a dev compose file at `development/compose.yaml`:
+
+```bash
+docker compose -f development/compose.yaml up --build
+```
+
+- App: http://localhost:8081/
+- Mailcatcher: http://localhost:1080/
+- MariaDB: `127.0.0.1:33061` (default creds in the compose file)
+
+## Docs
+
+Wiki: https://github.com/stonedz/pff2/wiki

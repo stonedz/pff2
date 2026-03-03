@@ -15,6 +15,39 @@ if (php_sapi_name() != "cli") {
     throw new \Exception('can\'t do that');
 }
 require 'vendor/autoload.php';
+
+// Prepare PFF2 container
+if (!defined('DS')) {
+    define('DS', DIRECTORY_SEPARATOR);
+}
+if (!defined('ROOT')) {
+    define('ROOT', __DIR__);
+}
+// Needed by pff\Config to find files if using ROOT_LIB
+if (!defined('ROOT_LIB')) {
+    define('ROOT_LIB', ROOT . DS . 'vendor' . DS . 'stonedz' . DS . 'pff2');
+}
+
+\pff\Core\ServiceContainer::initPimple();
+\pff\Core\ServiceContainer::set()['config'] = function ($c) {
+    return new \pff\Config();
+};
+\pff\Core\ServiceContainer::set()['hookmanager'] = function ($c) {
+    return new \pff\Core\HookManager();
+};
+\pff\Core\ServiceContainer::set()['app'] = function ($c) {
+    return new \pff\App();
+};
+\pff\Core\ServiceContainer::set()['modulemanager'] = function ($c) {
+    return new \pff\Core\ModuleManager();
+};
+\pff\Core\ServiceContainer::set()['helpermanager'] = function ($c) {
+    return new \pff\Core\HelperManager();
+};
+\pff\Core\ServiceContainer::set()['yamlparser'] = function ($c) {
+    return new \Symfony\Component\Yaml\Parser();
+};
+
 require 'app/config/config.user.php';
 
 
@@ -49,6 +82,3 @@ ConsoleRunner::run(
     new SingleManagerProvider($db),
     $commands
 );
-
-
-// configuration (2)

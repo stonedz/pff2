@@ -13,6 +13,26 @@ function help() {
     echo -e "${NC}-f    Force the update";
 }
 
+force=false
+
+function copy_file() {
+    local src="$1"
+    local dest="$2"
+    local label="$3"
+
+    if [ -e "$dest" ] || [ -L "$dest" ]; then
+        if [ "$force" == "true" ]; then
+            cp -f "$src" "$dest"
+            echo -e "${GREEN}[OK]${NC} (${label} overwritten)"
+        else
+            echo -e "${GREEN}[OK]${NC} (${label} already present, skipped)"
+        fi
+    else
+        cp "$src" "$dest"
+        echo -e "${GREEN}[OK]"
+    fi
+}
+
 echo -e "${GREEN}========== \n${BLUE} pf${RED}f${GREEN}2 ${BLUE}update \n${GREEN}=========="
 
 # Gets the parameters
@@ -71,15 +91,11 @@ cd $tmp
 
 #Creating cli-config for doctrine
 echo -ne "\n${CYAN}Updating cli-config for doctrine"
-rm cli-config.php
-cp vendor/stonedz/pff2/cli-config.php .
-echo -e "${GREEN}[OK]"
+copy_file vendor/stonedz/pff2/cli-config.php ./cli-config.php "cli-config.php"
 
 
 echo -ne "\n${CYAN}Updating index.php"
-rm index.php
-cp vendor/stonedz/pff2/resources/site_skeleton/index.php .
-echo -e "${GREEN}[OK]"
+copy_file vendor/stonedz/pff2/resources/site_skeleton/index.php ./index.php "index.php"
 
 
 # Final message
